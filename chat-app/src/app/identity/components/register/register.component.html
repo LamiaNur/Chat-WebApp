@@ -1,0 +1,36 @@
+<form [formGroup]="registerFormControl" (ngSubmit)="onSubmit()" class="container w-50 mt-3">
+  <div class="mb-3">
+    <label class="form-label">First Name</label>
+    <input formControlName="firstName" type="text" class="form-control" >
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Last Name</label>
+    <input formControlName="lastName" type="text" class="form-control" >
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Birth Date</label>
+    <input formControlName="birthDay" type="date" class="form-control" >
+  </div>
+  <div class="mb-3">
+    <label class="form-label">About</label>
+    <input formControlName="about" type="text" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Profile Picture</label>
+    <input type="file" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Email address</label>
+    <input formControlName="email" type="email" class="form-control">
+    <div class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Password</label>
+    <input formControlName="password" type="password" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Confirm Password</label>
+    <input formControlName="confirmPassword" type="password" class="form-control">
+  </div>
+  <button [disabled]="!registerFormControl.valid" type="submit" class="mb-3 btn btn-primary">Register</button>
+</form>
