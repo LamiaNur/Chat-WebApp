@@ -12,29 +12,28 @@ namespace Chat.Api.Core.Services
     {
         public async Task<QueryResponse> HandleQueryAsync(IQuery query)
         {
+            var queryName = query.GetType().Name;
+            var handlerName = $"{queryName}Handler";
             try
             {
-                Console.WriteLine($"Before handle query: {query.GetType().Name}\n");
-
+                Console.WriteLine($"Before handle query: {queryName}\n");
+                Console.WriteLine($"Start Validating query: {queryName}\n");
                 query.ValidateQuery();
-                
-                var queryHandlerName = query.GetType().Name + "Handler";
-                var handler = DIService.Instance.GetService<IQueryHandler>(queryHandlerName);
+                Console.WriteLine($"Success Validating query: {queryName}\n");
+                Console.WriteLine($"Start Resolving QueryHandler: {handlerName}\n");
+                var handler = DIService.Instance.GetService<IQueryHandler>(handlerName);
                 if (handler == null)
                 {
-                    throw new Exception("Handler not set");
+                    throw new Exception("Handler not found");
                 }
+                Console.WriteLine($"Success Resolving queryHandler: {handlerName}\n");
                 var response = await handler.HandleAsync(query);
-                
                 if (string.IsNullOrEmpty(response.Status)) 
                 {
                     response.Status = ResponseStatus.Success;
                 }
-                
-                response.Name = query.GetType().Name;
-                
-                Console.WriteLine($"After Successful handle query : {query.GetType().Name}\n");
-
+                response.Name = queryName;
+                Console.WriteLine($"After Successful handle query : {query}\n");
                 return response;
             }
             catch (Exception ex)
@@ -42,9 +41,7 @@ namespace Chat.Api.Core.Services
                 var response = query.CreateResponse();
                 response.Status = ResponseStatus.Error;
                 response.Message = ex.Message;
-
-                Console.WriteLine($"After failed handle query : {query.GetType().Name}\n");
-
+                Console.WriteLine($"After failed handle query : {queryName}\n");
                 return response;
             }
         }
