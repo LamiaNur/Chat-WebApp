@@ -11,7 +11,6 @@ using System.Composition;
 namespace Chat.Api.IdentityService.Services
 {
     [Export(typeof(ITokenService))]
-    [Export("TokenService", typeof(ITokenService))]
     [Shared]
     public class TokenService : ITokenService
     {

@@ -1,8 +1,7 @@
+using System.Reflection;
 using Chat.Api.Core.Interfaces;
 using Chat.Api.Core.Services;
 using Chat.Api.IdentityService.Commands;
-using Chat.Api.IdentityService.Interfaces;
-using Chat.Api.IdentityService.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chat.Api.Controllers

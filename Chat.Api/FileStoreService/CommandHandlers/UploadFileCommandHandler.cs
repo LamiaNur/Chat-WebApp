@@ -6,8 +6,9 @@ using Chat.Api.Core.Models;
 using Chat.Api.Core.Services;
 using Chat.Api.FileStoreService.Interfaces;
 using Chat.Api.FileStoreService.Models;
+using Chat.Api.FileStoreService.Commands;
 
-namespace Chat.Api.FileStoreService.Commands
+namespace Chat.Api.FileStoreService.CommandHandlers
 {
     [Export(typeof(ICommandHandler))]
     [Export("UploadFileCommandHandler", typeof(ICommandHandler))]

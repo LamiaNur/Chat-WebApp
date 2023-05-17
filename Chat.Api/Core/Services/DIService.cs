@@ -45,7 +45,7 @@ namespace Chat.Api.Core.Services
             CreateContainer();
         }
 
-        public void AddAllAssemblies(string prefix)
+        private void AddAllAssemblies(string prefix)
         {
             var entryAssemblyLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location);
             if (!string.IsNullOrEmpty(entryAssemblyLocation))
@@ -59,7 +59,7 @@ namespace Chat.Api.Core.Services
             }
         }
 
-        public void AddAllAssemblies(string location, string prefix)
+        private void AddAllAssemblies(string location, string prefix)
         {
             if (string.IsNullOrEmpty(location) == false)
             {
@@ -91,13 +91,14 @@ namespace Chat.Api.Core.Services
             }
         }
 
-        public void AddAssembly<T>()
+        private void AddAssembly<T>()
         {
             AddAssembly(typeof(T).Assembly);
         }
 
-        public void AddAssembly(Assembly assembly)
+        private void AddAssembly(Assembly assembly)
         {
+            
             if (string.IsNullOrEmpty(assembly.FullName) || _assemblyLists.Contains(assembly.FullName))
             {
                 return;
@@ -107,7 +108,7 @@ namespace Chat.Api.Core.Services
             Console.WriteLine($"Adding Assembly {assembly.FullName}\n");
         }
 
-        void CreateContainer()
+        private void CreateContainer()
         {
             if (_container == null)
             {
@@ -164,6 +165,7 @@ namespace Chat.Api.Core.Services
 
         public T? GetService<T>(string name)
         {
+            CreateContainer();
             lock (_lockObject)
             {
                 try
@@ -180,6 +182,16 @@ namespace Chat.Api.Core.Services
                 catch (Exception)
                 {
                     Console.WriteLine($"GetService Failed of type : {typeof(T).Name} and name : {name} with container.\n");
+                    var services = GetServices<T>();
+                    foreach (var service in services)
+                    {
+                        if (service?.GetType()?.Name == name)
+                        {
+                            Console.WriteLine($"GetService Success of type : {typeof(T).Name} and name : {name} by searching with all the instances\n");
+                            return service;
+                        }
+                    }
+                    Console.WriteLine($"GetService Failed of type : {typeof(T).Name} and name : {name} by searching with all the instances\n");
                     return default(T);
                 }
             }

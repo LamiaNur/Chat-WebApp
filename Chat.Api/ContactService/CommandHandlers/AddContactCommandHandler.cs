@@ -7,19 +7,18 @@ using Chat.Api.Core.Models;
 using Chat.Api.Core.Services;
 using Chat.Api.IdentityService.Models;
 using Chat.Api.IdentityService.Queries;
+using Chat.Api.ContactService.Commands;
 
-namespace Chat.Api.ContactService.Commands
+namespace Chat.Api.ContactService.CommandHandlers
 {
     [Export(typeof(ICommandHandler))]
     [Export("AddContactCommandHandler", typeof(ICommandHandler))]
     [Shared]
     public class AddContactCommandHandler : ACommandHandler<AddContactCommand>
     {
-        private readonly IQueryService _queryService;
         private readonly IContactRepository _contactRepository;
         public AddContactCommandHandler()
         {
-            _queryService = DIService.Instance.GetService<IQueryService>();
             _contactRepository = DIService.Instance.GetService<IContactRepository>();
         }
 

@@ -4,8 +4,9 @@ using Chat.Api.ChatService.Models;
 using Chat.Api.Core.Interfaces;
 using Chat.Api.Core.Models;
 using Chat.Api.Core.Services;
+using Chat.Api.ChatService.Commands;
 
-namespace Chat.Api.ChatService.Commands
+namespace Chat.Api.ChatService.CommandHandlers
 {
     [Export(typeof(ICommandHandler))]
     [Export("UpdateLatestChatCommandHandler", typeof(ICommandHandler))]

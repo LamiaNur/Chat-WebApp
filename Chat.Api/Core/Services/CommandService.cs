@@ -6,14 +6,13 @@ using System.Composition;
 namespace Chat.Api.Core.Services 
 {
     [Export(typeof(ICommandService))]
-    [Export("CommandService", typeof(ICommandService))]
     [Shared]
     public class CommandService : ICommandService
     {
         public async Task<CommandResponse> HandleCommandAsync(ICommand command)
         {
             var commandName = command.GetType().Name;
-            var handlerName = $"{command}Handler";
+            var handlerName = $"{commandName}Handler";
             try
             {
                 Console.WriteLine($"Before handle command: {commandName}\n");

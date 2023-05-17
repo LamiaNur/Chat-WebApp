@@ -6,7 +6,6 @@ using Chat.Api.Core.Models;
 namespace Chat.Api.Core.Services
 {
     [Export(typeof(IQueryService))]
-    [Export("QueryService", typeof(IQueryService))]
     [Shared]
     public class QueryService : IQueryService
     {

@@ -7,7 +7,6 @@ using System.Composition;
 namespace Chat.Api.Core.Database.Contexts
 {
     [Export(typeof(IMongoDbContext))]
-    [Export("MongoDbContext", typeof(IMongoDbContext))]
     [Shared]
     public class MongoDbContext : IMongoDbContext
     {

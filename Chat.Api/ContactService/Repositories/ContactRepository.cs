@@ -9,7 +9,6 @@ using MongoDB.Driver;
 namespace Chat.Api.ContactService.Repositories
 {
     [Export(typeof(IContactRepository))]
-    [Export("ContactRepository", typeof(IContactRepository))]
     [Shared]
     public class ContactRepository : IContactRepository
     {

@@ -7,6 +7,7 @@ using Chat.Api.Core.Models;
 using Chat.Api.Core.Services;
 using Chat.Api.IdentityService.Models;
 using Chat.Api.IdentityService.Queries;
+using Chat.Api.ContactService.CommandHandlers;
 
 namespace Chat.Api.ContactService.Commands
 {
@@ -15,11 +16,9 @@ namespace Chat.Api.ContactService.Commands
     [Shared]
     public class AcceptOrRejectContactRequestCommandHandler : ACommandHandler<AcceptOrRejectContactRequestCommand>
     {
-        private readonly IQueryService _queryService;
         private readonly IContactRepository _contactRepository;
         public AcceptOrRejectContactRequestCommandHandler()
         {
-            _queryService = DIService.Instance.GetService<IQueryService>();
             _contactRepository = DIService.Instance.GetService<IContactRepository>();
         }
 

@@ -9,7 +9,6 @@ using MongoDB.Driver;
 namespace Chat.Api.IdentityService.Repositories
 {
     [Export(typeof(IUserRepository))]
-    [Export("UserRepository", typeof(IUserRepository))]
     [Shared]
     public class UserRepository : IUserRepository
     {

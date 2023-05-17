@@ -4,8 +4,9 @@ using Chat.Api.Core.Services;
 using Chat.Api.ChatService.Models;
 using Chat.Api.Core.Interfaces;
 using System.Composition;
+using Chat.Api.ChatService.Commands;
 
-namespace Chat.Api.ChatService.Commands
+namespace Chat.Api.ChatService.CommandHandlers
 {
     [Export(typeof(ICommandHandler))]
     [Export("SendMessageCommandHandler", typeof(ICommandHandler))]
@@ -13,12 +14,10 @@ namespace Chat.Api.ChatService.Commands
     public class SendMessageCommandHandler : ACommandHandler<SendMessageCommand>
     {
         private readonly IChatRepository _chatRepository;
-        private readonly ICommandService _commandService;
         
         public SendMessageCommandHandler()
         {
             _chatRepository = DIService.Instance.GetService<IChatRepository>();
-            _commandService = DIService.Instance.GetService<ICommandService>();
         }
         public override async Task<CommandResponse> OnHandleAsync(SendMessageCommand command)
         {

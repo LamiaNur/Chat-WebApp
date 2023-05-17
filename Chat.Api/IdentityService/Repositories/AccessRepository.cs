@@ -9,7 +9,6 @@ using System.Composition;
 namespace Chat.Api.IdentityService.Repositories
 {
     [Export(typeof(IAccessRepository))]
-    [Export("AccessRepository", typeof(IAccessRepository))]
     [Shared]
     public class AccessRepository : IAccessRepository
     {

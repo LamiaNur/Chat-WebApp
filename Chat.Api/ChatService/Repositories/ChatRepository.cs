@@ -4,9 +4,12 @@ using Chat.Api.Core.Database.Models;
 using Chat.Api.Core.Services;
 using Chat.Api.ChatService.Models;
 using MongoDB.Driver;
+using System.Composition;
 
 namespace Chat.Api.ChatService.Repositories
 {
+    [Export(typeof(IChatRepository))]
+    [Shared]
     public class ChatRepository : IChatRepository
     {
         private readonly IMongoDbContext _dbContext;

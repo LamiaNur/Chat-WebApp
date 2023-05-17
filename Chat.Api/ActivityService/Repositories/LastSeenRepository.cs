@@ -9,7 +9,6 @@ using Chat.Api.Core.Services;
 namespace Chat.Api.ActivityService.Repositories
 {
     [Export(typeof(ILastSeenRepository))]
-    [Export("LastSeenRepository", typeof(ILastSeenRepository))]
     [Shared]
     public class LastSeenRepository : ILastSeenRepository
     {

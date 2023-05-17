@@ -1,14 +1,11 @@
-using Chat.Api.Core.Constants;
-using Chat.Api.Core.Helpers;
 using Chat.Api.Core.Models;
 using Chat.Api.IdentityService.Interfaces;
-using Chat.Api.IdentityService.Models;
-using Chat.Api.IdentityService.Repositories;
 using Chat.Api.Core.Services;
 using System.Composition;
 using Chat.Api.Core.Interfaces;
+using Chat.Api.IdentityService.Commands;
 
-namespace Chat.Api.IdentityService.Commands
+namespace Chat.Api.IdentityService.CommandHandlers
 {
     [Export(typeof(ICommandHandler))]
     [Export("RegisterCommandHandler", typeof(ICommandHandler))]
@@ -21,8 +18,7 @@ namespace Chat.Api.IdentityService.Commands
         {
             _userRepository = DIService.Instance.GetService<IUserRepository>();
         }
-        
-        
+                
         public override async Task<CommandResponse> OnHandleAsync(RegisterCommand command)
         {
             var response = command.CreateResponse();
@@ -32,15 +28,12 @@ namespace Chat.Api.IdentityService.Commands
             }
             command.UserModel.Id = Guid.NewGuid().ToString();
             command.UserModel.UserName = $"{command.UserModel.FirstName}_{command.UserModel.LastName}";
-
             if (!await _userRepository.CreateUserAsync(command.UserModel))
             {
                 throw new Exception("Some anonymous problem occured!!");
             }
-
             response.Message = "User Created Successfully!!";
             response.SetData("UserProfile", command.UserModel.ToUserProfile());
-            
             return response;
         }
     }

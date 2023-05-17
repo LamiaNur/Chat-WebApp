@@ -8,7 +8,6 @@ using Chat.Api.FileStoreService.Models;
 namespace Chat.Api.FileStoreService.Repositories
 {
     [Export(typeof(IFileRepository))]
-    [Export("FileRepository", typeof(IFileRepository))]
     [Shared]
     public class FileRepository : IFileRepository
     {
