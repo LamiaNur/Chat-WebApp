@@ -23,7 +23,7 @@ namespace Chat.Api.ContactService.Commands
             _contactRepository = DIService.Instance.GetService<IContactRepository>();
         }
 
-        public override async Task<CommandResponse> OnExecuteAsync(AcceptOrRejectContactRequestCommand command)
+        public override async Task<CommandResponse> OnHandleAsync(AcceptOrRejectContactRequestCommand command)
         {
             var response = command.CreateResponse();
             var contact = await _contactRepository.GetContactByIdAsync(command.ContactId);

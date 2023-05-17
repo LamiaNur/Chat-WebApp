@@ -10,7 +10,7 @@ namespace Chat.Api.Core.Services
     [Shared]
     public class CommandService : ICommandService
     {
-        public async Task<CommandResponse> ExecuteCommandAsync(ICommand command)
+        public async Task<CommandResponse> HandleCommandAsync(ICommand command)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace Chat.Api.Core.Services
                 }
                 Console.WriteLine($"Success Resolving CommandHandler: {commandHandlerName}\n");
                 
-                var response = await handler.ExecuteAsync(command);
+                var response = await handler.HandleAsync(command);
                 if (string.IsNullOrEmpty(response.Status)) 
                 {
                     response.Status = ResponseStatus.Success;

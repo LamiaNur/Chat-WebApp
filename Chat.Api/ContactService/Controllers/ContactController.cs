@@ -24,12 +24,12 @@ namespace Chat.Api.Controllers
         [HttpPost, Route("add")]
         public async Task<IActionResult> AddContactAsync(AddContactCommand command)
         {
-            return Ok(await _commandService.ExecuteCommandAsync(command));
+            return Ok(await _commandService.HandleCommandAsync(command));
         }
         [HttpPost, Route("accept-reject")]
         public async Task<IActionResult> AcceptOrRejectContactRequestAsync(AcceptOrRejectContactRequestCommand command)
         {
-            return Ok(await _commandService.ExecuteCommandAsync(command));
+            return Ok(await _commandService.HandleCommandAsync(command));
         }
         [HttpPost, Route("get")]
         public async Task<IActionResult> AddContactAsync(ContactQuery query)

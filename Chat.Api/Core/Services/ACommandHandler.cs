@@ -5,10 +5,10 @@ namespace Chat.Api.Core.Services
 {
     public abstract class ACommandHandler<T> : ICommandHandler where T : ICommand
     {
-        public async Task<CommandResponse> ExecuteAsync(ICommand command)
+        public async Task<CommandResponse> HandleAsync(ICommand command)
         {
-            return await OnExecuteAsync((T)command);
+            return await OnHandleAsync((T)command);
         }
-        public abstract Task<CommandResponse> OnExecuteAsync(T command);
+        public abstract Task<CommandResponse> OnHandleAsync(T command);
     }
 }

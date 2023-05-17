@@ -20,7 +20,7 @@ namespace Chat.Api.ChatService.Commands
             _latestChatRepository = DIService.Instance.GetService<ILatestChatRepository>();
         }
 
-        public override async Task<CommandResponse> OnExecuteAsync(UpdateLatestChatCommand command)
+        public override async Task<CommandResponse> OnHandleAsync(UpdateLatestChatCommand command)
         {
             var response = command.CreateResponse();
             var latestChatModel = await _latestChatRepository.GetLatestChatAsync(command.LatestChatModel.UserId, command.LatestChatModel.SendTo);

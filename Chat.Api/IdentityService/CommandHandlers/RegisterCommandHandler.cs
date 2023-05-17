@@ -23,7 +23,7 @@ namespace Chat.Api.IdentityService.Commands
         }
         
         
-        public override async Task<CommandResponse> OnExecuteAsync(RegisterCommand command)
+        public override async Task<CommandResponse> OnHandleAsync(RegisterCommand command)
         {
             var response = command.CreateResponse();
             if (await _userRepository.IsUserExistAsync(command.UserModel)) 

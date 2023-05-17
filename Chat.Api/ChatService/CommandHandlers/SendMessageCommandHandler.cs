@@ -20,7 +20,7 @@ namespace Chat.Api.ChatService.Commands
             _chatRepository = DIService.Instance.GetService<IChatRepository>();
             _commandService = DIService.Instance.GetService<ICommandService>();
         }
-        public override async Task<CommandResponse> OnExecuteAsync(SendMessageCommand command)
+        public override async Task<CommandResponse> OnHandleAsync(SendMessageCommand command)
         {
             var response = command.CreateResponse();
             if (!await _chatRepository.SaveChatModelAsync(command.ChatModel))
@@ -32,7 +32,7 @@ namespace Chat.Api.ChatService.Commands
             {
                 LatestChatModel = latestChatModel
             };
-            await _commandService.ExecuteCommandAsync(updateLatestChatCommand);
+            await _commandService.HandleCommandAsync(updateLatestChatCommand);
             
             return response;
         }

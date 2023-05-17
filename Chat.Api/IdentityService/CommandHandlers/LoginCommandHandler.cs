@@ -26,7 +26,7 @@ namespace Chat.Api.IdentityService.Commands
             _commandService = DIService.Instance.GetService<ICommandService>();
         }
 
-        public override async Task<CommandResponse> OnExecuteAsync(LoginCommand command)
+        public override async Task<CommandResponse> OnHandleAsync(LoginCommand command)
         {
             var response = command.CreateResponse();
             var user = await _userRepository.GetUserAsync(command.Email, command.Password);
@@ -58,7 +58,7 @@ namespace Chat.Api.IdentityService.Commands
             {
                 UserId = user.Id
             };
-            await _commandService.ExecuteCommandAsync(updateLastSeenCommand);
+            await _commandService.HandleCommandAsync(updateLastSeenCommand);
         }
     }
 }

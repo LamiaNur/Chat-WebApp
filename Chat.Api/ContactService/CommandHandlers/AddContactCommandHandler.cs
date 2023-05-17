@@ -23,7 +23,7 @@ namespace Chat.Api.ContactService.Commands
             _contactRepository = DIService.Instance.GetService<IContactRepository>();
         }
 
-        public override async Task<CommandResponse> OnExecuteAsync(AddContactCommand command)
+        public override async Task<CommandResponse> OnHandleAsync(AddContactCommand command)
         {
             var response = command.CreateResponse();
             var userProfileQuery = new UserProfileQuery()

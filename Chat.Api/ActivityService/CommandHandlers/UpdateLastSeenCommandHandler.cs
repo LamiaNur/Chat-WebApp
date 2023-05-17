@@ -19,7 +19,7 @@ namespace Chat.Api.ActivityService.CommandHandlers
         {
             _lastSeenRepository = DIService.Instance.GetService<ILastSeenRepository>();
         }
-        public override async Task<CommandResponse> OnExecuteAsync(UpdateLastSeenCommand command)
+        public override async Task<CommandResponse> OnHandleAsync(UpdateLastSeenCommand command)
         {
             var response = command.CreateResponse();
             var lastSeenModel = await _lastSeenRepository.GetLastSeenModelByUserIdAsync(command.UserId);

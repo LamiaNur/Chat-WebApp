@@ -19,7 +19,7 @@ namespace Chat.Api.IdentityService.Commands
             _tokenService = DIService.Instance.GetService<ITokenService>();
         }
 
-        public override async Task<CommandResponse> OnExecuteAsync(RefreshTokenCommand command)
+        public override async Task<CommandResponse> OnHandleAsync(RefreshTokenCommand command)
         {
             var response = command.CreateResponse();
 

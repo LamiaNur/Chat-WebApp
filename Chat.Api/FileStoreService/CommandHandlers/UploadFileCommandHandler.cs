@@ -21,7 +21,7 @@ namespace Chat.Api.FileStoreService.Commands
             _fileRepository = DIService.Instance.GetService<IFileRepository>();
         }
         
-        public override async Task<CommandResponse> OnExecuteAsync(UploadFileCommand command)
+        public override async Task<CommandResponse> OnHandleAsync(UploadFileCommand command)
         {
             var response = command.CreateResponse();
             var file = command.FormFile;

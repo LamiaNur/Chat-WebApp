@@ -27,7 +27,7 @@ namespace Chat.Api.Controllers
         [HttpPost, Route("send")]
         public async Task<IActionResult> SendMessageAsync(SendMessageCommand command)
         {
-            return Ok(await _commandService.ExecuteCommandAsync(command));
+            return Ok(await _commandService.HandleCommandAsync(command));
         }
         [HttpPost, Route("list")]
         public async Task<IActionResult> GetChatListAsync(ChatListQuery query)

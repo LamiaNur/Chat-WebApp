@@ -4,6 +4,6 @@ namespace Chat.Api.Core.Interfaces
 {
     public interface ICommandHandler
     {
-        Task<CommandResponse> ExecuteAsync(ICommand command);
+        Task<CommandResponse> HandleAsync(ICommand command);
     }
 }

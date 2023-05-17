@@ -17,7 +17,7 @@ namespace Chat.Api.IdentityService.Commands
         {
             _tokenService = DIService.Instance.GetService<ITokenService>();
         }
-        public override async Task<CommandResponse> OnExecuteAsync(LogOutCommand command)
+        public override async Task<CommandResponse> OnHandleAsync(LogOutCommand command)
         {
             var response = command.CreateResponse();
 

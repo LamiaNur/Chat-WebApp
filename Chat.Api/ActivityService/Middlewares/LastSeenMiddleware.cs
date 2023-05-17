@@ -37,7 +37,7 @@ namespace Chat.Api.ActivityService.Middlewares
                     {
                         UserId = userProfile.Id  
                     };
-                    await _commandService.ExecuteCommandAsync(updateLastSeenCommand);
+                    await _commandService.HandleCommandAsync(updateLastSeenCommand);
                     Console.WriteLine("Last seen activity saved at LastSeenMiddleware\n");
                 } 
                 

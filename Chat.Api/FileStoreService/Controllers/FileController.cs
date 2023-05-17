@@ -31,7 +31,7 @@ namespace Chat.Api.Controllers
             {
                 FormFile = formFile
             };
-            return Ok(await _commandService.ExecuteCommandAsync(fileUploadCommand));
+            return Ok(await _commandService.HandleCommandAsync(fileUploadCommand));
         }
 
         [HttpPost]
