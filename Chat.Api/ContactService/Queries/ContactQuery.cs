@@ -1,6 +1,4 @@
-using Chat.Api.ContactService.Interfaces;
 using Chat.Api.Core.Models;
-using Chat.Api.Core.Services;
 
 namespace Chat.Api.ContactService.Queries
 {

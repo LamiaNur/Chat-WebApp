@@ -1,13 +1,8 @@
 using System.Composition;
 using Chat.Api.ContactService.Interfaces;
-using Chat.Api.ContactService.Models;
-using Chat.Api.Core.Constants;
 using Chat.Api.Core.Interfaces;
 using Chat.Api.Core.Models;
 using Chat.Api.Core.Services;
-using Chat.Api.IdentityService.Models;
-using Chat.Api.IdentityService.Queries;
-using Chat.Api.ContactService.CommandHandlers;
 
 namespace Chat.Api.ContactService.Commands
 {

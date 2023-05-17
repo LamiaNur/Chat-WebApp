@@ -17,7 +17,7 @@ namespace Chat.Api.ActivityService.Repositories
         
         public LastSeenRepository()
         {
-            _databaseInfo = DIService.Instance.GetService<IConfiguration>().GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
             _dbContext = DIService.Instance.GetService<IMongoDbContext>();
         }   
 

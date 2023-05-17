@@ -1,7 +1,4 @@
-using Chat.Api.Core.Helpers;
 using Chat.Api.Core.Models;
-using Chat.Api.Core.Services;
-using Chat.Api.IdentityService.Interfaces;
 
 namespace Chat.Api.IdentityService.Commands
 {

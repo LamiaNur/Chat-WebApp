@@ -76,16 +76,8 @@ namespace Chat.Api
                     .AllowAnyMethod();
                 });
             });
-            // services.AddSingleton<IMongoDbContext, MongoDbContext>();
-            // services.AddSingleton<IUserRepository, UserRepository>();
-            // services.AddSingleton<IAccessRepository, AccessRepository>();
-            // services.AddSingleton<IFileRepository, FileRepository>();
-            // services.AddSingleton<ILastSeenRepository, LastSeenRepository>();
-            // services.AddSingleton<ITokenService, TokenService>();
-            // services.AddSingleton<ICommandService, CommandService>();
-            // services.AddSingleton<IQueryService, QueryService>();
-            services.AddTransient<LastSeenMiddleware>();
             
+            services.AddTransient<LastSeenMiddleware>();
             DIService.Instance.Initialize(services.BuildServiceProvider(), "Chat");
         }
 

@@ -123,7 +123,7 @@ namespace Chat.Api.Core.Services
             }
         }
 
-        public T? GetService<T>()
+        public T GetService<T>()
         {
             CreateContainer();
         
@@ -151,19 +151,23 @@ namespace Chat.Api.Core.Services
                             throw;
                         }
                         var service = ServiceProvider.GetService<T>();
+                        if (service == null)
+                        {
+                            throw new Exception();
+                        }
                         Console.WriteLine($"GetService Success of type : {typeof(T).Name} with ServiceProvider.\n");
                         return service;
                     }
                     catch (Exception)
                     {
                         Console.WriteLine($"GetService Failed of type : {typeof(T).Name} with ServiceProvider.\n");
-                        return default(T);
+                        throw new Exception($"GetService Failed of type : {typeof(T).Name} with ServiceProvider.\n");
                     }
                 }
             }
         }
 
-        public T? GetService<T>(string name)
+        public T GetService<T>(string name)
         {
             CreateContainer();
             lock (_lockObject)
@@ -192,7 +196,7 @@ namespace Chat.Api.Core.Services
                         }
                     }
                     Console.WriteLine($"GetService Failed of type : {typeof(T).Name} and name : {name} by searching with all the instances\n");
-                    return default(T);
+                    throw new Exception($"GetService Failed of type : {typeof(T).Name} and name : {name} by searching with all the instances\n");
                 }
             }
         }

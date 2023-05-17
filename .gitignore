@@ -38,7 +38,7 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
-
+/Chat.Api/FileStoreService/Store
 # System files
 .DS_Store
 Thumbs.db

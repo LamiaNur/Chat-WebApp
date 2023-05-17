@@ -1,5 +1,3 @@
-using Chat.Api.ContactService.Models;
-
 namespace Chat.Api.Core.Models
 {
     public class QueryResponse : Response

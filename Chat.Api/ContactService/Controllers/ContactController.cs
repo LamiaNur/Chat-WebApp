@@ -1,5 +1,4 @@
 using Chat.Api.Core.Interfaces;
-using Chat.Api.ActivityService.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Chat.Api.Core.Services;

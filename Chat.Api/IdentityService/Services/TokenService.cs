@@ -19,7 +19,7 @@ namespace Chat.Api.IdentityService.Services
 
         public TokenService()
         {
-            _tokenConfig = DIService.Instance.GetService<IConfiguration>().GetSection("TokenConfig").Get<TokenConfig>();
+            _tokenConfig = DIService.Instance.GetConfiguration().GetSection("TokenConfig").Get<TokenConfig>();
             _accessRepository = DIService.Instance.GetService<IAccessRepository>();
         }
         

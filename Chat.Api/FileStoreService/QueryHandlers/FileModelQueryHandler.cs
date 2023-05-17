@@ -1,7 +1,5 @@
 using Chat.Api.Core.Models;
 using Chat.Api.FileStoreService.Interfaces;
-using Chat.Api.Core.Helpers;
-using Chat.Api.FileStoreService.Models;
 using Chat.Api.Core.Services;
 using Chat.Api.Core.Interfaces;
 using System.Composition;

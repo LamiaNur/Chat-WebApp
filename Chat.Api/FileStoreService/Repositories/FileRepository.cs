@@ -16,7 +16,7 @@ namespace Chat.Api.FileStoreService.Repositories
         
         public FileRepository()
         {
-            _databaseInfo = DIService.Instance.GetService<IConfiguration>().GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
             _dbContext = DIService.Instance.GetService<IMongoDbContext>();
         }
         

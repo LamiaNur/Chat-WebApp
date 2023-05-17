@@ -1,4 +1,3 @@
-using System.Reflection;
 using Chat.Api.Core.Interfaces;
 using Chat.Api.Core.Services;
 using Chat.Api.IdentityService.Commands;

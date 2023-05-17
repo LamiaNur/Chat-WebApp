@@ -1,6 +1,5 @@
 using Chat.Api.Core.Models;
 using Chat.Api.ActivityService.Interfaces;
-using Chat.Api.Core.Helpers;
 using Chat.Api.Core.Services;
 using System.Composition;
 using Chat.Api.Core.Interfaces;

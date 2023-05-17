@@ -17,7 +17,7 @@ namespace Chat.Api.ContactService.Repositories
         
         public ContactRepository()
         {
-            _databaseInfo = DIService.Instance.GetService<IConfiguration>().GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
             _dbContext = DIService.Instance.GetService<IMongoDbContext>();
         }
 

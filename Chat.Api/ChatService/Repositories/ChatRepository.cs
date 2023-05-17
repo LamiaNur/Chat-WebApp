@@ -18,7 +18,7 @@ namespace Chat.Api.ChatService.Repositories
         public ChatRepository()
         {
             _dbContext = DIService.Instance.GetService<IMongoDbContext>();
-            _databaseInfo = DIService.Instance.GetService<IConfiguration>().GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
         }
 
         public async Task<bool> SaveChatModelAsync(ChatModel chatModel)
