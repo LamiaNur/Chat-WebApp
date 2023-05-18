@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommandService } from 'src/app/core/services/command-service';
 import { LoginCommand } from '../../commands/login-command';
-import { take } from 'rxjs';
+import { take, timestamp } from 'rxjs';
 import { ResponseStatus } from 'src/app/core/constants/response-status';
 
 @Component({
@@ -32,6 +32,7 @@ export class LogInComponent implements OnInit {
     this.commandService.execute(logInCommand).pipe(take(1)).subscribe(response => {
       console.log(response);
       if (response.status === ResponseStatus.success) {
+        this.setTokenToStore(response.metaData.Token);
         this.router.navigateByUrl("");
       } else {
         alert(response.message);
@@ -44,10 +45,16 @@ export class LogInComponent implements OnInit {
     logInCommand.email = this.getFormValue("email");
     logInCommand.password = this.getFormValue("password");
     logInCommand.appId = "1234";
+    localStorage.setItem("appId", logInCommand.appId);
     return logInCommand;
   }
 
   getFormValue(key : string) {
     return this.logInFormControl.get(key)?.value?.toString();
+  }
+
+  setTokenToStore(token: any) {
+    localStorage.setItem("accessToken", token.accessToken);
+    localStorage.setItem("refreshToken", token.refreshToken);
   }
 }
