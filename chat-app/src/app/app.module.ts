@@ -10,12 +10,15 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CommandService } from './core/services/command-service';
 import { AuthService } from './identity/services/auth.service';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
+import { QueryService } from './core/services/query-service';
+import { UserProfileComponent } from './identity/components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RegisterComponent,
-    LogInComponent
+    LogInComponent,
+    UserProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -27,6 +30,7 @@ import { AuthInterceptor } from './interceptors/auth-interceptor';
   ],
   providers: [
     CommandService, 
+    QueryService,
     AuthService, 
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true} 
   ],

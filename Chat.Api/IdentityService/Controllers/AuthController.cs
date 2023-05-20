@@ -1,6 +1,8 @@
 using Chat.Api.Core.Interfaces;
 using Chat.Api.Core.Services;
 using Chat.Api.IdentityService.Commands;
+using Chat.Api.IdentityService.Queries;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chat.Api.Controllers
@@ -10,9 +12,11 @@ namespace Chat.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ICommandService _commandService;
+        private readonly IQueryService _queryService;
         public AuthController()
         {
             _commandService = DIService.Instance.GetService<ICommandService>();
+            _queryService = DIService.Instance.GetService<IQueryService>();
         }
 
         [HttpPost]
@@ -41,6 +45,14 @@ namespace Chat.Api.Controllers
         public async Task<IActionResult> RefreshTokenAsync(RefreshTokenCommand command)
         {
             return Ok(await _commandService.HandleCommandAsync(command));
+        }
+
+        [HttpPost]
+        [Route("user-profile")]
+        [Authorize]
+        public async Task<IActionResult> UserProfileAsync(UserProfileQuery query)
+        {
+            return Ok(await _queryService.HandleQueryAsync(query));
         }
     }
 }

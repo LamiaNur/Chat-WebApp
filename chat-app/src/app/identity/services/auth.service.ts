@@ -25,6 +25,14 @@ export class AuthService {
         localStorage.setItem("refreshToken", token.refreshToken);
     }
     
+    removeAccessToken() {
+        localStorage.removeItem("accessToken");
+    }
+
+    removeRefreshToken() {
+        localStorage.removeItem("refreshToken");
+    }
+
     getAppId() {
         var appId = localStorage.getItem("appId");
         if (appId) return appId;
