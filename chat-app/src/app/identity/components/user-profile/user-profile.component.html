@@ -1,7 +1,28 @@
-<p>user-profile works!</p>
-<h1>{{userProfile.firstName}}</h1>
-<h1>{{userProfile.lastName}}</h1>
-<h1>{{userProfile.birthDay}}</h1>
-<h1>{{userProfile.email}}</h1>
-<h1>{{userProfile.about}}</h1>
-<h1>{{userProfile.id}}</h1>
+<div class="text-center">
+    <button (click)="onClickEditProfile()" class="btn btn-primary">
+        {{editButtonText}}
+    </button>
+</div>
+<form [formGroup]="userProfileFormControl" (ngSubmit)="onSubmit()" class="container w-50 mt-3">
+    <div class="mb-3">
+      <label class="form-label">First Name</label>
+      <input formControlName="firstName" type="text" class="form-control" [readonly]="!isEditable">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Last Name</label>
+      <input formControlName="lastName" type="text" class="form-control" [readonly]="!isEditable">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Birth Date</label>
+      <input formControlName="birthDay" type="date" class="form-control" [readonly]="!isEditable">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">About</label>
+      <input formControlName="about" type="text" class="form-control" [readonly]="!isEditable">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Email address</label>
+      <input formControlName="email" type="email" class="form-control" readonly="true">
+    </div>
+    <button *ngIf="isEditable" [disabled]="!userProfileFormControl.valid" type="submit" class="mb-3 btn btn-primary">Save</button>
+</form>

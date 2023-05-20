@@ -29,12 +29,14 @@ export class LogInComponent implements OnInit {
   }
 
   onSubmit() {
+    localStorage.clear();
     var logInCommand = this.authService.getLogInCommand(this.getFormValue("email"), this.getFormValue("password"));
     this.commandService.execute(logInCommand).pipe(take(1)).subscribe(response => {
       console.log(response);
       if (response.status === ResponseStatus.success) {
         this.authService.setTokenToStore(response.metaData.Token);
-        this.router.navigateByUrl("");
+        localStorage.setItem("email", this.getFormValue("email"));
+        this.router.navigateByUrl("user-profile");
       } else {
         alert(response.message);
       }
