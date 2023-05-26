@@ -1,0 +1,14 @@
+<form [formGroup]="addContactFormControl" (ngSubmit)="onSubmitAddContact()" class="container w-50 mt-3">
+    <div class="mb-3">
+      <label class="form-label">Contact Email</label>
+      <input formControlName="email" type="email" class="form-control">
+    </div>
+    <button [disabled]="!addContactFormControl.valid" type="submit" class="mb-3 btn btn-primary">Add Contact</button>
+</form>
+
+<div class="container w-50 mt-3">
+    pending contacts: 
+    <div *ngFor="let item of items">
+        {{item.userB.email}}
+    </div>
+</div>

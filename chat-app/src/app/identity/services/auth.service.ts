@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoginCommand } from '../commands/login-command';
 import { RefreshTokenCommand } from '../commands/refresh-token-command';
 import { Token } from '../models/token';
+import { LogOutCommand } from '../commands/logout-command';
 @Injectable({
     providedIn: 'root',
 })
@@ -20,6 +21,18 @@ export class AuthService {
         return localStorage.getItem("refreshToken");
     }
     
+    isLoggedIn() {
+        const refreshToken = this.getRefreshToken();
+        const accessToken = this.getAccessToken();
+        if (refreshToken && accessToken) return true;
+        return false;
+    }
+
+    logOut() {
+        localStorage.clear();
+        sessionStorage.clear();
+    }
+
     setTokenToStore(token: any) {
         localStorage.setItem("accessToken", token.accessToken);
         localStorage.setItem("refreshToken", token.refreshToken);
@@ -55,6 +68,12 @@ export class AuthService {
         logInCommand.password = password;
         logInCommand.appId = this.getAppId();
         return logInCommand;
+    }
+
+    getLogOutCommand() {
+        var logOutCommand = new LogOutCommand();
+        logOutCommand.appId = this.getAppId();
+        return logOutCommand;
     }
 
     private setAppId() {

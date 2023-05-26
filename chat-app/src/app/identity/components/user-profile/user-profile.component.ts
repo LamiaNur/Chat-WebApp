@@ -23,7 +23,7 @@ export class UserProfileComponent implements OnInit{
     firstName : ['', [Validators.required, Validators.pattern('[a-zA-z ]*')]],
     lastName : ['', [Validators.required, Validators.pattern('[a-zA-z ]*')]],
     birthDay : ['', Validators.required],
-    about : [''],
+    about : ['', Validators.maxLength(200)],
     email : ['', [Validators.required, Validators.email]]
   });
 
