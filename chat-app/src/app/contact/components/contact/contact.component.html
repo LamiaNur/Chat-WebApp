@@ -7,8 +7,31 @@
 </form>
 
 <div class="container w-50 mt-3">
-    pending contacts: 
-    <div *ngFor="let item of items">
-        {{item.userB.email}}
+    <ul class="nav nav-tabs">
+        <li *ngFor="let contactTab of contactTabs; let idx = index;" class="nav-item">
+          <button (click)="onClickTab(idx)" [class]="contactTab.isActive? 'nav-link active' : 'nav-link'" >{{contactTab.text}}</button>
+        </li>
+    </ul>
+    <div class="list-group">
+        <div *ngIf="activeTabIndex === 0">
+            <li *ngFor="let item of items; let id = index;" class="list-group-item d-flex justify-content-between align-items-center">
+                {{item.userA.id === currentUserId? item.userB.email : item.userA.email}}
+                <button class="btn btn-primary">Open</button>
+            </li>
+            <!-- <a href="#" class="list-group-item list-group-item-action" aria-current="true">
+                <div class="d-flex w-100 justify-content-between">
+                  <h5 class="mb-1">List group item heading</h5>
+                  <small>3 days ago</small>
+                </div>
+                <p class="mb-1">Some placeholder content in a paragraph.</p>
+                <small>And some small print.</small>
+            </a> -->
+        </div>
+        <div *ngIf="activeTabIndex !== 0">
+            <li *ngFor="let item of items; let id = index;" class="list-group-item d-flex justify-content-between align-items-center">
+                {{item.userA.id === currentUserId? item.userB.email : item.userA.email}}
+                <button class="btn btn-primary" (click)="onClickContact(id)">{{item.userA.id === currentUserId? 'Cancel Pending' : 'Accept Request'}}</button>
+            </li>
+        </div>
     </div>
 </div>

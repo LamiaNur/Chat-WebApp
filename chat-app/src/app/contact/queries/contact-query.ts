@@ -5,7 +5,8 @@ export class ContactQuery extends QueryBase{
     
     userId : string | undefined | null;
     isPendingContacts : boolean | undefined;
-
+    isRequestContacts : boolean | undefined;
+    
     constructor() {
         super();
         this.apiUrl = Configuration.identityApi.concat("/Contact/get");

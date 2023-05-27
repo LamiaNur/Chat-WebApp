@@ -28,7 +28,7 @@ namespace Chat.Api.ContactService.Commands
             if (command.IsAcceptRequest)
             {
                 contact.IsPending = false;
-                if (await _contactRepository.SaveContactAsync(contact))
+                if (!await _contactRepository.SaveContactAsync(contact))
                 {
                     throw new Exception("Contact save problem");
                 }
@@ -36,7 +36,7 @@ namespace Chat.Api.ContactService.Commands
             } 
             else 
             {
-                if (await _contactRepository.DeleteContactById(command.ContactId))
+                if (!await _contactRepository.DeleteContactById(command.ContactId))
                 {
                     throw new Exception("Delete contact problem");
                 }
