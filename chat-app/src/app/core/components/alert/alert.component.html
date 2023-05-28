@@ -1,0 +1,6 @@
+<div *ngIf="isActiveAlert" class="container w-50">
+    <div class="alert alert-{{alertType}} alert-dismissible fade show" role="alert">
+        {{message}}
+        <button (click)="onClickCloseAlert()" type="button" class="btn-close" aria-label="Close"></button>
+    </div>
+</div>

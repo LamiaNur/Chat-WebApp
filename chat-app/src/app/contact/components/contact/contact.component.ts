@@ -73,7 +73,7 @@ export class ContactComponent implements OnInit {
     this.commandService.execute(this.getAddContactCommand())
     .pipe(take(1))
     .subscribe(response => {
-      alert(response.message);
+      
     });
   }
 
@@ -94,7 +94,7 @@ export class ContactComponent implements OnInit {
     this.commandService.execute(this.getAcceptOrRejectContactRequestCommand(id))
     .pipe(take(1))
     .subscribe(response => {
-      alert(response.message);
+      
     });
   }
   

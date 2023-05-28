@@ -14,6 +14,8 @@ import { QueryService } from './core/services/query-service';
 import { UserProfileComponent } from './identity/components/user-profile/user-profile.component';
 import { ContactComponent } from './contact/components/contact/contact.component';
 import { UserService } from './identity/services/user.service';
+import { AlertComponent } from './core/components/alert/alert.component';
+import { AlertService } from './core/services/alert-service';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { UserService } from './identity/services/user.service';
     RegisterComponent,
     LogInComponent,
     UserProfileComponent,
-    ContactComponent
+    ContactComponent,
+    AlertComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +39,7 @@ import { UserService } from './identity/services/user.service';
     QueryService,
     AuthService,
     UserService, 
+    AlertService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true} 
   ],
   bootstrap: [AppComponent]

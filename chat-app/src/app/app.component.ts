@@ -4,6 +4,7 @@ import { AuthService } from './identity/services/auth.service';
 import { take } from 'rxjs';
 import { ResponseStatus } from './core/constants/response-status';
 import { Router } from '@angular/router';
+import { AlertService } from './core/services/alert-service';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ export class AppComponent implements OnInit{
 
   constructor(
     private commandService : CommandService,
+    private alertService : AlertService,
     private authService: AuthService,
     private router: Router) {}
 
@@ -32,6 +34,7 @@ export class AppComponent implements OnInit{
         this.authService.logOut(); 
         this.isLoggedIn = this.authService.isLoggedIn();
         this.router.navigateByUrl("");
+        //this.alertService.showAlert(response.message, "success");
       }
     });
   }
