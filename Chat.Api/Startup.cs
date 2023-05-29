@@ -1,9 +1,9 @@
-using Chat.Api.Core.Services;
-using Chat.Api.ActivityService.Middlewares;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Chat.Api.ActivityModule.Middlewares;
+using Chat.Api.CoreModule.Services;
 
 namespace Chat.Api
 {
