@@ -35,12 +35,12 @@ import { AlertService } from './core/services/alert-service';
     HttpClientModule
   ],
   providers: [
-    CommandService, 
+    CommandService,
     QueryService,
     AuthService,
-    UserService, 
+    UserService,
     AlertService,
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true} 
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })
