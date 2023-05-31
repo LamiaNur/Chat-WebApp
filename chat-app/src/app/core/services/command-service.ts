@@ -9,13 +9,13 @@ import { ResponseStatus } from "../constants/response-status";
   providedIn: 'root',
 })
 export class CommandService {
-    
+
     private commandSubject : Subject<any> = new Subject<any>();
 
     constructor(
         private httpClient : HttpClient,
         private alertService : AlertService) {}
-    
+
     public execute(command : any) {
         if (!command.apiUrl) {
             console.error("Api Url not set...");
@@ -23,10 +23,10 @@ export class CommandService {
         this.httpClient.post<CommandResponse>(command.apiUrl, command)
         .pipe(take(1))
         .subscribe(res => {
-            let alertType = 'danger';
+            let alertType = 'error';
             if (res.status === ResponseStatus.success) {
                 alertType = 'success';
-            } 
+            }
             this.alertService.showAlert(res.message, alertType);
             this.commandSubject.next(res);
         });
