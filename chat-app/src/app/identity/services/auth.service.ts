@@ -7,8 +7,10 @@ import { LogOutCommand } from '../commands/logout-command';
     providedIn: 'root',
 })
 export class AuthService {
-
-    isTokenExpired(token: string) { 
+    canActivate() {
+      return this.isLoggedIn();
+    }
+    isTokenExpired(token: string) {
         const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
         return (Math.floor((new Date).getTime() / 1000)) >= expiry;
     }
@@ -20,7 +22,7 @@ export class AuthService {
     getRefreshToken() {
         return localStorage.getItem("refreshToken");
     }
-    
+
     isLoggedIn() {
         const refreshToken = this.getRefreshToken();
         const accessToken = this.getAccessToken();
@@ -37,7 +39,7 @@ export class AuthService {
         localStorage.setItem("accessToken", token.accessToken);
         localStorage.setItem("refreshToken", token.refreshToken);
     }
-    
+
     removeAccessToken() {
         localStorage.removeItem("accessToken");
     }
@@ -51,8 +53,8 @@ export class AuthService {
         if (appId) return appId;
         return this.setAppId();
     }
-    
-    getRefreshTokenCommand() { 
+
+    getRefreshTokenCommand() {
         var refreshTokenCommand = new RefreshTokenCommand();
         refreshTokenCommand.appId = this.getAppId();
         var token = new Token();
@@ -61,7 +63,7 @@ export class AuthService {
         refreshTokenCommand.token = token;
         return refreshTokenCommand;
     }
-    
+
     getLogInCommand(email : string, password : string) {
         var logInCommand = new LoginCommand();
         logInCommand.email = email;

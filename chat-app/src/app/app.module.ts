@@ -16,6 +16,8 @@ import { ContactComponent } from './contact/components/contact/contact.component
 import { UserService } from './identity/services/user.service';
 import { AlertComponent } from './core/components/alert/alert.component';
 import { AlertService } from './core/services/alert-service';
+import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatButton, MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -32,15 +34,17 @@ import { AlertService } from './core/services/alert-service';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSnackBarModule,
+    MatButtonModule
   ],
   providers: [
-    CommandService, 
+    CommandService,
     QueryService,
     AuthService,
-    UserService, 
+    UserService,
     AlertService,
-    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true} 
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })
