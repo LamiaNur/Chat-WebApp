@@ -1,8 +1,5 @@
-import {Component, inject, Inject, OnInit} from '@angular/core';
-import { AlertService } from '../../services/alert-service';
-import { take, takeUntil } from 'rxjs';
-import {MAT_SNACK_BAR_DATA, MatSnackBarConfig, MatSnackBarRef} from "@angular/material/snack-bar";
-import {MatButtonModule} from "@angular/material/button";
+import {Component, inject, OnInit} from '@angular/core';
+import {MatSnackBarConfig, MatSnackBarRef} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-alert',
@@ -11,31 +8,13 @@ import {MatButtonModule} from "@angular/material/button";
 })
 export class AlertComponent implements OnInit {
 
-  // message : any = "A simple success alert—check it out!";
-  // alertType : any = "danger";
-  // isActiveAlert : any = false;
   snackBarRef = inject(MatSnackBarRef);
   config : MatSnackBarConfig = new MatSnackBarConfig<any>();
-  constructor (private alertService: AlertService) {
-  }
+  
+  constructor () {}
 
   ngOnInit(): void {
     this.config = this.snackBarRef.containerInstance.snackBarConfig;
-    // this.alertService.getAlertObservable()
-    // .subscribe(data => {
-    //   console.log("[AlertComponent] subscriber - data received", data);
-    //   this.showAlert(data);
-    // });
-
   }
 
-  // onClickCloseAlert() {
-  //   this.isActiveAlert = false;
-  // }
-  //
-  // showAlert(data : any) {
-  //   this.isActiveAlert = true;
-  //   this.alertType = data.alertType;
-  //   this.message = data.message;
-  // }
 }

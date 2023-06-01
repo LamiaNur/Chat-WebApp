@@ -33,7 +33,7 @@ export class AppComponent implements OnInit{
       if (response.status) {
         this.authService.logOut(); 
         this.isLoggedIn = this.authService.isLoggedIn();
-        this.router.navigateByUrl("");
+        this.router.navigateByUrl("log-in");
         //this.alertService.showAlert(response.message, "success");
       }
     });

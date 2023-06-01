@@ -7,17 +7,24 @@ import {AlertComponent} from "../components/alert/alert.component";
     providedIn: 'root',
 })
 export class AlertService {
-  durationInSeconds = 5;
-
+  
   constructor(private _snackBar: MatSnackBar) {}
 
-  showAlert(message : any, alertType : any) {
+  showAlert(message : any, alertType : any, duration : any = 3000) {
     this._snackBar.openFromComponent(AlertComponent, {
-      duration: this.durationInSeconds * 1000,
+      duration: this.getDuration(message, duration),
       data : message,
       verticalPosition : "top",
       horizontalPosition : "center",
       panelClass : [alertType + '-snackbar']
     });
+  }
+
+  getDuration(message : any, duration : any) {
+    var messageLenDuration : any = (message.length / 10) * 1000;
+    if (duration === 3000) {
+      return messageLenDuration >= duration? messageLenDuration : duration;
+    }
+    return duration;
   }
 }
