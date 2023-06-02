@@ -11,6 +11,7 @@ export class AlertService {
   constructor(private _snackBar: MatSnackBar) {}
 
   showAlert(message : any, alertType : any, duration : any = 3000) {
+    if (!message || message.length === 0) return; 
     this._snackBar.openFromComponent(AlertComponent, {
       duration: this.getDuration(message, duration),
       data : message,
@@ -20,7 +21,7 @@ export class AlertService {
     });
   }
 
-  getDuration(message : any, duration : any) {
+  private getDuration(message : any, duration : any) {
     var messageLenDuration : any = (message.length / 10) * 1000;
     if (duration === 3000) {
       return messageLenDuration >= duration? messageLenDuration : duration;

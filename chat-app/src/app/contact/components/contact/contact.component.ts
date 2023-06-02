@@ -94,8 +94,14 @@ export class ContactComponent implements OnInit {
     this.commandService.execute(this.getAcceptOrRejectContactRequestCommand(id))
     .pipe(take(1))
     .subscribe(response => {
-      
+      if (response.status === ResponseStatus.success) {
+        this.router.navigateByUrl('contact');
+      }
     });
+  }
+
+  onClickedContact(contact : any) {
+    console.log("clicked", contact);
   }
   
   getAcceptOrRejectContactRequestCommand(id : any) {

@@ -5,6 +5,7 @@ import { LogInComponent } from './identity/components/log-in/log-in.component';
 import { UserProfileComponent } from './identity/components/user-profile/user-profile.component';
 import { ContactComponent } from './contact/components/contact/contact.component';
 import { AuthService } from "./identity/services/auth.service";
+import { ChatComponent } from './chat/components/chat/chat.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,11 @@ const routes: Routes = [
     path: "contact",
     component: ContactComponent,
     canActivate: [() => inject(AuthService).canActivate()]
+  },
+  {
+    path : "chat",
+    component: ChatComponent,
+    canActivate:[() => inject(AuthService).canActivate()]
   }
 ];
 

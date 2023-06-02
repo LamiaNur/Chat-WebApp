@@ -18,6 +18,7 @@ import { AlertComponent } from './core/components/alert/alert.component';
 import { AlertService } from './core/services/alert-service';
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatButton, MatButtonModule} from "@angular/material/button";
+import { ChatComponent } from './chat/components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {MatButton, MatButtonModule} from "@angular/material/button";
     LogInComponent,
     UserProfileComponent,
     ContactComponent,
-    AlertComponent
+    AlertComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

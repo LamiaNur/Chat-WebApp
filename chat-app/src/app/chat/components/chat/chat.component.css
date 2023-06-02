@@ -1,0 +1,81 @@
+
+    .chat-container {
+      height: 500px; /* Set the desired height for the chat container */
+      overflow-y: auto;
+      /*scrollbar-width: thin;  For Firefox */
+       /*scrollbar-color: #f1f1f1 #e9ebee; For Firefox */
+    }
+  
+    /* For Chrome, Edge, and Safari */
+    .chat-container::-webkit-scrollbar {
+      width: 10px;
+    }
+  
+    .chat-container::-webkit-scrollbar-track {
+    background-color: #e9ebee;
+  }
+
+  .chat-container::-webkit-scrollbar-thumb {
+    background-color: #bbb; /* Darken the scrollbar thumb color */
+  }
+
+  
+  
+  
+
+    .message {
+      position: relative;
+      padding: 10px;
+      border-radius: 15px;
+      max-width: 70%;
+      margin-bottom: 10px;
+    }
+  
+    .message .time {
+      position: absolute;
+      bottom: -20px;
+      font-size: 12px;
+      color: #777;
+    }
+  
+    .message-group.outgoing .message {
+      align-self: flex-end;
+    }
+
+  
+  
+
+    .message-group {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 10px;
+    }
+  
+    .message-group.incoming {
+      justify-content: flex-end;
+    }
+  
+    .message {
+      background-color: #e9ebee; /* Gray color for other chats */
+      padding: 10px;
+      border-radius: 15px;
+      max-width: 70%;
+    }
+  
+    .message-group.outgoing .message {
+      background-color: #0084ff; /* Blue color for user's chat */
+      color: white; /* Text color for user's chat */
+      align-self: flex-end;
+    }
+  
+    .btn-send {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  
+    .btn-send i {
+      margin-right: 5px;
+    }
+  
+    
+  

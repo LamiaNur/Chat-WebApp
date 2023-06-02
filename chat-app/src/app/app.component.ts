@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { CommandService } from './core/services/command-service';
 import { AuthService } from './identity/services/auth.service';
 import { take } from 'rxjs';
