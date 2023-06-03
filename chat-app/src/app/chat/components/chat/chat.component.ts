@@ -76,7 +76,8 @@ export class ChatComponent implements OnInit{
   processChats() {
     for (let index = 0; index < this.chats.length; index++) {
       const element = this.chats[index];
-      this.chats[index].sentAt = element.sentAt.split('T')[1].split('.')[0].substring(0, 5);
+      const convertedTime = new Date(element.sentAt);
+      this.chats[index].sentAt = convertedTime.toString();
     }
     console.log(this.chats);
   }

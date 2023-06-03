@@ -17,13 +17,13 @@
               <div *ngIf="chat.userId !== currentUserId" class="message-group incoming">
                 <div class="message">
                   <p>{{chat.message}}</p>
-                  <span class="time">{{chat.sentAt}} pm</span>
+                  <span class="time">{{chat.sentAt | date:'shortTime'}}</span>
                 </div>
               </div>
               <div *ngIf="chat.userId === currentUserId" class="message-group outgoing">
                 <div class="message">
                   <p>{{chat.message}}</p>
-                  <span class="time">{{chat.sentAt}} pm</span>
+                  <span class="time">{{chat.sentAt | date:'shortTime'}}</span>
                 </div>
                 <span class="message-status">{{chat.status}}</span>
               </div>
