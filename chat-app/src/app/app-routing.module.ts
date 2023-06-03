@@ -29,7 +29,7 @@ const routes: Routes = [
     canActivate: [() => inject(AuthService).canActivate()]
   },
   {
-    path : "chat",
+    path: "chat/:type",
     component: ChatComponent,
     canActivate:[() => inject(AuthService).canActivate()]
   }

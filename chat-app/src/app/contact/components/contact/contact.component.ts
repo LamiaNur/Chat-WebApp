@@ -102,6 +102,14 @@ export class ContactComponent implements OnInit {
 
   onClickedContact(contact : any) {
     console.log("clicked", contact);
+    this.router.navigateByUrl('chat/' + this.getContactUserId(contact));
+  }
+
+  getContactUserId(contact: any) {
+    if (this.currentUserId === contact.userA.id) {
+      return contact.userB.id;
+    }
+    return contact.userA.id;
   }
   
   getAcceptOrRejectContactRequestCommand(id : any) {

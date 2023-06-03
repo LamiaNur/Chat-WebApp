@@ -1,4 +1,13 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserService } from 'src/app/identity/services/user.service';
+import { SendMessageCommand } from '../../commands/send-message-command';
+import { ChatModel } from '../../models/chat-model';
+import { CommandService } from 'src/app/core/services/command-service';
+import { take, takeLast } from 'rxjs';
+import { QueryService } from 'src/app/core/services/query-service';
+import { ChatQuery } from '../../queries/chat-query';
+import { ResponseStatus } from 'src/app/core/constants/response-status';
 
 @Component({
   selector: 'app-chat',
@@ -7,10 +16,39 @@ import { Component, ElementRef, OnInit } from '@angular/core';
 })
 export class ChatComponent implements OnInit{
   
-  constructor(private elementRef : ElementRef) {}
-  scrolledChats: number = 0;
+  chatTitle : any = "khairul anam mubin";
+  lastSeen : any = "Active Now";
+  inputMessage : any = "";
+  currentUserId : any = "";
+  sendToUserId : any = "";
+  chats : any;
+
+  constructor(
+    private elementRef : ElementRef,
+    private userService : UserService,
+    private commandService : CommandService,
+    private queryServie : QueryService,
+    private router : Router) {}
   
   ngOnInit(): void {
+    this.setChatScrollStartFromBottom();
+    this.currentUserId = this.userService.getCurrentUserId();
+    this.sendToUserId = this.userService.getCurrentOpenedChatUserId();
+    var query = new ChatQuery();
+    query.sendTo = this.sendToUserId;
+    query.userId = this.currentUserId;
+
+    this.queryServie.execute(query)
+    .pipe(take(1))
+    .subscribe(res => {
+      if (res.status === ResponseStatus.success) {
+        this.chats = res.items;
+      }
+      console.log(res);
+    });
+  }
+
+  setChatScrollStartFromBottom() {
     const chatContainer = this.elementRef.nativeElement.querySelector('.chat-container');
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
@@ -21,19 +59,20 @@ export class ChatComponent implements OnInit{
     const scrollHeight = element.scrollHeight;
     const scrollTop = element.scrollTop;
     const clientHeight = element.clientHeight;
+  }
 
-    if (scrollTop === 0) {
-      // User has scrolled to the top
-      // Perform necessary action, e.g., load more chats
-    }
-
-    if (scrollTop + clientHeight === scrollHeight) {
-      // User has scrolled to the bottom
-      // Perform necessary action, e.g., mark all chats as read
-    }
-
-    // Calculate the number of chats scrolled
-    this.scrolledChats = Math.floor(scrollTop / clientHeight);
-    console.log(this.scrolledChats);
+  onClickSendMessage() {
+    console.log(this.inputMessage);
+    var sendMessageCommand = new SendMessageCommand();
+    sendMessageCommand.chatModel.userId = this.currentUserId;
+    sendMessageCommand.chatModel.sendTo = this.sendToUserId;
+    sendMessageCommand.chatModel.message = this.inputMessage;
+    sendMessageCommand.chatModel.status = "new";
+    this.inputMessage = '';
+    this.commandService.execute(sendMessageCommand)
+    .pipe(take(1))
+    .subscribe(response => {
+      this.router.navigateByUrl(this.router.url);
+    });
   }
 }

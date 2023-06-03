@@ -22,17 +22,19 @@ namespace Chat.Api.ChatModule.CommandHandlers
         public override async Task<CommandResponse> OnHandleAsync(SendMessageCommand command)
         {
             var response = command.CreateResponse();
+            command.ChatModel.Id = Guid.NewGuid().ToString();
+            command.ChatModel.SentAt = DateTime.UtcNow;
             if (!await _chatRepository.SaveChatModelAsync(command.ChatModel))
             {
                 throw new Exception("Chat model save error");
             }
-            var latestChatModel = (LatestChatModel) command.ChatModel;
+            var latestChatModel = command.ChatModel.ToLatestChatModel();
             var updateLatestChatCommand = new UpdateLatestChatCommand()
             {
                 LatestChatModel = latestChatModel
             };
             await _commandService.HandleCommandAsync(updateLatestChatCommand);
-            
+            response.Message = "Send message success";
             return response;
         }
     }

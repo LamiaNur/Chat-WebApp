@@ -10,5 +10,18 @@ namespace Chat.Api.ChatModule.Models
         public string Message {get; set;} = string.Empty;
         public DateTime SentAt {get; set;}
         public string Status {get; set;} = string.Empty;
+
+        public LatestChatModel ToLatestChatModel()
+        {
+            return new LatestChatModel
+            {
+                Id = Id,
+                UserId = UserId,
+                SendTo = SendTo,
+                Message = Message,
+                SentAt = SentAt,
+                Status = Status
+            };
+        }
     }
 }

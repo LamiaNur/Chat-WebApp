@@ -1,13 +1,15 @@
 import { QueryBase } from "src/app/core/models/query-base";
 import { Configuration } from "src/app/core/services/configuration";
 
-export class UserProfileQuery extends QueryBase{
+export class ChatQuery extends QueryBase {
     
-    email : string | undefined | null;
     userId : any;
-    
+    sendTo : any;
+
     constructor() {
         super();
-        this.apiUrl = Configuration.identityApi.concat("/Auth/user-profile");
+        this.apiUrl = Configuration.identityApi + "/chat/get";
+        this.Offset = 0;
+        this.limit = 100;
     }
 }

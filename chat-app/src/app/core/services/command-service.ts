@@ -20,9 +20,11 @@ export class CommandService {
         if (!command.apiUrl) {
             console.error("Api Url not set...");
         }
+        console.log("Executing command", command);
         this.httpClient.post<CommandResponse>(command.apiUrl, command)
         .pipe(take(1))
         .subscribe(res => {
+            console.log("Command Response", res);
             let alertType = 'error';
             if (res.status === ResponseStatus.success) {
                 alertType = 'success';
