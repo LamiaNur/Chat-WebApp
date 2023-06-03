@@ -17,7 +17,8 @@ background-color: #bbb;
   padding: 10px;
   border-radius: 15px;
   max-width: 70%;
-  margin-bottom: 10px;
+  min-width: 12%;
+  margin-bottom: 15px;
   background-color: #e9ebee;
 }
 
@@ -27,7 +28,13 @@ background-color: #bbb;
   font-size: 12px;
   color: #777;
 }
-
+.message-status {
+  padding-left: 10px;
+  color: #777;
+  bottom: 0px;
+  right: 50px;
+  font-size: 12px;
+}
 .message-group.outgoing .message {
   align-self: flex-end;
 }
@@ -77,13 +84,27 @@ background-color: #bbb;
   color:  #42b72a;
   padding: 2px 5px;
   border-radius: 10px;
+  font-size: 10px;
+}
+.active-now-idle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  /* background-color: white; Green color */
+  color:  #777;
+  padding: 2px 5px;
+  border-radius: 10px;
+  font-size: 10px;
 }
 .active-now .active-now-title {
   color: black;
+  font-size: 12px;
 }
-.active-now i {
-  font-size: 10px;
+.active-now-idle .active-now-title {
+  color: black;
+  font-size: 12px;
 }
+
 .card-title {
   padding-right: 200px;
 }

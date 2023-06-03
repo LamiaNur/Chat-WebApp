@@ -29,6 +29,27 @@ namespace Chat.Api.ActivityModule.QueryHandlers
                 throw new Exception("Last Seen Model not found");
             }
             response.AddItem(lastSeenModel);
+            var timeDifference = DateTime.UtcNow.Subtract(lastSeenModel.LastSeenAt);
+            var days = int.Parse(timeDifference.TotalDays.ToString().Split('.')[0]);
+            var hours = int.Parse(timeDifference.TotalHours.ToString().Split('.')[0]);
+            var minitues = int.Parse(timeDifference.TotalMinutes.ToString().Split('.')[0]);
+            response.SetData("Days", days);
+            response.SetData("Hours", hours);
+            response.SetData("Minitues", minitues);
+            var status = "";
+            var isActive = false;
+            if (days == 0 && hours == 0 && minitues == 0) {
+                status = "Active Now";
+                isActive = true;
+            }  else if (days == 0 && hours == 0) {
+                status = $"{minitues} minitues ago";
+            } else if (days == 0) {
+                status = $"{hours} hour ago";
+            } else {
+                status = $"{days} days ago";
+            }
+            response.SetData("Status", status);
+            response.SetData("IsActive", isActive);
             return response;
         }
     }

@@ -1,13 +1,14 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/identity/services/user.service';
 import { SendMessageCommand } from '../../commands/send-message-command';
 import { ChatModel } from '../../models/chat-model';
 import { CommandService } from 'src/app/core/services/command-service';
-import { take, takeLast } from 'rxjs';
+import { take, takeLast, timer } from 'rxjs';
 import { QueryService } from 'src/app/core/services/query-service';
 import { ChatQuery } from '../../queries/chat-query';
 import { ResponseStatus } from 'src/app/core/constants/response-status';
+import { LastSeenQuery } from 'src/app/activity/queries/last-seen-query';
 
 @Component({
   selector: 'app-chat',
@@ -20,8 +21,11 @@ export class ChatComponent implements OnInit{
   lastSeen : any = "Active Now";
   inputMessage : any = "";
   currentUserId : any = "";
+  currentUserProfile : any;
+  sendToUserProfile : any;
   sendToUserId : any = "";
   chats : any;
+  isActive : any; 
 
   constructor(
     private elementRef : ElementRef,
@@ -31,9 +35,25 @@ export class ChatComponent implements OnInit{
     private router : Router) {}
   
   ngOnInit(): void {
-    this.setChatScrollStartFromBottom();
     this.currentUserId = this.userService.getCurrentUserId();
     this.sendToUserId = this.userService.getCurrentOpenedChatUserId();
+    this.currentUserProfile = this.userService.getCurrentUserProfile();
+    this.getChats();
+    
+    this.userService.getUserProfileById(this.sendToUserId)
+    .pipe(take(1))
+    .subscribe(res => {
+      if (res.name === "UserProfileQuery") {
+        this.sendToUserProfile = res.items[0];
+        this.chatTitle = this.sendToUserProfile.firstName + " " + this.sendToUserProfile.lastName;
+        console.log("this is from user profile query Response",res);
+      }
+    });
+
+    this.getLastSeenStatus();
+  }
+
+  getChats() {
     var query = new ChatQuery();
     query.sendTo = this.sendToUserId;
     query.userId = this.currentUserId;
@@ -42,23 +62,36 @@ export class ChatComponent implements OnInit{
     .pipe(take(1))
     .subscribe(res => {
       if (res.status === ResponseStatus.success) {
+        
         this.chats = res.items;
+        this.processChats();
+        this.setChatScrollStartFromBottom();
+        console.log("this is from get chat query Response",res);
+        
       }
       console.log(res);
     });
   }
 
-  setChatScrollStartFromBottom() {
-    const chatContainer = this.elementRef.nativeElement.querySelector('.chat-container');
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+  processChats() {
+    for (let index = 0; index < this.chats.length; index++) {
+      const element = this.chats[index];
+      this.chats[index].sentAt = element.sentAt.split('T')[1].split('.')[0].substring(0, 5);
+    }
+    console.log(this.chats);
   }
+
+  setChatScrollStartFromBottom() {
+    timer(1).subscribe(res => {
+      const chatContainer = this.elementRef.nativeElement.querySelector('.chat-container');
+      chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+      console.log(chatContainer.scrollTop);
+    });
+  }
+  
 
   onChatScroll(event: any): void {
     console.log(event);
-    const element = event.target;
-    const scrollHeight = element.scrollHeight;
-    const scrollTop = element.scrollTop;
-    const clientHeight = element.clientHeight;
   }
 
   onClickSendMessage() {
@@ -67,12 +100,23 @@ export class ChatComponent implements OnInit{
     sendMessageCommand.chatModel.userId = this.currentUserId;
     sendMessageCommand.chatModel.sendTo = this.sendToUserId;
     sendMessageCommand.chatModel.message = this.inputMessage;
-    sendMessageCommand.chatModel.status = "new";
+    sendMessageCommand.chatModel.status = "Sent";
     this.inputMessage = '';
     this.commandService.execute(sendMessageCommand)
     .pipe(take(1))
     .subscribe(response => {
-      this.router.navigateByUrl(this.router.url);
+      this.getChats();
     });
+  }
+
+  getLastSeenStatus() {
+    var lastSeenQuery = new LastSeenQuery();
+    lastSeenQuery.userId = this.sendToUserId;
+    this.queryServie.execute(lastSeenQuery)
+    .pipe(take(1))
+    .subscribe(response => {
+      this.lastSeen = response.metaData.Status;
+      this.isActive = response.metaData.IsActive;
+    })
   }
 }

@@ -24,6 +24,7 @@ namespace Chat.Api.ChatModule.CommandHandlers
             var response = command.CreateResponse();
             command.ChatModel.Id = Guid.NewGuid().ToString();
             command.ChatModel.SentAt = DateTime.UtcNow;
+            command.ChatModel.Status = "Sent";
             if (!await _chatRepository.SaveChatModelAsync(command.ChatModel))
             {
                 throw new Exception("Chat model save error");
