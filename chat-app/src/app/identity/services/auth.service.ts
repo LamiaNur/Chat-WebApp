@@ -3,6 +3,7 @@ import { LoginCommand } from '../commands/login-command';
 import { RefreshTokenCommand } from '../commands/refresh-token-command';
 import { Token } from '../models/token';
 import { LogOutCommand } from '../commands/logout-command';
+import {Guid} from "guid-typescript";
 @Injectable({
     providedIn: 'root',
 })
@@ -79,7 +80,7 @@ export class AuthService {
     }
 
     private setAppId() {
-        var appId = "1234";
+        var appId = Guid.create().toString();
         localStorage.setItem("appId", appId);
         return appId;
     }

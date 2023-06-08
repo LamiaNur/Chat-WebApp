@@ -30,19 +30,19 @@ namespace Chat.Api.ActivityModule.QueryHandlers
             }
             response.AddItem(lastSeenModel);
             var timeDifference = DateTime.UtcNow.Subtract(lastSeenModel.LastSeenAt);
-            var days = int.Parse(timeDifference.TotalDays.ToString().Split('.')[0]);
-            var hours = int.Parse(timeDifference.TotalHours.ToString().Split('.')[0]);
-            var minitues = int.Parse(timeDifference.TotalMinutes.ToString().Split('.')[0]);
+            var days = ((int)timeDifference.TotalDays);
+            var hours = ((int)timeDifference.TotalHours);
+            var minutes =((int)timeDifference.TotalMinutes);
             response.SetData("Days", days);
             response.SetData("Hours", hours);
-            response.SetData("Minitues", minitues);
+            response.SetData("Minitues", minutes);
             var status = "";
             var isActive = false;
-            if (days == 0 && hours == 0 && minitues == 0) {
+            if (days == 0 && hours == 0 && minutes == 0) {
                 status = "Active Now";
                 isActive = true;
             }  else if (days == 0 && hours == 0) {
-                status = $"{minitues} minitues ago";
+                status = $"{minutes} minitues ago";
             } else if (days == 0) {
                 status = $"{hours} hour ago";
             } else {
