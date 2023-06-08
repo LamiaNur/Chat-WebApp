@@ -6,6 +6,7 @@ import { UserProfileComponent } from './identity/components/user-profile/user-pr
 import { ContactComponent } from './contact/components/contact/contact.component';
 import { AuthService } from "./identity/services/auth.service";
 import { ChatComponent } from './chat/components/chat/chat.component';
+import { ChatListComponent } from './chat/components/chat-list/chat-list.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
   {
     path: "chat/:type",
     component: ChatComponent,
+    canActivate:[() => inject(AuthService).canActivate()]
+  },
+  {
+    path: "chat",
+    component : ChatListComponent,
     canActivate:[() => inject(AuthService).canActivate()]
   }
 ];

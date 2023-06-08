@@ -118,6 +118,6 @@ export class ChatComponent implements OnInit{
     .subscribe(response => {
       this.lastSeen = response.metaData.Status;
       this.isActive = response.metaData.IsActive;
-    })
+    });
   }
 }

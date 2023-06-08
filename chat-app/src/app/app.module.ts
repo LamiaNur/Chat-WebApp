@@ -19,6 +19,7 @@ import { AlertService } from './core/services/alert-service';
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatButton, MatButtonModule} from "@angular/material/button";
 import { ChatComponent } from './chat/components/chat/chat.component';
+import { ChatListComponent } from './chat/components/chat-list/chat-list.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ChatComponent } from './chat/components/chat/chat.component';
     UserProfileComponent,
     ContactComponent,
     AlertComponent,
-    ChatComponent
+    ChatComponent,
+    ChatListComponent
   ],
   imports: [
     BrowserModule,
