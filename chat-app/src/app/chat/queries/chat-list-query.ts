@@ -7,7 +7,7 @@ export class ChatListQuery extends QueryBase {
     
     constructor() {
         super();
-        this.apiUrl = Configuration.identityApi + "/chat/get";
+        this.apiUrl = Configuration.identityApi + "/chat/list";
         this.Offset = 0;
         this.limit = 100;
     }
