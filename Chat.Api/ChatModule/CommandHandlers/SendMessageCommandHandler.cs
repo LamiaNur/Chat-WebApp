@@ -35,7 +35,6 @@ namespace Chat.Api.ChatModule.CommandHandlers
                 LatestChatModel = latestChatModel
             };
             await _commandService.HandleCommandAsync(updateLatestChatCommand);
-            response.Message = "Send message success";
             return response;
         }
     }

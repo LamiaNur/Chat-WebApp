@@ -31,7 +31,7 @@ namespace Chat.Api.ContactModule.CommandHandlers
                 Email = command.ContactEmail
             };
             var queryResponse = await _queryService.HandleQueryAsync(userProfileQuery);
-            if (queryResponse == null || queryResponse.Status == ResponseStatus.Error || queryResponse.ItemsCount < 2)
+            if (queryResponse == null || queryResponse.Status != ResponseStatus.Success || queryResponse.ItemsCount < 2)
             {
                 throw new Exception("User profile query error");
             }

@@ -6,7 +6,7 @@ namespace Chat.Api.IdentityModule.Interfaces
     {
         Task<bool> IsUserExistAsync(UserModel userModel);
         Task<bool> CreateUserAsync(UserModel userModel);
-        Task<UserModel?> GetUserAsync(string email, string password);
+        Task<UserModel?> GetUserByEmailAsync(string email);
         Task<List<UserModel>> GetUsersByUserIdOrEmailAsync(string userId, string email);
     }
 }

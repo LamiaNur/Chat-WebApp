@@ -30,12 +30,10 @@ namespace Chat.Api.IdentityModule.Repositories
             return userItem != null;
         }
 
-        public async Task<UserModel?> GetUserAsync(string email, string password)
+        public async Task<UserModel?> GetUserByEmailAsync(string email)
         {
             var emailFilter = Builders<UserModel>.Filter.Eq("Email", email);
-            var passwordFilter = Builders<UserModel>.Filter.Eq("Password", password);
-            var filter = Builders<UserModel>.Filter.And(emailFilter, passwordFilter);
-            var userModel = await _dbContext.GetItemByFilterDefinitionAsync<UserModel>(_databaseInfo, filter);
+            var userModel = await _dbContext.GetItemByFilterDefinitionAsync<UserModel>(_databaseInfo, email);
             return userModel;
         }
 
