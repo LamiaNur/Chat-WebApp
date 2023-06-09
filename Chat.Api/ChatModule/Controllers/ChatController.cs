@@ -25,6 +25,13 @@ namespace Chat.Api.ChatModule.Controllers
         {
             return Ok(await _commandService.HandleCommandAsync(command));
         }
+
+        [HttpPost, Route("update-status")]
+        public async Task<IActionResult> UpdateChatsStatusAsync(UpdateChatsStatusCommand command)
+        {
+            return Ok(await _commandService.HandleCommandAsync(command));
+        }
+
         [HttpPost, Route("list")]
         public async Task<IActionResult> GetChatListAsync(ChatListQuery query)
         {

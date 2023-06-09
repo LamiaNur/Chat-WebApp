@@ -6,5 +6,6 @@ namespace Chat.Api.ChatModule.Interfaces
     {
         Task<bool> SaveChatModelAsync(ChatModel chatModel);
         Task<List<ChatModel>> GetChatModelsAsync(string userId, string sendTo, int offset, int limit);
+        Task<List<ChatModel>> GetSenderAndReceiverSpecificChatModelsAsync(string senderId, string receiverId);
     }
 }

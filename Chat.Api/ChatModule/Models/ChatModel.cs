@@ -1,4 +1,5 @@
 using Chat.Api.CoreModule.Database.Interfaces;
+using Chat.Api.CoreModule.Helpers;
 
 namespace Chat.Api.ChatModule.Models
 {
@@ -21,6 +22,17 @@ namespace Chat.Api.ChatModule.Models
                 Message = Message,
                 SentAt = SentAt,
                 Status = Status
+            };
+        }
+        public ChatDto ToChatDto()
+        {
+            return new ChatDto
+            {
+                Id = Id,
+                UserId = UserId,
+                Message = Message,
+                Status = Status,
+                SentAt = SentAt
             };
         }
     }

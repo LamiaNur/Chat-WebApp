@@ -17,8 +17,8 @@ import { LastSeenQuery } from 'src/app/activity/queries/last-seen-query';
 })
 export class ChatComponent implements OnInit{
   
-  chatTitle : any = "khairul anam mubin";
-  lastSeen : any = "Active Now";
+  chatTitle : any = "";
+  lastSeen : any = "";
   inputMessage : any = "";
   currentUserId : any = "";
   currentUserProfile : any;
@@ -75,9 +75,13 @@ export class ChatComponent implements OnInit{
 
   processChats() {
     for (let index = 0; index < this.chats.length; index++) {
-      const element = this.chats[index];
-      const convertedTime = new Date(element.sentAt);
-      this.chats[index].sentAt = convertedTime.toString();
+      const chatTime = new Date(this.chats[index].sentAt);
+      const currentTime = new Date();
+      if (chatTime.getDay() === currentTime.getDay()) {
+        this.chats[index].sentAt = chatTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      } else {
+        this.chats[index].sentAt = chatTime.toLocaleDateString();
+      }
     }
     console.log(this.chats);
   }

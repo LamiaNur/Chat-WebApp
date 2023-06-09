@@ -3,7 +3,7 @@
       <label class="form-label">Contact Email</label>
       <input formControlName="email" type="email" class="form-control">
     </div>
-    <button [disabled]="!addContactFormControl.valid" type="submit" class="mb-3 btn btn-primary">Add Contact</button>
+    <button [disabled]="!addContactFormControl.valid" type="submit" class="mb-3 btn btn-dark">Add Contact</button>
 </form>
 
 <div class="container w-50 mt-3">
@@ -15,14 +15,14 @@
     <div class="list-group">
         <div *ngIf="activeTabIndex === 0">
             <li *ngFor="let item of items; let id = index;" class="list-group-item d-flex justify-content-between align-items-center">
-                <a (click)="onClickedContact(item)" class="list-group-item list-group-item-action" aria-current="true">
+                <button (click)="onClickedContact(item)" class="list-group-item list-group-item-action" aria-current="true">
                     <div class="d-flex w-100 justify-content-between">
                       <h3 class="mb-1">{{item.userA.id === currentUserId? item.userB.email : item.userA.email}}</h3>
                       <small>3 days ago</small>
                     </div>
                     <!-- <p class="mb-1">Some placeholder content in a paragraph.</p> -->
                     <!-- <small>And some small print.</small> -->
-                </a>
+                </button>
                 
                 <!-- <button class="btn btn-primary">Open</button> -->
             </li>
@@ -30,7 +30,7 @@
         <div *ngIf="activeTabIndex !== 0">
             <li *ngFor="let item of items; let id = index;" class="list-group-item d-flex justify-content-between align-items-center">
                 {{item.userA.id === currentUserId? item.userB.email : item.userA.email}}
-                <button class="btn btn-primary" (click)="onClickContact(id)">{{item.userA.id === currentUserId? 'Cancel Pending' : 'Accept Request'}}</button>
+                <button class="btn btn-dark" (click)="onClickContact(id)">{{item.userA.id === currentUserId? 'Cancel Pending' : 'Accept Request'}}</button>
             </li>
         </div>
     </div>

@@ -4,6 +4,8 @@ import { ChatListQuery } from '../../queries/chat-list-query';
 import { UserService } from 'src/app/identity/services/user.service';
 import { take } from 'rxjs';
 import { Router } from '@angular/router';
+import { UpdateChatsStatusCommand } from '../../commands/update-chats-status-command';
+import { CommandService } from 'src/app/core/services/command-service';
 
 @Component({
   selector: 'app-chat-list',
@@ -17,6 +19,7 @@ export class ChatListComponent implements OnInit{
   chatUsers : any;
 
   constructor(
+    private commandService: CommandService,
     private queryService : QueryService, 
     private userService : UserService,
     private router : Router) {
@@ -64,7 +67,18 @@ export class ChatListComponent implements OnInit{
   onClickChat(chat: any) {
     console.log("clicked", chat);
     var url = "chat/" + chat.userId;
-    this.router.navigateByUrl(url);
+    if (chat.occurrance === 0) {
+      this.router.navigateByUrl(url);
+      return;
+    }
+    var updateChatsStatusCommand = new UpdateChatsStatusCommand();
+    updateChatsStatusCommand.userId = this.userService.getCurrentUserId();
+    updateChatsStatusCommand.openedChatUserId = chat.userId;
+    this.commandService.execute(updateChatsStatusCommand)
+    .pipe(take(1))
+    .subscribe(response => {
+      this.router.navigateByUrl(url);
+    });    
   }
 
   getChatUser(userId : any) {
@@ -73,5 +87,7 @@ export class ChatListComponent implements OnInit{
     }
     return null;
   }
-
+  onChatListScroll($event : any) {
+    console.log($event);
+  }
 }

@@ -1,5 +1,5 @@
 <div class="text-center">
-    <button (click)="onClickEditProfile()" class="btn btn-primary">
+    <button (click)="onClickEditProfile()" class="btn btn-dark">
         {{editButtonText}}
     </button>
 </div>
@@ -24,5 +24,5 @@
       <label class="form-label">Email address</label>
       <input formControlName="email" type="email" class="form-control" readonly="true">
     </div>
-    <button *ngIf="isEditable" [disabled]="!userProfileFormControl.valid" type="submit" class="mb-3 btn btn-primary">Save</button>
+    <button *ngIf="isEditable" [disabled]="!userProfileFormControl.valid" type="submit" class="mb-3 btn btn-dark">Save</button>
 </form>

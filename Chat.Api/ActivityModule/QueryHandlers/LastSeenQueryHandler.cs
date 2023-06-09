@@ -13,9 +13,7 @@ namespace Chat.Api.ActivityModule.QueryHandlers
     [Shared]
     public class LastSeenQueryHandler : AQueryHandler<LastSeenQuery>
     {
-
-        private readonly ILastSeenRepository _lastSeenRepository;
-        
+        private readonly ILastSeenRepository _lastSeenRepository;        
         public LastSeenQueryHandler()
         {
            _lastSeenRepository = DIService.Instance.GetService<ILastSeenRepository>();
@@ -30,9 +28,9 @@ namespace Chat.Api.ActivityModule.QueryHandlers
                 throw new Exception("Last Seen Model not found");
             }
             response.AddItem(lastSeenModel);
-            var displayTime = DisplayTimeHelper.GetChatListDisplayTime(lastSeenModel.LastSeenAt.Date, "Active Now");
-            response.SetData("Status", displayTime);
+            var displayTime = DisplayTimeHelper.GetChatListDisplayTime(lastSeenModel.LastSeenAt, "Active Now");
             var isActive = displayTime == "Active Now";
+            response.SetData("Status", displayTime);
             response.SetData("IsActive", isActive);
             return response;
         }

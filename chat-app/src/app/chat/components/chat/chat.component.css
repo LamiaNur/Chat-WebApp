@@ -50,7 +50,7 @@ background-color: #bbb;
 }
 
 .message-group.outgoing .message {
-  background-color: #0084ff;
+  background-color: #343a40	;
   color: white;
   align-self: flex-end;
 }

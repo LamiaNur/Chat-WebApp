@@ -4,6 +4,7 @@ using Chat.Api.ChatModule.Queries;
 using Chat.Api.CoreModule.Interfaces;
 using Chat.Api.CoreModule.Models;
 using Chat.Api.CoreModule.Services;
+using Chat.Api.CoreModule.Helpers;
 
 namespace Chat.Api.ChatModule.QueryHandlers
 {
@@ -22,7 +23,10 @@ namespace Chat.Api.ChatModule.QueryHandlers
         {
             var response = query.CreateResponse();
             var chatModels = await _chatRepository.GetChatModelsAsync(query.UserId, query.SendTo, query.Offset, query.Limit);
-            response.AddItems(chatModels.ToList<object>());
+            foreach (var chatModel in chatModels)
+            {
+                response.AddItem(chatModel.ToChatDto());   
+            }
             return response;
         }
     }

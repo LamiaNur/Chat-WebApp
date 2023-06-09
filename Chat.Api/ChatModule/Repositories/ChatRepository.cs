@@ -37,5 +37,14 @@ namespace Chat.Api.ChatModule.Repositories
             var orFilter = Builders<ChatModel>.Filter.Or(andFilter, alterAndFilter);
             return await _dbContext.GetItemsByFilterDefinitionAsync<ChatModel>(_databaseInfo, orFilter, offset, limit);
         }
+
+        public async Task<List<ChatModel>> GetSenderAndReceiverSpecificChatModelsAsync(string senderId, string receiverId)
+        {
+            var senderFilter = Builders<ChatModel>.Filter.Eq("UserId", senderId);
+            var receiverFilter = Builders<ChatModel>.Filter.Eq("SendTo", receiverId);
+            var statusFilter = Builders<ChatModel>.Filter.Ne("Status", "Seen");
+            var andFilter = Builders<ChatModel>.Filter.And(senderFilter, receiverFilter);
+            return await _dbContext.GetItemsByFilterDefinitionAsync<ChatModel>(_databaseInfo, andFilter);
+        }
     }
 }
