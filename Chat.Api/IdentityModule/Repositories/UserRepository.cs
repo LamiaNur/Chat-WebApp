@@ -33,7 +33,7 @@ namespace Chat.Api.IdentityModule.Repositories
         public async Task<UserModel?> GetUserByEmailAsync(string email)
         {
             var emailFilter = Builders<UserModel>.Filter.Eq("Email", email);
-            var userModel = await _dbContext.GetItemByFilterDefinitionAsync<UserModel>(_databaseInfo, email);
+            var userModel = await _dbContext.GetItemByFilterDefinitionAsync<UserModel>(_databaseInfo, emailFilter);
             return userModel;
         }
 
@@ -48,6 +48,22 @@ namespace Chat.Api.IdentityModule.Repositories
             var emailFilter = Builders<UserModel>.Filter.Eq("Email", email);
             var filter = Builders<UserModel>.Filter.Or(idFilter, emailFilter);
             return await _dbContext.GetItemsByFilterDefinitionAsync<UserModel>(_databaseInfo, filter);
+        }
+
+        private async Task<List<UserModel>> GetUsersByMultipleValuesAsync(string field, List<string> values)
+        {
+            var filter = Builders<UserModel>.Filter.In(field, values);
+            return await _dbContext.GetItemsByFilterDefinitionAsync<UserModel>(_databaseInfo, filter);
+        }
+
+        public async Task<List<UserModel>> GetUsersByUserIdsAsync(List<string> userIds)
+        {
+            return await GetUsersByMultipleValuesAsync("Id", userIds);
+        }
+
+        public async Task<List<UserModel>> GetUsersByEmailsAsync(List<string> emails)
+        {
+            return await GetUsersByMultipleValuesAsync("Email", emails);
         }
     }
 }

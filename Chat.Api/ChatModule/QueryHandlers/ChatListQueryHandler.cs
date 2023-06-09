@@ -21,7 +21,11 @@ namespace Chat.Api.ChatModule.QueryHandlers
         {
             var response = query.CreateResponse();
             var latestChatModels = await _latestChatRepository.GetLatestChatModelsAsync(query.UserId, query.Offset, query.Limit);
-            response.AddItems(latestChatModels.ToList<object>());
+            foreach (var latestChatModel in latestChatModels)
+            {
+                response.AddItem(latestChatModel.ToLatestChatDto(query.UserId));
+            }
+            // response.AddItems(latestChatModels.ToList<object>());
             return response;
         }
     }

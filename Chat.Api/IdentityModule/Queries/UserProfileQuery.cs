@@ -4,11 +4,11 @@ namespace Chat.Api.IdentityModule.Queries
 {
     public class UserProfileQuery : AQuery
     {
-        public string? UserId {get; set;} = string.Empty;
-        public string? Email {get; set;} = string.Empty;
+        public List<string>? UserIds {get; set;}
+        public List<string>? Emails {get; set;}
         public override void ValidateQuery()
         {
-            if (string.IsNullOrEmpty(UserId) && string.IsNullOrEmpty(Email)) 
+            if (UserIds == null && Emails == null) 
             {
                 throw new Exception("Query Parameters not set");
             }

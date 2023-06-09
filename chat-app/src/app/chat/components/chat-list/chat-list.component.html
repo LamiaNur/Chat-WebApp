@@ -3,7 +3,8 @@
         <a (click)="onClickChat(chat)" class="list-group-item list-group-item-action" aria-current="true">
           <div class="d-flex w-100 justify-content-between">
             <h3 class="mb-1">{{chat.chatName}}</h3>
-            <small>{{chat.sentAt}}</small>
+            <small>{{chat.durationDisplayTime}}</small>
+            <small>{{chat.occurrance}}</small>
           </div>
           <p class="mb-1">{{chat.latestMessage}}</p>
           <!-- <small>And some small print.</small> -->

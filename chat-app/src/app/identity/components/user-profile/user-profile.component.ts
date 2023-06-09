@@ -7,6 +7,7 @@ import { UserProfile } from '../../models/user-profile';
 import { CommandService } from 'src/app/core/services/command-service';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -30,35 +31,18 @@ export class UserProfileComponent implements OnInit{
   constructor(
     private queryService : QueryService,
     private commandService: CommandService,
+    private userService: UserService,
     private router: Router,
     private fb: FormBuilder) {}
     
   ngOnInit(): void {
     console.log("[UserProfileComponent] ngOnInit");
-    let user = sessionStorage.getItem("userProfile");
-    if (!user) {
-      this.getUserProfile();
-    } else {
-      this.userProfile = JSON.parse(user);
-      console.log("[UserProfileComponent] using session data", this.userProfile);
-      this.setFormData();
-    }
+    this.getUserProfile();
   }
   
   getUserProfile() {
-    var userProfileQuery = new UserProfileQuery();
-    userProfileQuery.email = localStorage.getItem("email");
-    this.queryService.execute(userProfileQuery)
-    .pipe(take(1))
-    .subscribe(response => {
-      console.log("[UserProfileComponent] UserProfileQuery", response);
-      if (response.status === ResponseStatus.success) {
-        this.userProfile = response.items[0];
-        console.log("[UserProfileComponent] setting user profile to session", this.userProfile);
-        sessionStorage.setItem("userProfile", JSON.stringify(this.userProfile));
-        this.setFormData();
-      } 
-    });
+    this.userProfile = this.userService.getCurrentUserProfile();
+    this.setFormData();
   }
 
   onSubmit() {

@@ -223,10 +223,10 @@ namespace Chat.Api.CoreModule.Database.Contexts
                     throw new Exception("Collection null");
                 }
                 var itemsCursor = await collection
-                                                .Find<T>(filterDefinition)
-                                                .Skip(offset)
-                                                .Limit(limit)
-                                                .ToCursorAsync();
+                    .Find<T>(filterDefinition)
+                    .Skip(offset)
+                    .Limit(limit)
+                    .ToCursorAsync();
                 var items = await itemsCursor.ToListAsync();
                 Console.WriteLine($"Successfully Get Items by filter count : {items.Count}\n");
                 return items;

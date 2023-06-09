@@ -27,8 +27,8 @@ namespace Chat.Api.ContactModule.CommandHandlers
             var response = command.CreateResponse();
             var userProfileQuery = new UserProfileQuery()
             {
-                UserId = command.UserId,
-                Email = command.ContactEmail
+                UserIds = new List<string> {command.UserId},
+                Emails = new List<string> {command.ContactEmail}
             };
             var queryResponse = await _queryService.HandleQueryAsync(userProfileQuery);
             if (queryResponse == null || queryResponse.Status != ResponseStatus.Success || queryResponse.ItemsCount < 2)

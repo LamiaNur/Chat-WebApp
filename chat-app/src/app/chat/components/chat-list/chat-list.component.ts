@@ -14,6 +14,7 @@ export class ChatListComponent implements OnInit{
   
   items : any;
   chatList : any;
+  chatUsers : any;
 
   constructor(
     private queryService : QueryService, 
@@ -29,7 +30,16 @@ export class ChatListComponent implements OnInit{
    .pipe(take(1))
    .subscribe(response => {
     this.items = response.items;
-    this.setChatList();
+    let userIds = [];
+    for (let i = 0; i < this.items.length; i++) {
+      userIds.push(this.items[i].userId);
+    }
+    this.userService.getUserProfilesByIds(userIds)
+    .pipe(take(1))
+    .subscribe(response => {
+      this.chatUsers = response.items;
+      this.setChatList();
+    });
    });
   }
 
@@ -37,12 +47,14 @@ export class ChatListComponent implements OnInit{
     if (!this.items || this.items.length === 0) return;
     this.chatList = [];
     for (let i = 0; i < this.items.length; i++) {
+      const userProfile = this.getChatUser(this.items[i].userId);
       let chat = {
         'latestMessage' : this.items[i].message,
-        'sentAt' : this.items[i].sentAt,
-        'chatName' : "LOL",
+        'durationDisplayTime' : this.items[i].durationDisplayTime,
+        'chatName' : userProfile.firstName + " " + userProfile.lastName,
         'userId' : this.items[i].userId,
-        'sendTo': this.items[i].sendTo
+        'isReceiver' : this.items[i].isReceiver,
+        'occurrance' : this.items[i].occurrance
       };
       this.chatList.push(chat);
     } 
@@ -51,9 +63,15 @@ export class ChatListComponent implements OnInit{
 
   onClickChat(chat: any) {
     console.log("clicked", chat);
-    var id = chat.userId === this.userService.getCurrentUserId()? chat.sendTo : chat.userId;
-    var url = "chat/" + id;
+    var url = "chat/" + chat.userId;
     this.router.navigateByUrl(url);
+  }
+
+  getChatUser(userId : any) {
+    for (let i = 0; i < this.chatUsers.length; i++) {
+      if (this.chatUsers[i].id === userId) return this.chatUsers[i];
+    }
+    return null;
   }
 
 }

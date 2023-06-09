@@ -5,6 +5,7 @@ import { CommandService } from 'src/app/core/services/command-service';
 import { take, timestamp } from 'rxjs';
 import { ResponseStatus } from 'src/app/core/constants/response-status';
 import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-log-in',
@@ -21,6 +22,7 @@ export class LogInComponent implements OnInit {
   constructor(
     private commandService: CommandService,
     private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private fb: FormBuilder) {}
 
@@ -36,9 +38,15 @@ export class LogInComponent implements OnInit {
       if (response.status === ResponseStatus.success) {
         this.authService.setTokenToStore(response.metaData.Token);
         localStorage.setItem("email", this.getFormValue("email"));
-        this.router.navigateByUrl("user-profile");
-      } else {
-        alert(response.message);
+        this.userService.getUserProfileByEmail(this.getFormValue("email"))
+        .pipe(take(1))
+        .subscribe(response => {
+          if (response.status === ResponseStatus.success) {
+            console.log("received user profile", response);
+            localStorage.setItem('userProfile', JSON.stringify(response.items[0]));
+            this.router.navigateByUrl("user-profile");
+          }
+        });
       }
     });
   }

@@ -3,8 +3,8 @@ import { Configuration } from "src/app/core/services/configuration";
 
 export class UserProfileQuery extends QueryBase{
     
-    email : string | undefined | null;
-    userId : any;
+    emails : any;
+    userIds : any;
     
     constructor() {
         super();

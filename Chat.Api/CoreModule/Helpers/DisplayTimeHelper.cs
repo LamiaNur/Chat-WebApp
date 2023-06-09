@@ -4,7 +4,7 @@ namespace Chat.Api.CoreModule.Helpers
     {
         public static string GetChatListDisplayTime(DateTime time, string activeStatus = "Just Now") 
         {
-            var timeDifference = DateTime.UtcNow - time;
+            var timeDifference = DateTime.UtcNow.Subtract(time);
             var days = (int)timeDifference.TotalDays;
             var hours = (int)timeDifference.TotalHours;
             var minutes = (int)timeDifference.TotalMinutes;

@@ -13,18 +13,7 @@ export class UserService{
 
     constructor (
         private router : Router,
-        private queryService: QueryService) {
-            if (!localStorage.getItem('userProfile')) {
-                this.getUserProfileByEmail(localStorage.getItem('email'))
-                .pipe(take(1))
-                .subscribe(response => {
-                    if (response.status === ResponseStatus.success) {
-                        console.log("received user profile", response);
-                        localStorage.setItem('userProfile', JSON.stringify(response.items[0]));
-                    }
-                });
-            }
-        }
+        private queryService: QueryService) {}
     
     getCurrentUserProfile() {
         const user = localStorage.getItem("userProfile");
@@ -53,13 +42,19 @@ export class UserService{
 
     getUserProfileByEmail(email: any) {
         var userProfileQuery = new UserProfileQuery();
-        userProfileQuery.email = email;
+        userProfileQuery.emails = [email];
         return this.queryService.execute(userProfileQuery);
     }
     
     getUserProfileById(userId : any) {
         var userProfileQuery = new UserProfileQuery();
-        userProfileQuery.userId = userId;
+        userProfileQuery.userIds = [userId];
+        return this.queryService.execute(userProfileQuery);
+    }
+
+    getUserProfilesByIds(userIds : any) {
+        var userProfileQuery = new UserProfileQuery();
+        userProfileQuery.userIds = userIds;
         return this.queryService.execute(userProfileQuery);
     }
 }
