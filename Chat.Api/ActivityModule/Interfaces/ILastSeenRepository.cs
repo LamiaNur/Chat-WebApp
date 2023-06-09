@@ -6,5 +6,6 @@ namespace Chat.Api.ActivityModule.Interfaces
     {
         Task<bool> SaveLastSeenModelAsync(LastSeenModel lastSeenModel);
         Task<LastSeenModel?> GetLastSeenModelByUserIdAsync(string userId);
+        Task<List<LastSeenModel>> GetLastSeenModelsByUserIdsAsync(List<string> userIds);
     }
 }

@@ -4,11 +4,11 @@ namespace Chat.Api.ActivityModule.Queries
 {
     public class LastSeenQuery : AQuery
     {
-        public string UserId {get; set;} = string.Empty;
+        public List<string> UserIds {get; set;}
 
         public override void ValidateQuery()
         {
-            if (string.IsNullOrEmpty(UserId))
+            if (UserIds == null || !UserIds.Any())
             {
                 throw new Exception("UserId not set");
             }

@@ -3,7 +3,7 @@ import { Configuration } from "src/app/core/services/configuration";
 
 export class LastSeenQuery extends QueryBase{
     
-    userId : string | undefined;
+    userIds : any;
 
     constructor() {
         super();

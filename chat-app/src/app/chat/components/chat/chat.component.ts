@@ -116,12 +116,12 @@ export class ChatComponent implements OnInit{
 
   getLastSeenStatus() {
     var lastSeenQuery = new LastSeenQuery();
-    lastSeenQuery.userId = this.sendToUserId;
+    lastSeenQuery.userIds = [this.sendToUserId];
     this.queryServie.execute(lastSeenQuery)
     .pipe(take(1))
     .subscribe(response => {
-      this.lastSeen = response.metaData.Status;
-      this.isActive = response.metaData.IsActive;
+      this.lastSeen = response.items[0].status;
+      this.isActive = response.items[0].isActive;
     });
   }
 }

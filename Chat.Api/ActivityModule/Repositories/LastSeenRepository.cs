@@ -31,5 +31,11 @@ namespace Chat.Api.ActivityModule.Repositories
             var userIdFilter = Builders<LastSeenModel>.Filter.Eq("UserId", userId);
             return await _dbContext.GetItemByFilterDefinitionAsync<LastSeenModel>(_databaseInfo, userIdFilter);
         }
+
+        public async Task<List<LastSeenModel>> GetLastSeenModelsByUserIdsAsync(List<string> userIds)
+        {
+            var userIdsFilter = Builders<LastSeenModel>.Filter.In("UserId", userIds);
+            return await _dbContext.GetItemsByFilterDefinitionAsync<LastSeenModel>(_databaseInfo, userIdsFilter);
+        }
     }
 }

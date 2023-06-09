@@ -18,13 +18,13 @@
                 <button (click)="onClickedContact(item)" class="list-group-item list-group-item-action" aria-current="true">
                     <div class="d-flex w-100 justify-content-between">
                       <h3 class="mb-1">{{item.userA.id === currentUserId? item.userB.email : item.userA.email}}</h3>
-                      <small>3 days ago</small>
+                      <div [class]="item.isActive? 'active-now' : 'active-now-idle'">
+                        <i class="fas fa-circle"></i>
+                        <span class="active-now-title">{{item.status}}</span>
+                      </div>
+                      <!-- <small>{{item.status}}</small> -->
                     </div>
-                    <!-- <p class="mb-1">Some placeholder content in a paragraph.</p> -->
-                    <!-- <small>And some small print.</small> -->
                 </button>
-                
-                <!-- <button class="btn btn-primary">Open</button> -->
             </li>
         </div>
         <div *ngIf="activeTabIndex !== 0">

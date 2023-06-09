@@ -10,6 +10,7 @@ import { ResponseStatus } from 'src/app/core/constants/response-status';
 import { ContactQuery } from '../../queries/contact-query';
 import { QueryService } from 'src/app/core/services/query-service';
 import { AcceptOrRejectContactRequestCommand } from '../../commands/accept-or-reject-contact-request-command';
+import { LastSeenQuery } from 'src/app/activity/queries/last-seen-query';
 
 @Component({
   selector: 'app-contact',
@@ -66,6 +67,32 @@ export class ContactComponent implements OnInit {
     .subscribe(response => {
       console.log(response);
       this.items = response.items;
+      const contactUserIds = [];
+      for (let item of this.items) {
+        const userId = item.userA.id === this.currentUserId? item.userB.id : item.userA.id;
+        contactUserIds.push(userId);
+        this.getLastSeenStatus(contactUserIds);
+      }
+    });
+  }
+
+  getLastSeenStatus(userIds : any) {
+    var lastSeenQuery = new LastSeenQuery();
+    lastSeenQuery.userIds = userIds;
+    this.queryService.execute(lastSeenQuery)
+    .pipe(take(1))
+    .subscribe(response => {
+      // TODO : need to refactor here
+      for (let i = 0; i < this.items.length; i++) {
+        const userId = this.items[i].userA.id === this.currentUserId? this.items[i].userB.id : this.items[i].userA.id;
+        for (let item of response.items) {
+          if (item.userId === userId) {
+            this.items[i].status = item.status;
+            this.items[i].isActive = item.isActive;
+            break;
+          }
+        }
+      }
     });
   }
 

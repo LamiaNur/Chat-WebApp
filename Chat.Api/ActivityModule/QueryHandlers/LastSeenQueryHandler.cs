@@ -22,16 +22,15 @@ namespace Chat.Api.ActivityModule.QueryHandlers
         public override async Task<QueryResponse> OnHandleAsync(LastSeenQuery query)
         {
             var response = query.CreateResponse();
-            var lastSeenModel = await _lastSeenRepository.GetLastSeenModelByUserIdAsync(query.UserId);
-            if (lastSeenModel == null)
+            var lastSeenModels = await _lastSeenRepository.GetLastSeenModelsByUserIdsAsync(query.UserIds);
+            if (lastSeenModels == null)
             {
-                throw new Exception("Last Seen Model not found");
+                throw new Exception("Last Seen Models Query Problems");
             }
-            response.AddItem(lastSeenModel);
-            var displayTime = DisplayTimeHelper.GetChatListDisplayTime(lastSeenModel.LastSeenAt, "Active Now");
-            var isActive = displayTime == "Active Now";
-            response.SetData("Status", displayTime);
-            response.SetData("IsActive", isActive);
+            foreach (var lastSeenModel in lastSeenModels)
+            {
+                response.AddItem(lastSeenModel.ToLastSeenDto());
+            }
             return response;
         }
     }

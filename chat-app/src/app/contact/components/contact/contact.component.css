@@ -1,0 +1,28 @@
+.active-now {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    /* background-color: white; Green color */
+    color:  #42b72a;
+    padding: 2px 5px;
+    border-radius: 10px;
+    font-size: 10px;
+  }
+  .active-now-idle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    /* background-color: white; Green color */
+    color:  #777;
+    padding: 2px 5px;
+    border-radius: 10px;
+    font-size: 10px;
+  }
+  .active-now .active-now-title {
+    color: black;
+    font-size: 12px;
+  }
+  .active-now-idle .active-now-title {
+    color: black;
+    font-size: 12px;
+  }

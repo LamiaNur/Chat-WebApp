@@ -22,7 +22,7 @@ namespace Chat.Api.CoreModule.Helpers
             }
             return $"{days} days ago";
         }
-        
+
         public static string GetChatDisplayTime(DateTime time)
         {
             var timeDifference = DateTime.UtcNow.Subtract(time);
@@ -34,6 +34,19 @@ namespace Chat.Api.CoreModule.Helpers
                 return time.ToString("h:mm tt");
             }
             return time.ToString("dd/MM/yyyy");
+        }
+
+        public static bool IsActive(DateTime time)
+        {
+            var timeDifference = DateTime.UtcNow.Subtract(time);
+            var days = (int)timeDifference.TotalDays;
+            var hours = (int)timeDifference.TotalHours;
+            var minutes = (int)timeDifference.TotalMinutes;
+            if (days == 0 && hours == 0 && minutes == 0)
+            {
+                return true;
+            }  
+            return false;
         }
     }
 }
