@@ -14,9 +14,11 @@ namespace Chat.Api.ChatModule.CommandHandlers
     public class SendMessageCommandHandler : ACommandHandler<SendMessageCommand>
     {
         private readonly IChatRepository _chatRepository;
+        private readonly IChatHubService _chatHubService;
         
         public SendMessageCommandHandler()
         {
+            _chatHubService = DIService.Instance.GetService<IChatHubService>();
             _chatRepository = DIService.Instance.GetService<IChatRepository>();
         }
         public override async Task<CommandResponse> OnHandleAsync(SendMessageCommand command)
@@ -29,6 +31,10 @@ namespace Chat.Api.ChatModule.CommandHandlers
             {
                 throw new Exception("Chat model save error");
             }
+            var requestContext = command.GetValue<RequestContext>("RequestContext");
+            _chatHubService._hubContext = requestContext.HubContext;
+            await _chatHubService.SendAsync<ChatModel>(command.ChatModel.SendTo, command.ChatModel);
+
             var latestChatModel = command.ChatModel.ToLatestChatModel();
             var updateLatestChatCommand = new UpdateLatestChatCommand()
             {

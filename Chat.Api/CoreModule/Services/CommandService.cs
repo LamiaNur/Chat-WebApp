@@ -9,7 +9,7 @@ namespace Chat.Api.CoreModule.Services
     [Shared]
     public class CommandService : ICommandService
     {
-        public async Task<CommandResponse> HandleCommandAsync(ICommand command)
+        public async Task<CommandResponse> HandleCommandAsync(ICommand command, RequestContext requestContext = null)
         {
             var commandName = command.GetType().Name;
             var handlerName = $"{commandName}Handler";
@@ -26,7 +26,7 @@ namespace Chat.Api.CoreModule.Services
                     throw new Exception("Handler not found");
                 }
                 Console.WriteLine($"Success Resolving CommandHandler: {handlerName}\n");
-                var response = await handler.HandleAsync(command);
+                var response = await handler.HandleAsync(command, requestContext);
                 if (string.IsNullOrEmpty(response.Status)) 
                 {
                     response.Status = ResponseStatus.Success;

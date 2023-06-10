@@ -4,6 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Chat.Api.ActivityModule.Middlewares;
 using Chat.Api.CoreModule.Services;
+using Chat.Api.ChatModule.Hubs;
+using Chat.Api.ChatModule.Interfaces;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.Api
 {
@@ -39,6 +42,7 @@ namespace Chat.Api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF32.GetBytes(Configuration["TokenConfig:SecretKey"]))
                 };
             });
+            services.AddSignalR();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
@@ -69,15 +73,17 @@ namespace Chat.Api
                     }
                 });
             });
-            services.AddCors(options => {
-                options.AddDefaultPolicy(builder => {
-                    builder.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-                });
-            });
+            services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+            {
+                builder.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowCredentials();
+            }));
             
             services.AddTransient<LastSeenMiddleware>();
+            // services.AddSingleton<IHubConnectionService, HubConnectionService>();
+            // services.AddTransient<IChatHubService, ChatHubService>();
             DIService.Instance.Initialize(services.BuildServiceProvider(), "Chat");
         }
 
@@ -92,12 +98,13 @@ namespace Chat.Api
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseRouting();
-            app.UseCors();
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
             app.UseMiddleware<LastSeenMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }

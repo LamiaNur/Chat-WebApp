@@ -20,6 +20,7 @@ import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatButton, MatButtonModule} from "@angular/material/button";
 import { ChatComponent } from './chat/components/chat/chat.component';
 import { ChatListComponent } from './chat/components/chat-list/chat-list.component';
+import { SignalRService } from './core/services/signalr-service';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { ChatListComponent } from './chat/components/chat-list/chat-list.compone
     AuthService,
     UserService,
     AlertService,
+    SignalRService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
