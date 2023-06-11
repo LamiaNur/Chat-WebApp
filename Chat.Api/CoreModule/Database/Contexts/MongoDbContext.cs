@@ -15,7 +15,7 @@ namespace Chat.Api.CoreModule.Database.Contexts
         public MongoDbContext()
         {
             _dbClients = new Dictionary<string, MongoClient>();
-            MaxLimit = 100;
+            MaxLimit = 1000;
         }
 
         private MongoClient? GetClient(string connectionString)
