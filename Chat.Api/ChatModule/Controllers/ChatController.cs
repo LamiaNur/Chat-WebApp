@@ -12,7 +12,7 @@ namespace Chat.Api.ChatModule.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    // [Microsoft.AspNetCore.Authorization.Authorize]
+    [Authorize]
     public class ChatController : ControllerBase
     {
         private readonly ICommandService _commandService;

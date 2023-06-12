@@ -3,15 +3,16 @@ import * as signalR from '@microsoft/signalr';
 import { AuthService } from 'src/app/identity/services/auth.service';
 import { AlertService } from './alert-service';
 import { Subject } from 'rxjs';
+import { ChatSocketService } from 'src/app/chat/services/chat-socket-service';
 
 @Injectable()
 export class SignalRService {
-  private hubConnection: any;
   
-  private notificationSubject : Subject<any> = new Subject<any>();
+  private hubConnection: any;
 
-  constructor(private authService: AuthService,
-    private alertService: AlertService) { }
+  constructor(
+    private authService: AuthService,
+    private chatSocketService : ChatSocketService) { }
 
   startConnection(): void {
     const token = this.authService.getAccessToken();
@@ -21,15 +22,13 @@ export class SignalRService {
     this.hubConnection = new signalR.HubConnectionBuilder()
     .withUrl("https://localhost:50501/chatHub", options)
     .build();
+    
     this.hubConnection.start().catch((err: string) => document.write(err));
 
     this.hubConnection.on("ReceivedChat",  (message: any) => {
         console.log("Received message with web socket", message);
-        this.notificationSubject.next(message);
-        // this.alertService.showAlert(JSON.stringify(message), 'success', 1000);
+        this.chatSocketService.chatSubject.next(message);
     });
   }
-  getNotificationObservable() {
-    return this.notificationSubject.asObservable();
-  }
+
 }

@@ -13,7 +13,7 @@
             </div>
           </div>
           <div class="card-body chat-container"  (scroll)="onChatScroll($event)">
-            <div *ngFor="let chat of chats">
+            <div *ngFor="let chat of chats | reverse">
               <div *ngIf="chat.userId !== currentUserId" class="message-group incoming">
                 <div class="message">
                   <p>{{chat.message}}</p>

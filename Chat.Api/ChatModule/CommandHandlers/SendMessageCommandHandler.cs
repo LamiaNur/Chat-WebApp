@@ -41,6 +41,7 @@ namespace Chat.Api.ChatModule.CommandHandlers
                 LatestChatModel = latestChatModel
             };
             await _commandService.HandleCommandAsync(updateLatestChatCommand);
+            response.SetData("Message", command.ChatModel.ToChatDto());
             return response;
         }
     }

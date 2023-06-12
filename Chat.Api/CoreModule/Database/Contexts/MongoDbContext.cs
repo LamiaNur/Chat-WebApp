@@ -222,8 +222,10 @@ namespace Chat.Api.CoreModule.Database.Contexts
                 {
                     throw new Exception("Collection null");
                 }
+                var sortDef = Builders<T>.Sort.Descending("SentAt");
                 var itemsCursor = await collection
                     .Find<T>(filterDefinition)
+                    .Sort(sortDef)
                     .Skip(offset)
                     .Limit(limit)
                     .ToCursorAsync();

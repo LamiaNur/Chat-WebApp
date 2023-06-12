@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/identity/services/user.service';
 import { SendMessageCommand } from '../../commands/send-message-command';
@@ -11,6 +11,7 @@ import { ResponseStatus } from 'src/app/core/constants/response-status';
 import { LastSeenQuery } from 'src/app/activity/queries/last-seen-query';
 import { Subject } from '@microsoft/signalr';
 import { SignalRService } from 'src/app/core/services/signalr-service';
+import { ChatSocketService } from '../../services/chat-socket-service';
 
 @Component({
   selector: 'app-chat',
@@ -28,6 +29,8 @@ export class ChatComponent implements OnInit{
   sendToUserId : any = "";
   chats : any;
   isActive : any; 
+  query: ChatQuery = new ChatQuery();
+  totalChats:any;
 
   constructor(
     private elementRef : ElementRef,
@@ -35,13 +38,18 @@ export class ChatComponent implements OnInit{
     private commandService : CommandService,
     private queryServie : QueryService,
     private signalRService: SignalRService,
+    private chatSocketService: ChatSocketService,
     private router : Router) {}
   
   ngOnInit(): void {
+    this.chats = [];
     this.currentUserId = this.userService.getCurrentUserId();
     this.sendToUserId = this.userService.getCurrentOpenedChatUserId();
     this.currentUserProfile = this.userService.getCurrentUserProfile();
-    this.getChats();
+
+    this.query.sendTo = this.sendToUserId;
+    this.query.userId = this.currentUserId;
+    this.getChats(this.query);
     
     this.userService.getUserProfileById(this.sendToUserId)
     .pipe(take(1))
@@ -52,7 +60,7 @@ export class ChatComponent implements OnInit{
         console.log("this is from user profile query Response",res);
       }
     });
-    this.signalRService.getNotificationObservable()
+    this.chatSocketService.getChatSocketObservable()
     .subscribe(message => {
       message = this.processChat(message);
       this.chats.push(message);
@@ -62,19 +70,17 @@ export class ChatComponent implements OnInit{
     this.getLastSeenStatus();
   }
 
-  getChats() {
-    var query = new ChatQuery();
-    query.sendTo = this.sendToUserId;
-    query.userId = this.currentUserId;
-
+  getChats(query : ChatQuery) {
     this.queryServie.execute(query)
     .pipe(take(1))
     .subscribe(res => {
       if (res.status === ResponseStatus.success) {
-        
-        this.chats = res.items;
+        this.chats = this.chats.concat(res.items);
         this.processChats();
-        this.setChatScrollStartFromBottom();
+        if (query.Offset === 0) {
+          this.setChatScrollStartFromBottom();
+          this.totalChats = res.totalCount;
+        }
         console.log("this is from get chat query Response",res);
         
       }
@@ -83,15 +89,10 @@ export class ChatComponent implements OnInit{
   }
 
   processChats() {
-    for (let index = 0; index < this.chats.length; index++) {
+    let totalLen = this.query.Offset + this.query.limit;
+    if (totalLen > this.chats.length) totalLen = this.chats.length;
+    for (let index = this.query.Offset; index < totalLen; index++) {
       this.chats[index] = this.processChat(this.chats[index]);
-      // const chatTime = new Date(this.chats[index].sentAt);
-      // const currentTime = new Date();
-      // if (chatTime.getDay() === currentTime.getDay()) {
-      //   this.chats[index].sentAt = chatTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-      // } else {
-      //   this.chats[index].sentAt = chatTime.toLocaleDateString();
-      // }
     }
     console.log(this.chats);
   }
@@ -117,7 +118,10 @@ export class ChatComponent implements OnInit{
   
 
   onChatScroll(event: any): void {
-    console.log(event);
+    console.log("clientHeight : " + event.target.clientHeight + "\nscrolltop : " + event.target.scrollTop + "\nscrollheight : " + event.target.scrollHeight);
+    if( event.target.scrollTop < event.target.clientHeight) {
+      this.getChats(this.query.getNextPaginationQuery());
+    }
   }
 
   onClickSendMessage() {
@@ -131,7 +135,10 @@ export class ChatComponent implements OnInit{
     this.commandService.execute(sendMessageCommand)
     .pipe(take(1))
     .subscribe(response => {
-      this.getChats();
+      // this.getChats(this.query);
+      // this.chats = [this.processChat(response.metaData.Message)].concat(this.chats);
+      // this.processChats();
+      // this.setChatScrollStartFromBottom();
     });
   }
 
