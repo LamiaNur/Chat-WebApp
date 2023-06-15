@@ -63,7 +63,7 @@ export class ChatComponent implements OnInit{
     this.chatSocketService.getChatSocketObservable()
     .subscribe(message => {
       message = this.processChat(message);
-      this.chats.push(message);
+      this.chats = [message].concat(this.chats);
       // this.processChats();
       this.setChatScrollStartFromBottom();
     });

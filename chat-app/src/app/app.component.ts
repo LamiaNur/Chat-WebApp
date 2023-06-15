@@ -27,8 +27,8 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
-
-    this.signalRService.startConnection();
+    if (this.isLoggedIn)
+      this.signalRService.startConnection();
   }
 
   onClickLogOut() {
