@@ -5,6 +5,9 @@ using Chat.Api.FileStoreModule.Interfaces;
 using Chat.Api.FileStoreModule.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Chat.Api.ChatModule.Hubs;
+using Chat.Api.CoreModule.Models;
 
 namespace Chat.Api.FileStoreModule.Controllers
 {
@@ -16,22 +19,27 @@ namespace Chat.Api.FileStoreModule.Controllers
         private readonly ICommandService _commandService;
         private readonly IQueryService _queryService;
         private readonly IFileRepository _fileRepository;
-        public FileController()
+        private readonly IHubContext<ChatHub> _hubContext;
+        public FileController(IHubContext<ChatHub> hubContext)
         {
             _commandService = DIService.Instance.GetService<ICommandService>();
             _queryService = DIService.Instance.GetService<IQueryService>();
             _fileRepository = DIService.Instance.GetService<IFileRepository>();
+            _hubContext = hubContext;
         }
 
         [HttpPost]
         [Route("upload")]
         public async Task<IActionResult> UploadAsync(IFormFile formFile)
         {
+            var context = new RequestContext();
+            context.HubContext = _hubContext;
+            context.HttpContext = HttpContext;
             var fileUploadCommand = new UploadFileCommand()
             {
                 FormFile = formFile
             };
-            return Ok(await _commandService.HandleCommandAsync(fileUploadCommand));
+            return Ok(await _commandService.HandleCommandAsync(fileUploadCommand, context));
         }
 
         [HttpPost]

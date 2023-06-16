@@ -2,13 +2,19 @@ using System.Composition;
 using Chat.Api.CoreModule.Constants;
 using Chat.Api.CoreModule.Interfaces;
 using Chat.Api.CoreModule.Models;
-
+using Chat.Api.IdentityModule.Interfaces;
+using Microsoft.Net.Http.Headers;
 namespace Chat.Api.CoreModule.Services 
 {
     [Export(typeof(ICommandService))]
     [Shared]
     public class CommandService : ICommandService
     {
+        private ITokenService _tokenService;
+        public CommandService()
+        {
+            _tokenService = DIService.Instance.GetService<ITokenService>();
+        }
         public async Task<CommandResponse> HandleCommandAsync(ICommand command, RequestContext requestContext = null)
         {
             var commandName = command.GetType().Name;
@@ -26,6 +32,9 @@ namespace Chat.Api.CoreModule.Services
                     throw new Exception("Handler not found");
                 }
                 Console.WriteLine($"Success Resolving CommandHandler: {handlerName}\n");
+                var accessToken = requestContext.HttpContext.Request.Headers[HeaderNames.Authorization].ToString();
+                var userProfile = _tokenService.GetUserProfileFromAccessToken(accessToken);
+                requestContext.CurrentUser = userProfile;
                 var response = await handler.HandleAsync(command, requestContext);
                 if (string.IsNullOrEmpty(response.Status)) 
                 {

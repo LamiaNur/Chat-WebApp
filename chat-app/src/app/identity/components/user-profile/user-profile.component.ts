@@ -66,4 +66,8 @@ export class UserProfileComponent implements OnInit{
       email: this.userProfile.email
     });
   }
+  onFileSelected($event: any) {
+    console.log($event);
+    const file:File = $event.target.files[0];
+  }
 }

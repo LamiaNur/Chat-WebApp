@@ -31,6 +31,7 @@ export class ChatComponent implements OnInit{
   isActive : any; 
   query: ChatQuery = new ChatQuery();
   totalChats:any;
+  canExecuteChatQuery: any = true;
 
   constructor(
     private elementRef : ElementRef,
@@ -57,14 +58,12 @@ export class ChatComponent implements OnInit{
       if (res.name === "UserProfileQuery") {
         this.sendToUserProfile = res.items[0];
         this.chatTitle = this.sendToUserProfile.firstName + " " + this.sendToUserProfile.lastName;
-        console.log("this is from user profile query Response",res);
       }
     });
     this.chatSocketService.getChatSocketObservable()
     .subscribe(message => {
       message = this.processChat(message);
       this.chats = [message].concat(this.chats);
-      // this.processChats();
       this.setChatScrollStartFromBottom();
     });
     this.getLastSeenStatus();
@@ -75,26 +74,24 @@ export class ChatComponent implements OnInit{
     .pipe(take(1))
     .subscribe(res => {
       if (res.status === ResponseStatus.success) {
-        this.chats = this.chats.concat(res.items);
-        this.processChats();
-        if (query.Offset === 0) {
-          this.setChatScrollStartFromBottom();
-          this.totalChats = res.totalCount;
+        if (res.items.length === 0) {
+          this.canExecuteChatQuery = false;
+        } else {
+          this.chats = this.chats.concat(this.processChats(res.items));
+          if (query.Offset === 0) {
+            this.setChatScrollStartFromBottom();
+            this.totalChats = res.totalCount;
+          }
         }
-        console.log("this is from get chat query Response",res);
-        
       }
-      console.log(res);
     });
   }
 
-  processChats() {
-    let totalLen = this.query.Offset + this.query.limit;
-    if (totalLen > this.chats.length) totalLen = this.chats.length;
-    for (let index = this.query.Offset; index < totalLen; index++) {
-      this.chats[index] = this.processChat(this.chats[index]);
+  processChats(chats : any) {
+    for (let index = 0; index < chats.length; index++) {
+      chats[index] = this.processChat(chats[index]);
     }
-    console.log(this.chats);
+    return chats;
   }
 
   processChat(chat : any) {
@@ -112,14 +109,13 @@ export class ChatComponent implements OnInit{
     timer(1).subscribe(res => {
       const chatContainer = this.elementRef.nativeElement.querySelector('.chat-container');
       chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-      console.log(chatContainer.scrollTop);
     });
   }
   
 
   onChatScroll(event: any): void {
     console.log("clientHeight : " + event.target.clientHeight + "\nscrolltop : " + event.target.scrollTop + "\nscrollheight : " + event.target.scrollHeight);
-    if( event.target.scrollTop < event.target.clientHeight) {
+    if( event.target.scrollTop < event.target.clientHeight && this.canExecuteChatQuery) {
       this.getChats(this.query.getNextPaginationQuery());
     }
   }
@@ -135,10 +131,8 @@ export class ChatComponent implements OnInit{
     this.commandService.execute(sendMessageCommand)
     .pipe(take(1))
     .subscribe(response => {
-      // this.getChats(this.query);
-      // this.chats = [this.processChat(response.metaData.Message)].concat(this.chats);
-      // this.processChats();
-      // this.setChatScrollStartFromBottom();
+      this.chats = [this.processChat(response.metaData.Message)].concat(this.chats);
+      this.setChatScrollStartFromBottom();
     });
   }
 
