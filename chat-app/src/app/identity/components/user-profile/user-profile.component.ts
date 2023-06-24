@@ -54,6 +54,7 @@ export class UserProfileComponent implements OnInit{
       console.log(response);
       this.profilePictureDetails = response.items[0];
       this.fileService.downloadFile(this.userProfile.profilePictureId)
+      .pipe(take(1))
       .subscribe(response => {
         this.userBlobImageUrl = response;
       });

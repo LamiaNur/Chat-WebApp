@@ -63,8 +63,10 @@ export class ChatComponent implements OnInit{
         this.chatTitle = this.sendToUserProfile.firstName + " " + this.sendToUserProfile.lastName;
         if (this.sendToUserProfile.profilePictureId){
           this.fileService.downloadFile(this.sendToUserProfile.profilePictureId)
+          .pipe(take(1))
           .subscribe(response => {
             this.sendToUserBlobImageUrl = response;
+            console.log("Blob url", response);
           });
         }
       }
