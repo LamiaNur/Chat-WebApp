@@ -40,6 +40,19 @@ export class UserService{
         return '';
     }
 
+    getCurrentOpenedProfileUserId() {
+        if (this.router.url.includes('user')) {
+            let splittedUrl = this.router.url.split('/');
+            if (splittedUrl.length === 0) {
+                splittedUrl = this.router.url.split('\\');
+            } 
+            if (splittedUrl.length === 0) return '';
+            splittedUrl = splittedUrl.reverse();
+            return splittedUrl[0];
+        }
+        return '';
+    }
+
     setUserProfileToStore(userProfile: any) {
         localStorage.setItem('userProfile', JSON.stringify(userProfile));
     }

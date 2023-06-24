@@ -18,11 +18,14 @@ import { UpdateUserProfileCommand } from '../../commands/update-user-profile-com
 })
 export class UserProfileComponent implements OnInit{
   
+  isCurrentUser: boolean = false;
+  currentUserId: any;
   isEditable : boolean = false;
   editButtonText : string = "Edit Profile";
   userProfile : UserProfile = new UserProfile();
   profilePictureDetails : any;
   userBlobImageUrl : any = '';
+  pictureUploadEnable: boolean = false;
 
   userProfileFormControl = this.fb.group({
     firstName : ['', [Validators.required, Validators.pattern('[a-zA-z ]*')]],
@@ -42,21 +45,32 @@ export class UserProfileComponent implements OnInit{
     
   ngOnInit(): void {
     console.log("[UserProfileComponent] ngOnInit");
-    this.getUserProfile();
+    this.currentUserId = this.userService.getCurrentUserId();
+    if (this.router.url.includes(this.currentUserId)) {
+      this.isCurrentUser = true;
+    } else {
+      this.isCurrentUser = false;
+      this.currentUserId = this.userService.getCurrentOpenedProfileUserId();
+    }
+    this.getUserProfile(this.currentUserId);
   }
   
-  getUserProfile() {
-    this.userProfile = this.userService.getCurrentUserProfile();
-    this.setFormData();
-    this.fileService.getFileModelByFileId(this.userProfile.profilePictureId)
+  getUserProfile(userId : any) {
+    this.userService.getUserProfileById(userId)
     .pipe(take(1))
     .subscribe(response => {
-      console.log(response);
-      this.profilePictureDetails = response.items[0];
-      this.fileService.downloadFile(this.userProfile.profilePictureId)
+      this.userProfile = response.items[0];
+      this.setFormData();
+      this.fileService.getFileModelByFileId(this.userProfile.profilePictureId)
       .pipe(take(1))
       .subscribe(response => {
-        this.userBlobImageUrl = response;
+        console.log(response);
+        this.profilePictureDetails = response.items[0];
+        this.fileService.downloadFile(this.userProfile.profilePictureId)
+        .pipe(take(1))
+        .subscribe(response => {
+          this.userBlobImageUrl = response;
+        });
       });
     });
   }
@@ -72,6 +86,10 @@ export class UserProfileComponent implements OnInit{
     this.isEditable = !this.isEditable;
     if (this.isEditable) this.editButtonText = "Cancel";
     else this.editButtonText = "Edit Profile";
+  }
+
+  onClickUpdateProfilePicture() {
+    this.pictureUploadEnable = true;
   }
 
   setFormData() {
@@ -103,7 +121,7 @@ export class UserProfileComponent implements OnInit{
     .subscribe(response => {
       this.userProfile = response.metaData.UserProfile;
       this.userService.setUserProfileToStore(this.userProfile);
-      this.getUserProfile();
+      this.getUserProfile(this.userProfile.id);
     });
   }
 

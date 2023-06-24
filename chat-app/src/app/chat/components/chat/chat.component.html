@@ -3,7 +3,7 @@
       <div class="col-md-6 offset-md-3">
         <div class="card">
           <div class="d-flex justify-content-between card-header align-items-center">
-            <div *ngIf="sendToUserBlobImageUrl" class="user-picture">
+            <div (click)="onClickUserProfile()" *ngIf="sendToUserBlobImageUrl" class="user-picture">
               <img [src]="sendToUserBlobImageUrl" alt="Image">
             </div>
             <h3 class="card-title mt-2">{{chatTitle}}</h3>

@@ -20,7 +20,7 @@ const routes: Routes = [
     canActivate: [() => !inject(AuthService).canActivate()]
   },
   {
-    path: "user-profile",
+    path: "user/:type",
     component: UserProfileComponent,
     canActivate: [() => inject(AuthService).canActivate()]
   },

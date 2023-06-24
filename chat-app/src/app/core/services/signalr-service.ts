@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/identity/services/auth.service';
 import { AlertService } from './alert-service';
 import { Subject } from 'rxjs';
 import { ChatSocketService } from 'src/app/chat/services/chat-socket-service';
+import { Configuration } from './configuration';
 
 @Injectable()
 export class SignalRService {
@@ -20,7 +21,7 @@ export class SignalRService {
         accessTokenFactory : () => token
     };
     this.hubConnection = new signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:50501/chatHub", options)
+    .withUrl(Configuration.chatHubApi, options)
     .build();
     
     this.hubConnection.start().catch((err: string) => document.write(err));

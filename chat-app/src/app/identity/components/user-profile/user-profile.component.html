@@ -5,13 +5,16 @@
         <img *ngIf="userBlobImageUrl" class="card-img-top" [attr.src]="userBlobImageUrl" alt="Image">
         <h2 class="card-title text-center">{{userProfile.firstName}} {{userProfile.lastName}}</h2>
       </div>
-      <div class="card-footer text-center">
+      <div *ngIf="!pictureUploadEnable && isCurrentUser" class="card-footer text-center">
+        <button (click)="onClickUpdateProfilePicture()" class="btn btn-dark">Update Profile Picture</button>
+      </div>
+      <div *ngIf="pictureUploadEnable" class="card-footer text-center">
         <input type="file" class="file-input" (change)="onFileSelected($event)">
       </div>
     </div>
   </div>
   <div class="col">
-    <div class="text-center">
+    <div *ngIf="isCurrentUser" class="text-center">
       <button (click)="onClickEditProfile()" class="btn btn-dark">
           {{editButtonText}}
       </button>

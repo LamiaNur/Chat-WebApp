@@ -157,4 +157,9 @@ export class ChatComponent implements OnInit{
       this.isActive = response.items[0].isActive;
     });
   }
+
+  onClickUserProfile() {
+    const userId = this.sendToUserId;
+    this.router.navigateByUrl('/user/' + userId);
+  }
 }
