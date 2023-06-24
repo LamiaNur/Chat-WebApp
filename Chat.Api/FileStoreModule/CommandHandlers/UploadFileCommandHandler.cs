@@ -24,7 +24,7 @@ namespace Chat.Api.FileStoreModule.CommandHandlers
         {
             var response = command.CreateResponse();
             var file = command.FormFile;
-            var pathToSave = "FileStoreService\\Store";
+            var pathToSave = "FileStoreModule\\Store";
             if (file.Length <= 0) 
             {
                 throw new Exception("File Length 0");

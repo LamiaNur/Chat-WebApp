@@ -43,7 +43,7 @@ export class LogInComponent implements OnInit {
         .subscribe(response => {
           if (response.status === ResponseStatus.success) {
             console.log("received user profile", response);
-            localStorage.setItem('userProfile', JSON.stringify(response.items[0]));
+            this.userService.setUserProfileToStore(response.items[0]);
             this.router.navigateByUrl("user-profile");
           }
         });

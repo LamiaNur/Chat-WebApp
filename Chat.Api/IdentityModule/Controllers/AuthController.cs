@@ -54,5 +54,13 @@ namespace Chat.Api.IdentityModule.Controllers
         {
             return Ok(await _queryService.HandleQueryAsync(query));
         }
+        
+        [HttpPost]
+        [Route("update")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUserAsync(UpdateUserProfileCommand command)
+        {
+            return Ok(await _commandService.HandleCommandAsync(command));
+        }
     }
 }

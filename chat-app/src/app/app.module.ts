@@ -23,6 +23,8 @@ import { ChatListComponent } from './chat/components/chat-list/chat-list.compone
 import { SignalRService } from './core/services/signalr-service';
 import { ChatSocketService } from './chat/services/chat-socket-service';
 import { ReversePipe } from './core/pipes/reverse-pipe';
+import { FileService } from './core/services/file-service';
+import { SafeUrlPipe } from './core/pipes/safe-url-pipe';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { ReversePipe } from './core/pipes/reverse-pipe';
     AlertComponent,
     ChatComponent,
     ChatListComponent,
-    ReversePipe
+    ReversePipe,
+    SafeUrlPipe
   ],
   imports: [
     BrowserModule,
@@ -54,6 +57,7 @@ import { ReversePipe } from './core/pipes/reverse-pipe';
     AlertService,
     SignalRService,
     ChatSocketService,
+    FileService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]

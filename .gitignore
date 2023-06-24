@@ -7,6 +7,7 @@
 /bazel-out
 /bin
 /obj
+**/FileStoreModule/Store/
 # Node
 /node_modules
 npm-debug.log

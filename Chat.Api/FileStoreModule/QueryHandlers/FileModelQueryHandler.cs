@@ -27,6 +27,8 @@ namespace Chat.Api.FileStoreModule.QueryHandlers
             {
                 throw new Exception("File not found");
             }
+            var path = Directory.GetCurrentDirectory();
+            fileModel.Url = Path.Combine(path, fileModel.Url);
             response.AddItem(fileModel);
             return response;
         }

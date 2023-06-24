@@ -40,6 +40,10 @@ export class UserService{
         return '';
     }
 
+    setUserProfileToStore(userProfile: any) {
+        localStorage.setItem('userProfile', JSON.stringify(userProfile));
+    }
+    
     getUserProfileByEmail(email: any) {
         var userProfileQuery = new UserProfileQuery();
         userProfileQuery.emails = [email];

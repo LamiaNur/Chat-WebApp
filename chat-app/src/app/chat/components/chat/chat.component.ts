@@ -12,6 +12,7 @@ import { LastSeenQuery } from 'src/app/activity/queries/last-seen-query';
 import { Subject } from '@microsoft/signalr';
 import { SignalRService } from 'src/app/core/services/signalr-service';
 import { ChatSocketService } from '../../services/chat-socket-service';
+import { FileService } from 'src/app/core/services/file-service';
 
 @Component({
   selector: 'app-chat',
@@ -32,6 +33,7 @@ export class ChatComponent implements OnInit{
   query: ChatQuery = new ChatQuery();
   totalChats:any;
   canExecuteChatQuery: any = true;
+  sendToUserBlobImageUrl: any = '';
 
   constructor(
     private elementRef : ElementRef,
@@ -40,6 +42,7 @@ export class ChatComponent implements OnInit{
     private queryServie : QueryService,
     private signalRService: SignalRService,
     private chatSocketService: ChatSocketService,
+    private fileService: FileService,
     private router : Router) {}
   
   ngOnInit(): void {
@@ -58,6 +61,12 @@ export class ChatComponent implements OnInit{
       if (res.name === "UserProfileQuery") {
         this.sendToUserProfile = res.items[0];
         this.chatTitle = this.sendToUserProfile.firstName + " " + this.sendToUserProfile.lastName;
+        if (this.sendToUserProfile.profilePictureId){
+          this.fileService.downloadFile(this.sendToUserProfile.profilePictureId)
+          .subscribe(response => {
+            this.sendToUserBlobImageUrl = response;
+          });
+        }
       }
     });
     this.chatSocketService.getChatSocketObservable()

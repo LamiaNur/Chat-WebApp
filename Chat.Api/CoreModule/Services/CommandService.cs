@@ -32,9 +32,12 @@ namespace Chat.Api.CoreModule.Services
                     throw new Exception("Handler not found");
                 }
                 Console.WriteLine($"Success Resolving CommandHandler: {handlerName}\n");
-                var accessToken = requestContext.HttpContext.Request.Headers[HeaderNames.Authorization].ToString();
-                var userProfile = _tokenService.GetUserProfileFromAccessToken(accessToken);
-                requestContext.CurrentUser = userProfile;
+                var accessToken = requestContext?.HttpContext.Request.Headers[HeaderNames.Authorization].ToString();
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    var userProfile = _tokenService.GetUserProfileFromAccessToken(accessToken);
+                    requestContext.CurrentUser = userProfile;
+                }
                 var response = await handler.HandleAsync(command, requestContext);
                 if (string.IsNullOrEmpty(response.Status)) 
                 {

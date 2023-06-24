@@ -2,8 +2,8 @@
   <div class="col">
     <div class="card"  style="width: 18rem;">
       <div class="card-body">
-        <img class="card-img-top" src="assets/a.jpg" alt="User Picture">
-        <h2 class="card-title text-center"> Khairul Anam Mubin</h2>
+        <img *ngIf="userBlobImageUrl" class="card-img-top" [attr.src]="userBlobImageUrl" alt="Image">
+        <h2 class="card-title text-center">{{userProfile.firstName}} {{userProfile.lastName}}</h2>
       </div>
       <div class="card-footer text-center">
         <input type="file" class="file-input" (change)="onFileSelected($event)">
@@ -11,14 +11,15 @@
     </div>
   </div>
   <div class="col">
+    <div class="text-center">
+      <button (click)="onClickEditProfile()" class="btn btn-dark">
+          {{editButtonText}}
+      </button>
+  </div>
     <form [formGroup]="userProfileFormControl" (ngSubmit)="onSubmit()" class="container">
       <div class="card">
         <div class="card-body">
-          <div class="text-center">
-            <button (click)="onClickEditProfile()" class="btn btn-dark">
-                {{editButtonText}}
-            </button>
-        </div>
+         
           <div class="mb-3">
             <label class="form-label">First Name</label>
             <input formControlName="firstName" type="text" class="form-control" [readonly]="!isEditable">
