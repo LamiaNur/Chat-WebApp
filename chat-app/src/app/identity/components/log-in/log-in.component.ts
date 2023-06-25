@@ -44,7 +44,7 @@ export class LogInComponent implements OnInit {
           if (response.status === ResponseStatus.success) {
             console.log("received user profile", response);
             this.userService.setUserProfileToStore(response.items[0]);
-            this.router.navigateByUrl("user-profile");
+            this.router.navigateByUrl("user/" + response.items[0].id);
           }
         });
       }
