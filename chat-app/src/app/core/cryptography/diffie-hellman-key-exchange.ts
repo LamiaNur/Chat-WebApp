@@ -23,13 +23,13 @@ export class DiffieHellmanKeyExchange {
         return this.privateKey;
     }
 
-    calculatePublicKey() {
-        this.publicKey = MathHelper.getBigMod(this.alpha, this.privateKey, this.prime);
+    calculatePublicKey(privateKey: any) {
+        this.publicKey = MathHelper.getBigMod(this.alpha, privateKey, this.prime);
         return this.publicKey;
     }
 
-    calculateSharedSecret(receivedPublicKey: any) {
-        this.sharedSecred = MathHelper.getBigMod(receivedPublicKey, this.privateKey, this.prime);
+    calculateSharedSecret(receivedPublicKey: any, privateKey: any) {
+        this.sharedSecred = MathHelper.getBigMod(receivedPublicKey, privateKey, this.prime);
         return this.sharedSecred;
     }
 }

@@ -6,6 +6,7 @@ import { take, timestamp } from 'rxjs';
 import { ResponseStatus } from 'src/app/core/constants/response-status';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { SecurtiyService } from 'src/app/core/services/security-service';
 
 @Component({
   selector: 'app-log-in',
@@ -24,7 +25,8 @@ export class LogInComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private router: Router,
-    private fb: FormBuilder) {}
+    private fb: FormBuilder,
+    private securityService: SecurtiyService) {}
 
   ngOnInit() {
     
@@ -32,6 +34,8 @@ export class LogInComponent implements OnInit {
 
   onSubmit() {
     localStorage.clear();
+    const password = this.getFormValue("password");
+    
     var logInCommand = this.authService.getLogInCommand(this.getFormValue("email"), this.getFormValue("password"));
     this.commandService.execute(logInCommand).pipe(take(1)).subscribe(response => {
       console.log(response);
@@ -45,6 +49,7 @@ export class LogInComponent implements OnInit {
             console.log("received user profile", response);
             this.userService.setUserProfileToStore(response.items[0]);
             this.router.navigateByUrl("user/" + response.items[0].id);
+            this.securityService.createAndSavePrivateKey(password);
           }
         });
       }

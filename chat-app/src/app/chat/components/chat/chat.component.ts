@@ -13,6 +13,8 @@ import { Subject } from '@microsoft/signalr';
 import { SignalRService } from 'src/app/core/services/signalr-service';
 import { ChatSocketService } from '../../services/chat-socket-service';
 import { FileService } from 'src/app/core/services/file-service';
+import { SecurtiyService } from 'src/app/core/services/security-service';
+import { EncrytptionDecryptionFactory, IEncryptionDecryption } from 'src/app/core/helpers/encryption-decryption-helper';
 
 @Component({
   selector: 'app-chat',
@@ -34,6 +36,8 @@ export class ChatComponent implements OnInit{
   totalChats:any;
   canExecuteChatQuery: any = true;
   sendToUserBlobImageUrl: any = '';
+  sharedSecret: any;
+  encryptionDecryptionHelper: IEncryptionDecryption | undefined;
 
   constructor(
     private elementRef : ElementRef,
@@ -43,9 +47,11 @@ export class ChatComponent implements OnInit{
     private signalRService: SignalRService,
     private chatSocketService: ChatSocketService,
     private fileService: FileService,
-    private router : Router) {}
+    private router : Router,
+    private securityService: SecurtiyService) {}
   
   ngOnInit(): void {
+    this.encryptionDecryptionHelper = EncrytptionDecryptionFactory.getEncryptionDecryption();
     this.chats = [];
     this.currentUserId = this.userService.getCurrentUserId();
     this.sendToUserId = this.userService.getCurrentOpenedChatUserId();
@@ -60,6 +66,7 @@ export class ChatComponent implements OnInit{
     .subscribe(res => {
       if (res.name === "UserProfileQuery") {
         this.sendToUserProfile = res.items[0];
+        this.sharedSecret = this.securityService.getSharedSecretKey(this.sendToUserProfile.publicKey);
         this.chatTitle = this.sendToUserProfile.firstName + " " + this.sendToUserProfile.lastName;
         if (this.sendToUserProfile.profilePictureId){
           this.fileService.downloadFile(this.sendToUserProfile.profilePictureId)
@@ -113,6 +120,7 @@ export class ChatComponent implements OnInit{
     } else {
       chat.sentAt = chatTime.toLocaleDateString();
     }
+    chat.message = this.encryptionDecryptionHelper?.decrypt(chat.message, this.sharedSecret);
     return chat;
   }
 
@@ -138,6 +146,7 @@ export class ChatComponent implements OnInit{
     sendMessageCommand.chatModel.sendTo = this.sendToUserId;
     sendMessageCommand.chatModel.message = this.inputMessage;
     sendMessageCommand.chatModel.status = "Sent";
+    sendMessageCommand.chatModel.message = this.encryptionDecryptionHelper?.encrypt(sendMessageCommand.chatModel.message, this.sharedSecret);
     this.inputMessage = '';
     this.commandService.execute(sendMessageCommand)
     .pipe(take(1))

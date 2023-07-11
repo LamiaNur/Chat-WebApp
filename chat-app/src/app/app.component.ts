@@ -39,30 +39,30 @@ export class AppComponent implements OnInit{
     if (this.isLoggedIn)
       this.signalRService.startConnection();
 
-    const prime = MathHelper.generateRandomPrime(1000000,9999999);
-    console.log(prime);
-    console.log(MathHelper.getRandomPrimitiveRootOfPrime(prime));
+    // const prime = MathHelper.generateRandomPrime(1000000,9999999);
+    // console.log(prime);
+    // console.log(MathHelper.getRandomPrimitiveRootOfPrime(prime));
     
-    const client1 = new DiffieHellmanKeyExchange();
-    client1.generatePrivateKey();
-    client1.calculatePublicKey();
+    // const client1 = new DiffieHellmanKeyExchange();
+    // client1.generatePrivateKey();
+    // client1.calculatePublicKey();
 
-    const client2 = new DiffieHellmanKeyExchange();
-    client2.initialize(client1.prime, client1.alpha);
-    client2.generatePrivateKey();
-    client2.calculatePublicKey();
+    // const client2 = new DiffieHellmanKeyExchange();
+    // client2.initialize(client1.prime, client1.alpha);
+    // client2.generatePrivateKey();
+    // client2.calculatePublicKey();
 
-    let secretClient1 = client1.calculateSharedSecret(client2.publicKey);
-    let secretClient2 = client2.calculateSharedSecret(client1.publicKey);
-    secretClient1 %= 256;
-    secretClient2 %= 256;
-    console.log("Secret Client 1 : ", secretClient1);
-    console.log("Secret Client 2 : ", secretClient2);
+    // let secretClient1 = client1.calculateSharedSecret(client2.publicKey);
+    // let secretClient2 = client2.calculateSharedSecret(client1.publicKey);
+    // secretClient1 %= 256;
+    // secretClient2 %= 256;
+    // console.log("Secret Client 1 : ", secretClient1);
+    // console.log("Secret Client 2 : ", secretClient2);
 
-    const messageEncrypted = this.encryptionDecryption.encrypt("Hello world", secretClient1);
-    const messageDecrypted = this.encryptionDecryption.decrypt(messageEncrypted, secretClient2);
-    console.log(messageEncrypted);
-    console.log(messageDecrypted);
+    // const messageEncrypted = this.encryptionDecryption.encrypt("Hello world", secretClient1);
+    // const messageDecrypted = this.encryptionDecryption.decrypt(messageEncrypted, secretClient2);
+    // console.log(messageEncrypted);
+    // console.log(messageDecrypted);
   }
 
   onClickLogOut() {

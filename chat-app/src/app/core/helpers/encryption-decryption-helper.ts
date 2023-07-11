@@ -28,12 +28,13 @@ export class XorEncryptionDecryption implements IEncryptionDecryption{
 }
 
 export class EncrytptionDecryptionFactory{
+    private static xorEncryptionDecryption = new XorEncryptionDecryption();
     public static getEncryptionDecryption(method : any = "xor") : IEncryptionDecryption{
         switch (method) {
             case "xor":
-                return new XorEncryptionDecryption();
+                return this.xorEncryptionDecryption;
             default:
-                return new XorEncryptionDecryption();
+                return this.xorEncryptionDecryption;
         }
     }
 }

@@ -25,6 +25,7 @@ import { ChatSocketService } from './chat/services/chat-socket-service';
 import { ReversePipe } from './core/pipes/reverse-pipe';
 import { FileService } from './core/services/file-service';
 import { SafeUrlPipe } from './core/pipes/safe-url-pipe';
+import { SecurtiyService } from './core/services/security-service';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { SafeUrlPipe } from './core/pipes/safe-url-pipe';
     SignalRService,
     ChatSocketService,
     FileService,
+    SecurtiyService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
