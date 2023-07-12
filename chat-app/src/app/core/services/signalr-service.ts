@@ -24,7 +24,7 @@ export class SignalRService {
     .withUrl(Configuration.chatHubApi, options)
     .build();
     
-    this.hubConnection.start().catch((err: string) => document.write(err));
+    this.hubConnection.start().catch((err: string) => console.log(err));
 
     this.hubConnection.on("ReceivedChat",  (message: any) => {
         console.log("Received message with web socket", message);
