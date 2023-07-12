@@ -61,17 +61,19 @@ export class UserProfileComponent implements OnInit{
     .subscribe(response => {
       this.userProfile = response.items[0];
       this.setFormData();
-      this.fileService.getFileModelByFileId(this.userProfile.profilePictureId)
-      .pipe(take(1))
-      .subscribe(response => {
-        console.log(response);
-        this.profilePictureDetails = response.items[0];
-        this.fileService.downloadFile(this.userProfile.profilePictureId)
+      if (this.userProfile.profilePictureId) {
+        this.fileService.getFileModelByFileId(this.userProfile.profilePictureId)
         .pipe(take(1))
         .subscribe(response => {
-          this.userBlobImageUrl = response;
+          console.log(response);
+          this.profilePictureDetails = response.items[0];
+          this.fileService.downloadFile(this.userProfile.profilePictureId)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.userBlobImageUrl = response;
+          });
         });
-      });
+      }
     });
   }
 

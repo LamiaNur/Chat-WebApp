@@ -15,6 +15,7 @@ import { ChatSocketService } from '../../services/chat-socket-service';
 import { FileService } from 'src/app/core/services/file-service';
 import { SecurtiyService } from 'src/app/core/services/security-service';
 import { EncrytptionDecryptionFactory, IEncryptionDecryption } from 'src/app/core/helpers/encryption-decryption-helper';
+import { ChatProcessor } from '../../helpers/chat-processor';
 
 @Component({
   selector: 'app-chat',
@@ -80,7 +81,7 @@ export class ChatComponent implements OnInit{
     });
     this.chatSocketService.getChatSocketObservable()
     .subscribe(message => {
-      message = this.processChat(message);
+      message = ChatProcessor.process(message, this.sharedSecret);
       this.chats = [message].concat(this.chats);
       this.setChatScrollStartFromBottom();
     });
@@ -107,22 +108,22 @@ export class ChatComponent implements OnInit{
 
   processChats(chats : any) {
     for (let index = 0; index < chats.length; index++) {
-      chats[index] = this.processChat(chats[index]);
+      chats[index] = ChatProcessor.process(chats[index], this.sharedSecret);
     }
     return chats;
   }
 
-  processChat(chat : any) {
-    const chatTime = new Date(chat.sentAt);
-    const currentTime = new Date();
-    if (chatTime.getDay() === currentTime.getDay()) {
-      chat.sentAt = chatTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    } else {
-      chat.sentAt = chatTime.toLocaleDateString();
-    }
-    chat.message = this.encryptionDecryptionHelper?.decrypt(chat.message, this.sharedSecret);
-    return chat;
-  }
+  // processChat(chat : any) {
+  //   const chatTime = new Date(chat.sentAt);
+  //   const currentTime = new Date();
+  //   if (chatTime.getDay() === currentTime.getDay()) {
+  //     chat.sentAt = chatTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  //   } else {
+  //     chat.sentAt = chatTime.toLocaleDateString();
+  //   }
+  //   chat.message = this.encryptionDecryptionHelper?.decrypt(chat.message, this.sharedSecret);
+  //   return chat;
+  // }
 
   setChatScrollStartFromBottom() {
     timer(1).subscribe(res => {
@@ -151,7 +152,7 @@ export class ChatComponent implements OnInit{
     this.commandService.execute(sendMessageCommand)
     .pipe(take(1))
     .subscribe(response => {
-      this.chats = [this.processChat(response.metaData.Message)].concat(this.chats);
+      this.chats = [ChatProcessor.process(response.metaData.Message, this.sharedSecret)].concat(this.chats);
       this.setChatScrollStartFromBottom();
     });
   }

@@ -6,6 +6,8 @@ import { take } from 'rxjs';
 import { Router } from '@angular/router';
 import { UpdateChatsStatusCommand } from '../../commands/update-chats-status-command';
 import { CommandService } from 'src/app/core/services/command-service';
+import { SecurtiyService } from 'src/app/core/services/security-service';
+import { ChatProcessor } from '../../helpers/chat-processor';
 
 @Component({
   selector: 'app-chat-list',
@@ -22,7 +24,8 @@ export class ChatListComponent implements OnInit{
     private commandService: CommandService,
     private queryService : QueryService, 
     private userService : UserService,
-    private router : Router) {
+    private router : Router,
+    private securityService : SecurtiyService) {
     
   }
   
@@ -51,6 +54,8 @@ export class ChatListComponent implements OnInit{
     this.chatList = [];
     for (let i = 0; i < this.items.length; i++) {
       const userProfile = this.getChatUser(this.items[i].userId);
+      const sharedSecret = this.securityService.getSharedSecretKey(userProfile.publicKey);
+      this.items[i] = ChatProcessor.process(this.items[i], sharedSecret);
       let chat = {
         'latestMessage' : this.items[i].message,
         'durationDisplayTime' : this.items[i].durationDisplayTime,

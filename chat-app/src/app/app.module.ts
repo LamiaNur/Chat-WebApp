@@ -26,6 +26,7 @@ import { ReversePipe } from './core/pipes/reverse-pipe';
 import { FileService } from './core/services/file-service';
 import { SafeUrlPipe } from './core/pipes/safe-url-pipe';
 import { SecurtiyService } from './core/services/security-service';
+import { HomeComponent } from './identity/components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { SecurtiyService } from './core/services/security-service';
     ChatComponent,
     ChatListComponent,
     ReversePipe,
-    SafeUrlPipe
+    SafeUrlPipe,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
