@@ -5,21 +5,26 @@ import { DiffieHellmanKeyExchange } from "../cryptography/diffie-hellman-key-exc
     providedIn: 'root',
 })
 export class SecurtiyService {
-    prime : any = 1000000007;
-    alpha: any = 37;
+    prime : any = 7227973;
+    alpha: any = 1738263;
     diffie: DiffieHellmanKeyExchange = new DiffieHellmanKeyExchange();
-
+    
+    constructor() {
+        this.diffie.initialize(this.prime, this.alpha);
+    }
+    
     createAndSavePrivateKey(token: any) {
         let hash_val = 0;
         let p = 31;
         let curP = 1;
         for (let i = 0; i < token.length; i++) {
-            hash_val += token[i] * curP % this.prime;
+            hash_val += token[i] * curP % 1738263;
             curP *= p;
-            curP %= this.prime;
-            hash_val %= this.prime;
+            curP %= 1738263;
+            hash_val %= 1738263;
         }
         localStorage.setItem("PrivateKey", hash_val.toString());
+        console.log(hash_val);
         return hash_val;
     }
 
@@ -28,12 +33,11 @@ export class SecurtiyService {
     }
 
     getPublicKey(privateKey : any) { // current user public key
-        this.diffie.initialize(this.prime, this.alpha);
         return this.diffie.calculatePublicKey(privateKey);
     }
 
-    getSharedSecretKey(publicKey: any) {
-        const privateKey = this.getPrivateKey();
+    getSharedSecretKey(publicKey: any, privateKey: any = '') {
+        if (privateKey === '') privateKey = this.getPrivateKey();
         return this.diffie.calculateSharedSecret(publicKey, privateKey);
     }
 

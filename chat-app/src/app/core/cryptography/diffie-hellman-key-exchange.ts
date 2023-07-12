@@ -9,8 +9,8 @@ export class DiffieHellmanKeyExchange {
     sharedSecred: any;
 
     constructor() {
-        this.prime = MathHelper.generateRandomPrime(1000000, 9999999);
-        this.alpha = MathHelper.getRandomPrimitiveRootOfPrime(this.prime);
+        // this.prime = MathHelper.generateRandomPrime(1000000, 9999999);
+        // this.alpha = MathHelper.getRandomPrimitiveRootOfPrime(this.prime);
     }
 
     initialize(prime: any, alpha: any) {
@@ -24,12 +24,12 @@ export class DiffieHellmanKeyExchange {
     }
 
     calculatePublicKey(privateKey: any) {
-        this.publicKey = MathHelper.getBigMod(this.alpha, privateKey, this.prime);
-        return this.publicKey;
+        console.log(this.alpha, this.prime);
+        return MathHelper.getBigMod(this.alpha, privateKey, this.prime);
     }
 
     calculateSharedSecret(receivedPublicKey: any, privateKey: any) {
-        this.sharedSecred = MathHelper.getBigMod(receivedPublicKey, privateKey, this.prime);
-        return this.sharedSecred;
+        console.log(this.alpha, this.prime);
+        return MathHelper.getBigMod(receivedPublicKey, privateKey, this.prime);
     }
 }

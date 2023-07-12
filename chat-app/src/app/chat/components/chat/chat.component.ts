@@ -59,15 +59,15 @@ export class ChatComponent implements OnInit{
 
     this.query.sendTo = this.sendToUserId;
     this.query.userId = this.currentUserId;
-    this.getChats(this.query);
     
     this.userService.getUserProfileById(this.sendToUserId)
     .pipe(take(1))
     .subscribe(res => {
-      if (res.name === "UserProfileQuery") {
+      if (res.status === ResponseStatus.success) {
         this.sendToUserProfile = res.items[0];
         this.sharedSecret = this.securityService.getSharedSecretKey(this.sendToUserProfile.publicKey);
         this.chatTitle = this.sendToUserProfile.firstName + " " + this.sendToUserProfile.lastName;
+        this.getChats(this.query);
         if (this.sendToUserProfile.profilePictureId){
           this.fileService.downloadFile(this.sendToUserProfile.profilePictureId)
           .pipe(take(1))

@@ -9,6 +9,7 @@ import { UserService } from './identity/services/user.service';
 import { MathHelper } from './core/helpers/math-helper';
 import { DiffieHellmanKeyExchange } from './core/cryptography/diffie-hellman-key-exchange';
 import { EncrytptionDecryptionFactory, IEncryptionDecryption } from './core/helpers/encryption-decryption-helper';
+import { SecurtiyService } from './core/services/security-service';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +30,8 @@ export class AppComponent implements OnInit{
     private userService: UserService,
     private authService: AuthService,
     private signalRService : SignalRService,
-    private router: Router) {
+    private router: Router,
+    private securityService : SecurtiyService) {
       this.encryptionDecryption = EncrytptionDecryptionFactory.getEncryptionDecryption();
     }
 
@@ -39,14 +41,20 @@ export class AppComponent implements OnInit{
     if (this.isLoggedIn)
       this.signalRService.startConnection();
 
-    // const prime = MathHelper.generateRandomPrime(1000000,9999999);
-    // console.log(prime);
-    // console.log(MathHelper.getRandomPrimitiveRootOfPrime(prime));
     
-    // const client1 = new DiffieHellmanKeyExchange();
-    // client1.generatePrivateKey();
-    // client1.calculatePublicKey();
+    // var privateKey1 = this.securityService.createAndSavePrivateKey("123456");
+    // var privateKey2 = this.securityService.createAndSavePrivateKey("123123");
 
+    // var publicKey1 = this.securityService.getPublicKey(privateKey1);
+    // var publicKey2 = this.securityService.getPublicKey(privateKey2);
+
+    // var sharedSecred1 = this.securityService.getSharedSecretKey(publicKey1, privateKey2);
+    // var sharedSecred2 = this.securityService.getSharedSecretKey(publicKey2, privateKey1);
+
+    // console.log("=================================");
+    // console.log(sharedSecred1);
+    // console.log(sharedSecred2);
+    // console.log("=================================");
     // const client2 = new DiffieHellmanKeyExchange();
     // client2.initialize(client1.prime, client1.alpha);
     // client2.generatePrivateKey();
@@ -72,7 +80,7 @@ export class AppComponent implements OnInit{
       if (response.status) {
         this.authService.logOut(); 
         this.isLoggedIn = this.authService.isLoggedIn();
-        this.router.navigateByUrl("log-in");
+        // this.router.navigateByUrl("log-in");
       }
     });
   }

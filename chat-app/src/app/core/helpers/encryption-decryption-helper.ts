@@ -6,6 +6,8 @@ export interface IEncryptionDecryption{
 export class XorEncryptionDecryption implements IEncryptionDecryption{
     
     encrypt(data: any, secretKey: any) {
+        secretKey %= 255;
+        console.log("Encryption secret: ",secretKey);
         let encryptedData = '';
         for (let i = 0; i < data.length; i++) {
             const charCode = data.charCodeAt(i);
@@ -16,6 +18,8 @@ export class XorEncryptionDecryption implements IEncryptionDecryption{
     }
 
     decrypt(data: any, secretKey: any) {
+        secretKey %= 255;
+        console.log("Decryption secret: ", secretKey);
         let decryptedData = '';
         for (let i = 0; i < data.length; i++) {
             const charCode = data.charCodeAt(i);
