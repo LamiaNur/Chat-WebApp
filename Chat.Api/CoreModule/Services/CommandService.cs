@@ -15,7 +15,7 @@ namespace Chat.Api.CoreModule.Services
         {
             _tokenService = DIService.Instance.GetService<ITokenService>();
         }
-        public async Task<CommandResponse> HandleCommandAsync(ICommand command, RequestContext requestContext = null)
+        public async Task<CommandResponse> HandleCommandAsync(ICommand command)
         {
             var commandName = command.GetType().Name;
             var handlerName = $"{commandName}Handler";
@@ -32,13 +32,14 @@ namespace Chat.Api.CoreModule.Services
                     throw new Exception("Handler not found");
                 }
                 Console.WriteLine($"Success Resolving CommandHandler: {handlerName}\n");
-                var accessToken = requestContext?.HttpContext.Request.Headers[HeaderNames.Authorization].ToString();
+                var requestContext = command.GetCurrentScope();
+                var accessToken = requestContext?.HttpContext?.Request.Headers[HeaderNames.Authorization].ToString();
                 if (!string.IsNullOrEmpty(accessToken))
                 {
                     var userProfile = _tokenService.GetUserProfileFromAccessToken(accessToken);
                     requestContext.CurrentUser = userProfile;
                 }
-                var response = await handler.HandleAsync(command, requestContext);
+                var response = await handler.HandleAsync(command);
                 if (string.IsNullOrEmpty(response.Status)) 
                 {
                     response.Status = ResponseStatus.Success;

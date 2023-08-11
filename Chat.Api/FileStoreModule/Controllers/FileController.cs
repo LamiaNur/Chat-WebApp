@@ -40,7 +40,8 @@ namespace Chat.Api.FileStoreModule.Controllers
             {
                 FormFile = formFile
             };
-            return Ok(await _commandService.HandleCommandAsync(fileUploadCommand, context));
+            fileUploadCommand.SetCurrentScope(context);
+            return Ok(await _commandService.HandleCommandAsync(fileUploadCommand));
         }
         [HttpGet]
         [Route("download")]

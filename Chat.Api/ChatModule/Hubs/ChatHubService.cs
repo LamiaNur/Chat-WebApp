@@ -3,8 +3,8 @@ using Chat.Api.ChatModule.Interfaces;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Interfaces;
 using Microsoft.AspNetCore.SignalR;
-using Chat.Api.IdentityModule.Models;
-using Newtonsoft.Json;
+using Chat.Api.CoreModule.Extensions;
+using Chat.Api.CoreModule.Models;
 
 namespace Chat.Api.ChatModule.Hubs
 {
@@ -13,16 +13,14 @@ namespace Chat.Api.ChatModule.Hubs
     public class ChatHubService : IChatHubService
     {
         private readonly ITokenService _tokenService;
-        public IHubContext<ChatHub> _hubContext {get; set;}
         private readonly IHubConnectionService _hubConnectionService;
-
         public ChatHubService()
         {
             _hubConnectionService = DIService.Instance.GetService<IHubConnectionService>();
             _tokenService = DIService.Instance.GetService<ITokenService>();
         }
 
-        public async Task SendAsync<T>(string userId, T message)
+        public async Task SendAsync<T>(string userId, T message, RequestContext requestContext)
         {
             var connectionId = _hubConnectionService.GetConnectionId(userId);
             Console.WriteLine("==============Sending");
@@ -31,8 +29,7 @@ namespace Chat.Api.ChatModule.Hubs
                 Console.WriteLine("ConnectionId not found");
                 return;
             }
-            var convertedMessage = JsonConvert.SerializeObject(message);
-            await _hubContext.Clients.Client(connectionId).SendAsync("ReceivedChat", message);
+            await requestContext.HubContext.Clients.Client(connectionId).SendAsync("ReceivedChat", message);
             Console.WriteLine("==============Sent message");
         }
     }

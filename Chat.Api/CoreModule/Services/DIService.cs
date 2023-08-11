@@ -8,8 +8,8 @@ namespace Chat.Api.CoreModule.Services
         private static DIService? _instance;
         private static readonly object _lockObject = new();
         private CompositionHost? _container;
-        private ContainerConfiguration _containerConfiguration;
-        private List<string> _assemblyLists;
+        private readonly ContainerConfiguration _containerConfiguration;
+        private readonly List<string> _assemblyLists;
         private IServiceProvider? ServiceProvider { get; set; }
         
         private DIService()

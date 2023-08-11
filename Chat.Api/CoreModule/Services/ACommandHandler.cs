@@ -7,10 +7,9 @@ namespace Chat.Api.CoreModule.Services
     {
         public readonly ICommandService _commandService = DIService.Instance.GetService<ICommandService>();
         public readonly IQueryService _queryService = DIService.Instance.GetService<IQueryService>();
-        public async Task<CommandResponse> HandleAsync(ICommand command, RequestContext requestContext = null)
+        public async Task<CommandResponse> HandleAsync(ICommand command)
         {
             Console.WriteLine($"OnHandleAsync of : {this.GetType().Name}\n");
-            command.SetValue("RequestContext", requestContext);
             var response = await OnHandleAsync((T)command);
             Console.WriteLine($"Successfully returned OnHandleAsync of : {this.GetType().Name}\n");
             return response;

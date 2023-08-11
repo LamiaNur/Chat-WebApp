@@ -4,6 +4,6 @@ namespace Chat.Api.CoreModule.Interfaces
 {
     public interface ICommandHandler
     {
-        Task<CommandResponse> HandleAsync(ICommand command, RequestContext context = null);
+        Task<CommandResponse> HandleAsync(ICommand command);
     }
 }

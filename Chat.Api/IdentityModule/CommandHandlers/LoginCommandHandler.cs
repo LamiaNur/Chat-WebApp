@@ -43,17 +43,7 @@ namespace Chat.Api.IdentityModule.CommandHandlers
             }
             response.SetData("Token", token);
             response.Message = "Logged in successfully";
-            await UpdateLastSeenActivity(user);
             return response;
-        }
-
-        private async Task UpdateLastSeenActivity(UserModel user)
-        {
-            var updateLastSeenCommand = new UpdateLastSeenCommand
-            {
-                UserId = user.Id
-            };
-            await _commandService.HandleCommandAsync(updateLastSeenCommand);
         }
     }
 }

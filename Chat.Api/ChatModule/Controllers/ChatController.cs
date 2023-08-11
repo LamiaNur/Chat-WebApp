@@ -31,7 +31,8 @@ namespace Chat.Api.ChatModule.Controllers
             var context = new RequestContext();
             context.HubContext = _hubContext;
             context.HttpContext = HttpContext;
-            return Ok(await _commandService.HandleCommandAsync(command, context));
+            command.SetCurrentScope(context);
+            return Ok(await _commandService.HandleCommandAsync(command));
         }
 
         [HttpPost, Route("update-status")]
