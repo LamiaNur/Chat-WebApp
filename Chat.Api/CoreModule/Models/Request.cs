@@ -6,7 +6,7 @@ namespace Chat.Api.CoreModule.Models
     {
         private RequestContext? RequestContext {get; set;}
         public Dictionary<string, object> FieldValues = new();
-        public RequestContext GetCurrentScope()
+        public RequestContext? GetCurrentScope()
         {
             return RequestContext;
         }

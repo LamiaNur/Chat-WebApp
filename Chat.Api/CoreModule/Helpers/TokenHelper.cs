@@ -37,7 +37,7 @@ namespace Chat.Api.CoreModule.Helpers
             return Guid.NewGuid().ToString();
         }
         
-        public static List<Claim> GetClaims(string accessToken)
+        public static List<Claim> GetClaims(string? accessToken)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace Chat.Api.CoreModule.Helpers
             return claim.Value;
         }
 
-        public static bool IsTokenValid(string accessToken, TokenValidationParameters validateParameters)
+        public static bool IsTokenValid(string? accessToken, TokenValidationParameters validateParameters)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace Chat.Api.CoreModule.Helpers
             }
         }
 
-        public static bool IsExpired(string accessToken)
+        public static bool IsExpired(string? accessToken)
         {
             try
             {
@@ -96,9 +96,9 @@ namespace Chat.Api.CoreModule.Helpers
                 return false;
             }
         }
-        private static string GetPreparedToken(string accessToken)
+        private static string? GetPreparedToken(string? accessToken)
         {
-            if (accessToken.StartsWith("Bearer "))
+            if (string.IsNullOrEmpty(accessToken) == false && accessToken.StartsWith("Bearer "))
             {
                 return accessToken.Replace("Bearer ", "");
             }

@@ -5,6 +5,7 @@ using Chat.Api.CoreModule.Services;
 using Chat.Api.FileStoreModule.Commands;
 using Chat.Api.FileStoreModule.Interfaces;
 using Chat.Api.FileStoreModule.Models;
+using Chat.Api.IdentityModule.Extensions;
 
 namespace Chat.Api.FileStoreModule.CommandHandlers
 {
@@ -37,8 +38,8 @@ namespace Chat.Api.FileStoreModule.CommandHandlers
             {
                 file.CopyTo(stream);
             }
-            var requestContext = command.GetCurrentScope();
-            
+
+            var currentUser = command.GetCurrentScope()?.GetCurrentUserProfile();
             var fileModel = new FileModel()
             {
                 Id = fileId,
@@ -46,7 +47,7 @@ namespace Chat.Api.FileStoreModule.CommandHandlers
                 Url = fullPath,
                 UploadedAt = DateTime.UtcNow,
                 Name = fileName,
-                UserId = requestContext?.CurrentUser?.Id
+                UserId = currentUser?.Id ?? ""
             };
             if (!await _fileRepository.SaveFileModelAsync(fileModel)) 
             {
