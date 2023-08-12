@@ -8,15 +8,14 @@ namespace Chat.Api.CoreModule.Services;
 [Shared]
 public class CommandQueryService : ICommandQueryService
 {
+    private readonly ICommandMediator _commandMediator = DIService.Instance.GetService<ICommandMediator>();
+    private readonly IQueryMediator _queryMediator = DIService.Instance.GetService<IQueryMediator>();
     public async Task<CommandResponse> HandleAsync(ICommand command)
     {
-        Console.WriteLine("This is from CommandQueryMediato\n");
-        ICommandMediator CommandMediator = DIService.Instance.GetService<ICommandMediator>();
-        return await CommandMediator.HandleAsync(command);
+        return await _commandMediator.HandleAsync(command);
     }
     public async Task<QueryResponse> HandleAsync(IQuery query)
     {
-       IQueryMediator QueryMediator = DIService.Instance.GetService<IQueryMediator>();
-        return await QueryMediator.HandleAsync(query);
+        return await _queryMediator.HandleAsync(query);
     }
 }

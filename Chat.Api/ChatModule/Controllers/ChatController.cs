@@ -16,18 +16,18 @@ namespace Chat.Api.ChatModule.Controllers
     public class ChatController : ControllerBase
     {
         private readonly ICommandQueryService _commandQueryService;
-        private readonly IHubContext<ChatHub> _hubContext;
+        private readonly IHubContext _hubContext;
         public ChatController(IHubContext<ChatHub> hubContext)
         {
             _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
-            _hubContext = hubContext;
+            _hubContext = (IHubContext)hubContext;
         }
 
         [HttpPost, Route("send")]
         public async Task<IActionResult> SendMessageAsync(SendMessageCommand command)
         {
             var context = new RequestContext();
-            context.HubContext = _hubContext;
+            context.HubContext = (IHubContext)_hubContext;
             context.HttpContext = HttpContext;
             command.SetCurrentScope(context);
             return Ok(await _commandQueryService.HandleAsync(command));

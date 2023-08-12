@@ -18,12 +18,12 @@ namespace Chat.Api.FileStoreModule.Controllers
     public class FileController : ControllerBase
     {
         private readonly ICommandQueryService _commandQueryService;
-        private readonly IHubContext<ChatHub> _hubContext;
+        private readonly IHubContext _hubContext;
 
         public FileController(IHubContext<ChatHub> hubContext)
         {
             _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
-            _hubContext = hubContext;
+            _hubContext = (IHubContext)hubContext;
         }
 
         [HttpPost]
@@ -31,7 +31,7 @@ namespace Chat.Api.FileStoreModule.Controllers
         public async Task<IActionResult> UploadAsync(IFormFile formFile)
         {
             var context = new RequestContext();
-            context.HubContext = _hubContext;
+            context.HubContext = (IHubContext)_hubContext;
             context.HttpContext = HttpContext;
             var fileUploadCommand = new UploadFileCommand()
             {
@@ -40,7 +40,7 @@ namespace Chat.Api.FileStoreModule.Controllers
             fileUploadCommand.SetCurrentScope(context);
             return Ok(await _commandQueryService.HandleAsync(fileUploadCommand));
         }
-        
+
         [HttpGet]
         [Route("download")]
         public async Task<IActionResult> DownloadAsync([FromQuery] string fileId)
