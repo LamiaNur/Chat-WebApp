@@ -38,9 +38,8 @@ namespace Chat.Api.CoreModule.Services
             }
         }
 
-        public void Initialize(IServiceProvider serviceProvider, string projectPrefix = "Chat")
+        public void Initialize(string projectPrefix = "Chat")
         {
-            ServiceProvider = serviceProvider;
             AddAllAssemblies(projectPrefix);
             CreateContainer();
         }
@@ -125,8 +124,6 @@ namespace Chat.Api.CoreModule.Services
 
         public T GetService<T>()
         {
-            CreateContainer();
-        
             lock (_lockObject)
             {
                 try
@@ -169,7 +166,6 @@ namespace Chat.Api.CoreModule.Services
 
         public T? GetService<T>(string name)
         {
-            CreateContainer();
             lock (_lockObject)
             {
                 try
@@ -203,7 +199,6 @@ namespace Chat.Api.CoreModule.Services
 
         public List<T> GetServices<T>()
         {
-            CreateContainer();
             lock (_lockObject)
             {
                 try
@@ -253,6 +248,11 @@ namespace Chat.Api.CoreModule.Services
             }
             Console.WriteLine("Get Configuration Success\n");
             return config;
+        }
+        
+        public void SetServiceProvider(IServiceProvider serviceProvider)
+        {
+            ServiceProvider = serviceProvider;
         }
     }
 }

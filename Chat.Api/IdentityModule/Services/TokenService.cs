@@ -83,7 +83,7 @@ namespace Chat.Api.IdentityModule.Services
             return claims;
         }
 
-        public UserProfile GetUserProfileFromAccessToken(string accessToken)
+        public UserProfile GetUserProfileFromAccessToken(string? accessToken)
         {
             var claims = TokenHelper.GetClaims(accessToken);
             var userProfile = new UserProfile();

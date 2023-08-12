@@ -84,11 +84,12 @@ namespace Chat.Api
             services.AddTransient<LastSeenMiddleware>();
             // services.AddSingleton<IHubConnectionService, HubConnectionService>();
             // services.AddTransient<IChatHubService, ChatHubService>();
-            DIService.Instance.Initialize(services.BuildServiceProvider(), "Chat");
+            DIService.Instance.Initialize("Chat");
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            DIService.Instance.SetServiceProvider(app.ApplicationServices);
             if (WebHostEnvironment.IsDevelopment())
             {
                 app.UseSwagger();

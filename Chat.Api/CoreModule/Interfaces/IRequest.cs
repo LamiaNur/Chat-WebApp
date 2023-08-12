@@ -7,6 +7,6 @@ namespace Chat.Api.CoreModule.Interfaces
         void SetValue(string key, object value);
         T? GetValue<T>(string key);
         void SetCurrentScope(RequestContext context);
-        RequestContext GetCurrentScope();
+        RequestContext? GetCurrentScope();
     }
 }
