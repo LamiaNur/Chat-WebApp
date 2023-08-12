@@ -5,11 +5,11 @@ namespace Chat.Api.CoreModule.Services
 {
     public abstract class ACommandHandler<T> : ICommandHandler where T : ICommand
     {
-        public readonly ICommandService _commandService = DIService.Instance.GetService<ICommandService>();
-        public readonly IQueryService _queryService = DIService.Instance.GetService<IQueryService>();
+        public readonly ICommandQueryService _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
         public async Task<CommandResponse> HandleAsync(ICommand command)
         {
             Console.WriteLine($"OnHandleAsync of : {this.GetType().Name}\n");
+            command.ValidateCommand();
             var response = await OnHandleAsync((T)command);
             Console.WriteLine($"Successfully returned OnHandleAsync of : {this.GetType().Name}\n");
             return response;

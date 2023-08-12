@@ -12,28 +12,26 @@ namespace Chat.Api.ContactModule.Controllers
     [Authorize]
     public class ContactController : ControllerBase
     {
-        private readonly ICommandService _commandService;
-        private readonly IQueryService _queryService;
+        private readonly ICommandQueryService _commandQueryService;
         public ContactController()
         {
-            _commandService = DIService.Instance.GetService<ICommandService>();
-            _queryService = DIService.Instance.GetService<IQueryService>();
+            _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
         }
 
         [HttpPost, Route("add")]
         public async Task<IActionResult> AddContactAsync(AddContactCommand command)
         {
-            return Ok(await _commandService.HandleCommandAsync(command));
+            return Ok(await _commandQueryService.HandleAsync(command));
         }
         [HttpPost, Route("accept-reject")]
         public async Task<IActionResult> AcceptOrRejectContactRequestAsync(AcceptOrRejectContactRequestCommand command)
         {
-            return Ok(await _commandService.HandleCommandAsync(command));
+            return Ok(await _commandQueryService.HandleAsync(command));
         }
         [HttpPost, Route("get")]
         public async Task<IActionResult> AddContactAsync(ContactQuery query)
         {
-            return Ok(await _queryService.HandleQueryAsync(query));
+            return Ok(await _commandQueryService.HandleAsync(query));
         }
     }
 }

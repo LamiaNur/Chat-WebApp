@@ -167,7 +167,7 @@ namespace Chat.Api.CoreModule.Services
             }
         }
 
-        public T GetService<T>(string name)
+        public T? GetService<T>(string name)
         {
             CreateContainer();
             lock (_lockObject)
@@ -196,8 +196,8 @@ namespace Chat.Api.CoreModule.Services
                         }
                     }
                     Console.WriteLine($"GetService Failed of type : {typeof(T).Name} and name : {name} by searching with all the instances\n");
-                    throw new Exception($"GetService Failed of type : {typeof(T).Name} and name : {name} by searching with all the instances\n");
                 }
+                return default;
             }
         }
 

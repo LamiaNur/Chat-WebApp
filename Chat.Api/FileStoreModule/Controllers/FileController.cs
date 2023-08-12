@@ -17,15 +17,12 @@ namespace Chat.Api.FileStoreModule.Controllers
     [Authorize]
     public class FileController : ControllerBase
     {
-        private readonly ICommandService _commandService;
-        private readonly IQueryService _queryService;
-        private readonly IFileRepository _fileRepository;
+        private readonly ICommandQueryService _commandQueryService;
         private readonly IHubContext<ChatHub> _hubContext;
+
         public FileController(IHubContext<ChatHub> hubContext)
         {
-            _commandService = DIService.Instance.GetService<ICommandService>();
-            _queryService = DIService.Instance.GetService<IQueryService>();
-            _fileRepository = DIService.Instance.GetService<IFileRepository>();
+            _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
             _hubContext = hubContext;
         }
 
@@ -41,8 +38,9 @@ namespace Chat.Api.FileStoreModule.Controllers
                 FormFile = formFile
             };
             fileUploadCommand.SetCurrentScope(context);
-            return Ok(await _commandService.HandleCommandAsync(fileUploadCommand));
+            return Ok(await _commandQueryService.HandleAsync(fileUploadCommand));
         }
+        
         [HttpGet]
         [Route("download")]
         public async Task<IActionResult> DownloadAsync([FromQuery] string fileId)
@@ -51,7 +49,7 @@ namespace Chat.Api.FileStoreModule.Controllers
             {
                 FileId = fileId
             };
-            var response = await _queryService.HandleQueryAsync(query);
+            var response = await _commandQueryService.HandleAsync(query);
             var fileDownloadResult = (FileDownloadResult)response.Items[0];
             return File(fileDownloadResult.FileBytes, fileDownloadResult.ContentType);
         }
@@ -60,7 +58,7 @@ namespace Chat.Api.FileStoreModule.Controllers
         [Route("get")]
         public async Task<IActionResult> GetFileModelAsync(FileModelQuery query)
         {
-            return Ok(await _queryService.HandleQueryAsync(query));
+            return Ok(await _commandQueryService.HandleAsync(query));
         }
     }
 }

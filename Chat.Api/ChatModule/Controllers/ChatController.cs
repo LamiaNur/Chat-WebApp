@@ -15,13 +15,11 @@ namespace Chat.Api.ChatModule.Controllers
     [Authorize]
     public class ChatController : ControllerBase
     {
-        private readonly ICommandService _commandService;
-        private readonly IQueryService _queryService;
+        private readonly ICommandQueryService _commandQueryService;
         private readonly IHubContext<ChatHub> _hubContext;
         public ChatController(IHubContext<ChatHub> hubContext)
         {
-            _commandService = DIService.Instance.GetService<ICommandService>();
-            _queryService = DIService.Instance.GetService<IQueryService>();
+            _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
             _hubContext = hubContext;
         }
 
@@ -32,25 +30,25 @@ namespace Chat.Api.ChatModule.Controllers
             context.HubContext = _hubContext;
             context.HttpContext = HttpContext;
             command.SetCurrentScope(context);
-            return Ok(await _commandService.HandleCommandAsync(command));
+            return Ok(await _commandQueryService.HandleAsync(command));
         }
 
         [HttpPost, Route("update-status")]
         public async Task<IActionResult> UpdateChatsStatusAsync(UpdateChatsStatusCommand command)
         {
-            return Ok(await _commandService.HandleCommandAsync(command));
+            return Ok(await _commandQueryService.HandleAsync(command));
         }
 
         [HttpPost, Route("list")]
         public async Task<IActionResult> GetChatListAsync(ChatListQuery query)
         {
-            return Ok(await _queryService.HandleQueryAsync(query));
+            return Ok(await _commandQueryService.HandleAsync(query));
         }
 
         [HttpPost, Route("get")]
         public async Task<IActionResult> GetChatsAsync(ChatQuery query)
         {
-            return Ok(await _queryService.HandleQueryAsync(query));
+            return Ok(await _commandQueryService.HandleAsync(query));
         }
         
     }
