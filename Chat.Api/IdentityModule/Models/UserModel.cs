@@ -16,7 +16,8 @@ namespace Chat.Api.IdentityModule.Models
                 BirthDay = this.BirthDay,
                 About = this.About,
                 ProfilePictureId = this.ProfilePictureId,
-                Email = this.Email
+                Email = this.Email,
+                PublicKey = this.PublicKey
             };
             return userProfile;
         }

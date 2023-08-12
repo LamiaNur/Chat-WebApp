@@ -10,6 +10,6 @@ export class ChatQuery extends QueryBase {
         super();
         this.apiUrl = Configuration.identityApi + "/chat/get";
         this.Offset = 0;
-        this.limit = 300;
+        this.limit = 30;
     }
 }

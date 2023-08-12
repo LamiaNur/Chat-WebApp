@@ -38,12 +38,12 @@ namespace Chat.Api.ChatModule.Hubs
 
         public string GetConnectionId(string userId)
         {
-            return userIdConnectionIdMapper[userId];
+            return userIdConnectionIdMapper.ContainsKey(userId)? userIdConnectionIdMapper[userId]: string.Empty;
         }
 
         public string GetUserId(string connectionId)
         {
-            return connectionIdUserIdMapper[connectionId];
+            return connectionIdUserIdMapper.ContainsKey(connectionId)? connectionIdUserIdMapper[connectionId]: string.Empty;
         }
 
         public void RemoveConnection(string connectionId)

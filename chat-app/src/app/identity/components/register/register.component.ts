@@ -6,6 +6,7 @@ import { take } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ResponseStatus } from 'src/app/core/constants/response-status';
 import { Router } from '@angular/router';
+import { SecurtiyService } from 'src/app/core/services/security-service';
 
 @Component({
   selector: 'app-register',
@@ -27,13 +28,15 @@ export class RegisterComponent implements OnInit{
   constructor(
     private commandService: CommandService,
     private router: Router,
-    private fb: FormBuilder) {}
+    private fb: FormBuilder,
+    private securityService: SecurtiyService) {}
 
   ngOnInit() {
     
   }
 
   onSubmit() {
+    this.securityService.createAndSavePrivateKey(this.getFormValue('password'));
     var registerCommand = this.getRegisterCommand();
     this.commandService.execute(registerCommand).pipe(take(1)).subscribe(response => {
       console.log(response);
@@ -51,6 +54,7 @@ export class RegisterComponent implements OnInit{
     userModel.about = this.getFormValue('about');
     userModel.email = this.getFormValue('email');
     userModel.password = this.getFormValue('password');
+    userModel.publicKey = this.securityService.getPublicKey(this.securityService.getPrivateKey());
     var registerCommand = new RegisterCommand();
     registerCommand.userModel = userModel;
     return registerCommand;

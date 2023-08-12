@@ -7,4 +7,5 @@ export class UserProfile {
     public email : any;
     public about : any;
     public profilePictureId : any;
+    public publicKey: any;
 }

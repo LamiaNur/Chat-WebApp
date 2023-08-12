@@ -1,6 +1,8 @@
+using Chat.Api.CoreModule.Interfaces;
+
 namespace Chat.Api.CoreModule.Models
 {
-    public class Response
+    public class Response : IResponse
     {
         public string Message {get; set;} = string.Empty;
         public string Status {get; set;} = string.Empty;
@@ -20,7 +22,7 @@ namespace Chat.Api.CoreModule.Models
         public T? GetData<T>(string key) 
         {
             if (MetaData.ContainsKey(key)) return (T)MetaData[key];
-            return default(T);
+            return default;
         }
     }
 }

@@ -1,28 +1,51 @@
-<div class="text-center">
-    <button (click)="onClickEditProfile()" class="btn btn-dark">
-        {{editButtonText}}
-    </button>
+<div class="row">
+  <div class="col">
+    <div class="card"  style="width: 18rem;">
+      <div class="card-body">
+        <img *ngIf="userBlobImageUrl" class="card-img-top" [attr.src]="userBlobImageUrl" alt="Image">
+        <h2 class="card-title text-center">{{userProfile.firstName}} {{userProfile.lastName}}</h2>
+      </div>
+      <div *ngIf="!pictureUploadEnable && isCurrentUser" class="card-footer text-center">
+        <button (click)="onClickUpdateProfilePicture()" class="btn btn-dark">Update Profile Picture</button>
+      </div>
+      <div *ngIf="pictureUploadEnable" class="card-footer text-center">
+        <input type="file" class="file-input" (change)="onFileSelected($event)">
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div *ngIf="isCurrentUser" class="text-center">
+      <button (click)="onClickEditProfile()" class="btn btn-dark">
+          {{editButtonText}}
+      </button>
+  </div>
+    <form [formGroup]="userProfileFormControl" (ngSubmit)="onSubmit()" class="container">
+      <div class="card">
+        <div class="card-body">
+         
+          <div class="mb-3">
+            <label class="form-label">First Name</label>
+            <input formControlName="firstName" type="text" class="form-control" [readonly]="!isEditable">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Last Name</label>
+            <input formControlName="lastName" type="text" class="form-control" [readonly]="!isEditable">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Birth Date</label>
+            <input formControlName="birthDay" type="date" class="form-control" [readonly]="!isEditable">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">About</label>
+            <input formControlName="about" type="text" class="form-control" [readonly]="!isEditable">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email address</label>
+            <input formControlName="email" type="email" class="form-control" readonly="true">
+          </div>
+          <button *ngIf="isEditable" [disabled]="!userProfileFormControl.valid" type="submit" class="mb-3 btn btn-dark">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
-<form [formGroup]="userProfileFormControl" (ngSubmit)="onSubmit()" class="container w-50 mt-3">
-    <div class="mb-3">
-      <label class="form-label">First Name</label>
-      <input formControlName="firstName" type="text" class="form-control" [readonly]="!isEditable">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Last Name</label>
-      <input formControlName="lastName" type="text" class="form-control" [readonly]="!isEditable">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Birth Date</label>
-      <input formControlName="birthDay" type="date" class="form-control" [readonly]="!isEditable">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">About</label>
-      <input formControlName="about" type="text" class="form-control" [readonly]="!isEditable">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Email address</label>
-      <input formControlName="email" type="email" class="form-control" readonly="true">
-    </div>
-    <button *ngIf="isEditable" [disabled]="!userProfileFormControl.valid" type="submit" class="mb-3 btn btn-dark">Save</button>
-</form>

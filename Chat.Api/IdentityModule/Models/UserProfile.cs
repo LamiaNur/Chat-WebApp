@@ -10,5 +10,6 @@ namespace Chat.Api.IdentityModule.Models
         public string Email {get; set;} = string.Empty;
         public string About {get; set;} = string.Empty;
         public string ProfilePictureId {get; set;} = string.Empty;
+        public int PublicKey {get; set;}
     }
 }

@@ -30,7 +30,7 @@ namespace Chat.Api.ContactModule.CommandHandlers
                 UserIds = new List<string> {command.UserId},
                 Emails = new List<string> {command.ContactEmail}
             };
-            var queryResponse = await _queryService.HandleQueryAsync(userProfileQuery);
+            var queryResponse = await _commandQueryService.HandleAsync(userProfileQuery);
             if (queryResponse == null || queryResponse.Status != ResponseStatus.Success || queryResponse.ItemsCount < 2)
             {
                 throw new Exception("User profile query error");

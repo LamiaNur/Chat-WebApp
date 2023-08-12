@@ -10,12 +10,12 @@ namespace Chat.Api.ActivityModule.Middlewares
     public class LastSeenMiddleware : IMiddleware
     {
         private readonly ITokenService _tokenService;
-        private readonly ICommandService _commandService;
+        private readonly ICommandQueryService _commandQueryService;
 
         public LastSeenMiddleware()
         {
             _tokenService = DIService.Instance.GetService<ITokenService>();
-            _commandService = DIService.Instance.GetService<ICommandService>();
+            _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -37,7 +37,7 @@ namespace Chat.Api.ActivityModule.Middlewares
                     {
                         UserId = userProfile.Id  
                     };
-                    await _commandService.HandleCommandAsync(updateLastSeenCommand);
+                    await _commandQueryService.HandleAsync(updateLastSeenCommand);
                     Console.WriteLine("Last seen activity saved at LastSeenMiddleware\n");
                 } 
                 

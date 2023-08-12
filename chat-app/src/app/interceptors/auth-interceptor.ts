@@ -43,6 +43,7 @@ export class AuthInterceptor implements HttpInterceptor {
   
   shouldInclude(req: HttpRequest<any>) {
     if (req.url.startsWith(Configuration.identityApi+"/Auth/user-profile")) return true;
+    if (req.url.startsWith(Configuration.identityApi+"/Auth/update")) return true;
     if (req.url.startsWith(Configuration.identityApi+"/Auth")) return false;
     return true;
   }

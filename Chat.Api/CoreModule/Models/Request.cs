@@ -2,31 +2,23 @@ using Chat.Api.CoreModule.Interfaces;
 
 namespace Chat.Api.CoreModule.Models
 {
-    public abstract class ACommand : ICommand
+    public class Request : IRequest
     {
-        public Dictionary<string, object> FieldValues;
-        
-        public ACommand()
+        private RequestContext? RequestContext {get; set;}
+        public Dictionary<string, object> FieldValues = new();
+        public RequestContext GetCurrentScope()
         {
-            FieldValues = new Dictionary<string, object>();
+            return RequestContext;
         }
-
-        public CommandResponse CreateResponse()
+        public void SetCurrentScope(RequestContext context)
         {
-            return new CommandResponse
-            {
-                Name = this.GetType().Name
-            };
+            RequestContext = context;
         }
-        
-        public abstract void ValidateCommand();
-
         public T? GetValue<T>(string key)
         {
             if (FieldValues.ContainsKey(key)) return (T)FieldValues[key];
-            return default(T);
+            return default;
         }
-
         public void SetValue(string key, object value)
         {
             if (FieldValues.ContainsKey(key)) FieldValues[key] = value;

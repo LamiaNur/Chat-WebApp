@@ -11,18 +11,16 @@ namespace Chat.Api.ActivityModule.Controllers
     [Authorize]
     public class ActivityController : ControllerBase
     {
-        private readonly ICommandService _commandService;
-        private readonly IQueryService _queryService;
+        private readonly ICommandQueryService _commandQueryService;
         public ActivityController()
         {
-            _commandService = DIService.Instance.GetService<ICommandService>();
-            _queryService = DIService.Instance.GetService<IQueryService>();
+            _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
         }
 
         [HttpPost, Route("last-seen")]
         public async Task<IActionResult> GetLastSeenModelAsync(LastSeenQuery query)
         {
-            return Ok(await _queryService.HandleQueryAsync(query));
+            return Ok(await _commandQueryService.HandleAsync(query));
         }
     }
 }

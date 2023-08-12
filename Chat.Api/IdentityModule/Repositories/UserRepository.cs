@@ -41,6 +41,11 @@ namespace Chat.Api.IdentityModule.Repositories
         {
             return await _dbContext.SaveItemAsync(_databaseInfo, userModel);
         }
+        
+        public async Task<bool> UpdateUserAsync(UserModel userModel)
+        {
+            return await _dbContext.SaveItemAsync(_databaseInfo, userModel);
+        }
 
         public async Task<List<UserModel>> GetUsersByUserIdOrEmailAsync(string userId, string email) 
         {

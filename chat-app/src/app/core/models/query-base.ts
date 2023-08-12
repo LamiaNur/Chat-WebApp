@@ -1,8 +1,12 @@
 export class QueryBase{
     
-    Offset: number | undefined = 0;
-    limit: number | undefined = 1;
+    Offset: any = 0;
+    limit: any = 1;
     fieldValues: any;
     apiUrl: string | undefined;
     
+    getNextPaginationQuery() {
+        this.Offset += this.limit;
+        return this;
+    }
 }

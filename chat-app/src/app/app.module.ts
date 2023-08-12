@@ -21,6 +21,12 @@ import {MatButton, MatButtonModule} from "@angular/material/button";
 import { ChatComponent } from './chat/components/chat/chat.component';
 import { ChatListComponent } from './chat/components/chat-list/chat-list.component';
 import { SignalRService } from './core/services/signalr-service';
+import { ChatSocketService } from './chat/services/chat-socket-service';
+import { ReversePipe } from './core/pipes/reverse-pipe';
+import { FileService } from './core/services/file-service';
+import { SafeUrlPipe } from './core/pipes/safe-url-pipe';
+import { SecurtiyService } from './core/services/security-service';
+import { HomeComponent } from './identity/components/home/home.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +37,10 @@ import { SignalRService } from './core/services/signalr-service';
     ContactComponent,
     AlertComponent,
     ChatComponent,
-    ChatListComponent
+    ChatListComponent,
+    ReversePipe,
+    SafeUrlPipe,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -50,6 +59,9 @@ import { SignalRService } from './core/services/signalr-service';
     UserService,
     AlertService,
     SignalRService,
+    ChatSocketService,
+    FileService,
+    SecurtiyService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]

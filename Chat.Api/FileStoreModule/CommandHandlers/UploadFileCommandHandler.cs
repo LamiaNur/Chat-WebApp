@@ -13,7 +13,7 @@ namespace Chat.Api.FileStoreModule.CommandHandlers
     [Shared]
     public class UploadFileCommandHandler : ACommandHandler<UploadFileCommand>
     {
-        private IFileRepository _fileRepository;
+        private readonly IFileRepository _fileRepository;
 
         public UploadFileCommandHandler()
         {
@@ -24,7 +24,7 @@ namespace Chat.Api.FileStoreModule.CommandHandlers
         {
             var response = command.CreateResponse();
             var file = command.FormFile;
-            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), "FileStoreService\\Store");
+            var pathToSave = "FileStoreModule\\Store";
             if (file.Length <= 0) 
             {
                 throw new Exception("File Length 0");
@@ -37,13 +37,16 @@ namespace Chat.Api.FileStoreModule.CommandHandlers
             {
                 file.CopyTo(stream);
             }
+            var requestContext = command.GetCurrentScope();
+            
             var fileModel = new FileModel()
             {
                 Id = fileId,
                 Extension = extension,
                 Url = fullPath,
                 UploadedAt = DateTime.UtcNow,
-                Name = fileName
+                Name = fileName,
+                UserId = requestContext?.CurrentUser?.Id
             };
             if (!await _fileRepository.SaveFileModelAsync(fileModel)) 
             {

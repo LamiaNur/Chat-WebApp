@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/identity/services/user.service';
 import { SendMessageCommand } from '../../commands/send-message-command';
@@ -11,6 +11,11 @@ import { ResponseStatus } from 'src/app/core/constants/response-status';
 import { LastSeenQuery } from 'src/app/activity/queries/last-seen-query';
 import { Subject } from '@microsoft/signalr';
 import { SignalRService } from 'src/app/core/services/signalr-service';
+import { ChatSocketService } from '../../services/chat-socket-service';
+import { FileService } from 'src/app/core/services/file-service';
+import { SecurtiyService } from 'src/app/core/services/security-service';
+import { EncrytptionDecryptionFactory, IEncryptionDecryption } from 'src/app/core/helpers/encryption-decryption-helper';
+import { ChatProcessor } from '../../helpers/chat-processor';
 
 @Component({
   selector: 'app-chat',
@@ -28,6 +33,12 @@ export class ChatComponent implements OnInit{
   sendToUserId : any = "";
   chats : any;
   isActive : any; 
+  query: ChatQuery = new ChatQuery();
+  totalChats:any;
+  canExecuteChatQuery: any = true;
+  sendToUserBlobImageUrl: any = '';
+  sharedSecret: any;
+  encryptionDecryptionHelper: IEncryptionDecryption | undefined;
 
   constructor(
     private elementRef : ElementRef,
@@ -35,89 +46,98 @@ export class ChatComponent implements OnInit{
     private commandService : CommandService,
     private queryServie : QueryService,
     private signalRService: SignalRService,
-    private router : Router) {}
+    private chatSocketService: ChatSocketService,
+    private fileService: FileService,
+    private router : Router,
+    private securityService: SecurtiyService) {}
   
   ngOnInit(): void {
+    this.encryptionDecryptionHelper = EncrytptionDecryptionFactory.getEncryptionDecryption();
+    this.chats = [];
     this.currentUserId = this.userService.getCurrentUserId();
     this.sendToUserId = this.userService.getCurrentOpenedChatUserId();
     this.currentUserProfile = this.userService.getCurrentUserProfile();
-    this.getChats();
+
+    this.query.sendTo = this.sendToUserId;
+    this.query.userId = this.currentUserId;
     
     this.userService.getUserProfileById(this.sendToUserId)
     .pipe(take(1))
     .subscribe(res => {
-      if (res.name === "UserProfileQuery") {
+      if (res.status === ResponseStatus.success) {
         this.sendToUserProfile = res.items[0];
+        this.sharedSecret = this.securityService.getSharedSecretKey(this.sendToUserProfile.publicKey);
         this.chatTitle = this.sendToUserProfile.firstName + " " + this.sendToUserProfile.lastName;
-        console.log("this is from user profile query Response",res);
+        this.getChats(this.query);
+        if (this.sendToUserProfile.profilePictureId){
+          this.fileService.downloadFile(this.sendToUserProfile.profilePictureId)
+          .pipe(take(1))
+          .subscribe(response => {
+            this.sendToUserBlobImageUrl = response;
+            console.log("Blob url", response);
+          });
+        }
       }
     });
-    this.signalRService.getNotificationObservable()
+    this.chatSocketService.getChatSocketObservable()
     .subscribe(message => {
-      message = this.processChat(message);
-      this.chats.push(message);
-      // this.processChats();
+      message = ChatProcessor.process(message, this.sharedSecret);
+      this.chats = [message].concat(this.chats);
       this.setChatScrollStartFromBottom();
     });
     this.getLastSeenStatus();
   }
 
-  getChats() {
-    var query = new ChatQuery();
-    query.sendTo = this.sendToUserId;
-    query.userId = this.currentUserId;
-
+  getChats(query : ChatQuery) {
     this.queryServie.execute(query)
     .pipe(take(1))
     .subscribe(res => {
       if (res.status === ResponseStatus.success) {
-        
-        this.chats = res.items;
-        this.processChats();
-        this.setChatScrollStartFromBottom();
-        console.log("this is from get chat query Response",res);
-        
+        if (res.items.length === 0) {
+          this.canExecuteChatQuery = false;
+        } else {
+          this.chats = this.chats.concat(this.processChats(res.items));
+          if (query.Offset === 0) {
+            this.setChatScrollStartFromBottom();
+            this.totalChats = res.totalCount;
+          }
+        }
       }
-      console.log(res);
     });
   }
 
-  processChats() {
-    for (let index = 0; index < this.chats.length; index++) {
-      this.chats[index] = this.processChat(this.chats[index]);
-      // const chatTime = new Date(this.chats[index].sentAt);
-      // const currentTime = new Date();
-      // if (chatTime.getDay() === currentTime.getDay()) {
-      //   this.chats[index].sentAt = chatTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-      // } else {
-      //   this.chats[index].sentAt = chatTime.toLocaleDateString();
-      // }
+  processChats(chats : any) {
+    for (let index = 0; index < chats.length; index++) {
+      chats[index] = ChatProcessor.process(chats[index], this.sharedSecret);
     }
-    console.log(this.chats);
+    return chats;
   }
 
-  processChat(chat : any) {
-    const chatTime = new Date(chat.sentAt);
-    const currentTime = new Date();
-    if (chatTime.getDay() === currentTime.getDay()) {
-      chat.sentAt = chatTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    } else {
-      chat.sentAt = chatTime.toLocaleDateString();
-    }
-    return chat;
-  }
+  // processChat(chat : any) {
+  //   const chatTime = new Date(chat.sentAt);
+  //   const currentTime = new Date();
+  //   if (chatTime.getDay() === currentTime.getDay()) {
+  //     chat.sentAt = chatTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  //   } else {
+  //     chat.sentAt = chatTime.toLocaleDateString();
+  //   }
+  //   chat.message = this.encryptionDecryptionHelper?.decrypt(chat.message, this.sharedSecret);
+  //   return chat;
+  // }
 
   setChatScrollStartFromBottom() {
     timer(1).subscribe(res => {
       const chatContainer = this.elementRef.nativeElement.querySelector('.chat-container');
       chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
-      console.log(chatContainer.scrollTop);
     });
   }
   
 
   onChatScroll(event: any): void {
-    console.log(event);
+    console.log("clientHeight : " + event.target.clientHeight + "\nscrolltop : " + event.target.scrollTop + "\nscrollheight : " + event.target.scrollHeight);
+    if( event.target.scrollTop < event.target.clientHeight && this.canExecuteChatQuery) {
+      this.getChats(this.query.getNextPaginationQuery());
+    }
   }
 
   onClickSendMessage() {
@@ -127,11 +147,13 @@ export class ChatComponent implements OnInit{
     sendMessageCommand.chatModel.sendTo = this.sendToUserId;
     sendMessageCommand.chatModel.message = this.inputMessage;
     sendMessageCommand.chatModel.status = "Sent";
+    sendMessageCommand.chatModel.message = this.encryptionDecryptionHelper?.encrypt(sendMessageCommand.chatModel.message, this.sharedSecret);
     this.inputMessage = '';
     this.commandService.execute(sendMessageCommand)
     .pipe(take(1))
     .subscribe(response => {
-      this.getChats();
+      this.chats = [ChatProcessor.process(response.metaData.Message, this.sharedSecret)].concat(this.chats);
+      this.setChatScrollStartFromBottom();
     });
   }
 
@@ -144,5 +166,10 @@ export class ChatComponent implements OnInit{
       this.lastSeen = response.items[0].status;
       this.isActive = response.items[0].isActive;
     });
+  }
+
+  onClickUserProfile() {
+    const userId = this.sendToUserId;
+    this.router.navigateByUrl('/user/' + userId);
   }
 }

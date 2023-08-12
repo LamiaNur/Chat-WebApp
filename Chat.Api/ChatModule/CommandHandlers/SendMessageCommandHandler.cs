@@ -31,16 +31,16 @@ namespace Chat.Api.ChatModule.CommandHandlers
             {
                 throw new Exception("Chat model save error");
             }
-            var requestContext = command.GetValue<RequestContext>("RequestContext");
-            _chatHubService._hubContext = requestContext.HubContext;
-            await _chatHubService.SendAsync<ChatModel>(command.ChatModel.SendTo, command.ChatModel);
+            var requestContext = command.GetCurrentScope();
+            await _chatHubService.SendAsync<ChatModel>(command.ChatModel.SendTo, command.ChatModel, requestContext);
 
             var latestChatModel = command.ChatModel.ToLatestChatModel();
             var updateLatestChatCommand = new UpdateLatestChatCommand()
             {
                 LatestChatModel = latestChatModel
             };
-            await _commandService.HandleCommandAsync(updateLatestChatCommand);
+            await _commandQueryService.HandleAsync(updateLatestChatCommand);
+            response.SetData("Message", command.ChatModel.ToChatDto());
             return response;
         }
     }
