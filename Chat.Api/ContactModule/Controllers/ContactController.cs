@@ -1,6 +1,6 @@
 using Chat.Api.ContactModule.Commands;
 using Chat.Api.ContactModule.Queries;
-using Chat.Api.CoreModule.Interfaces;
+using Chat.Api.CoreModule.CQRS;
 using Chat.Api.CoreModule.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

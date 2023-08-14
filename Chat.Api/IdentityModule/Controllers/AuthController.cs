@@ -1,4 +1,4 @@
-using Chat.Api.CoreModule.Interfaces;
+using Chat.Api.CoreModule.CQRS;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Queries;

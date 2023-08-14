@@ -1,4 +1,3 @@
-using Chat.Api.CoreModule.Interfaces;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.FileStoreModule.Commands;
 using Chat.Api.FileStoreModule.Interfaces;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.SignalR;
 using Chat.Api.ChatModule.Hubs;
 using Chat.Api.CoreModule.Models;
 using Chat.Api.FileStoreModule.Models;
+using Chat.Api.CoreModule.CQRS;
 
 namespace Chat.Api.FileStoreModule.Controllers
 {

@@ -1,7 +1,4 @@
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-
-namespace Chat.Api.CoreModule.Mediators;
+namespace Chat.Api.CoreModule.CQRS;
 
 public interface IQueryMediator
 {

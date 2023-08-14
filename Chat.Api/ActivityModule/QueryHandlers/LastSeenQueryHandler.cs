@@ -1,9 +1,8 @@
 using System.Composition;
 using Chat.Api.ActivityModule.Interfaces;
 using Chat.Api.ActivityModule.Queries;
+using Chat.Api.CoreModule.CQRS;
 using Chat.Api.CoreModule.Helpers;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
 using Chat.Api.CoreModule.Services;
 
 namespace Chat.Api.ActivityModule.QueryHandlers

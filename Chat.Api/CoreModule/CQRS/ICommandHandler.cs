@@ -1,10 +1,9 @@
 using Chat.Api.CoreModule.Mediators;
-using Chat.Api.CoreModule.Models;
 
-namespace Chat.Api.CoreModule.Interfaces
+namespace Chat.Api.CoreModule.CQRS
 {
     public interface ICommandHandler : IRequestHandler<ICommand, CommandResponse>
     {
-        
+
     }
 }

@@ -1,6 +1,6 @@
-using Chat.Api.CoreModule.Interfaces;
+using Chat.Api.CoreModule.Models;
 
-namespace Chat.Api.CoreModule.Models
+namespace Chat.Api.CoreModule.CQRS
 {
     public abstract class ACommand : Request, ICommand
     {
@@ -8,7 +8,7 @@ namespace Chat.Api.CoreModule.Models
         {
             return new CommandResponse
             {
-                Name = this.GetType().Name
+                Name = GetType().Name
             };
         }
         public abstract void ValidateCommand();

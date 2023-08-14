@@ -1,6 +1,6 @@
-using Chat.Api.CoreModule.Models;
+using Chat.Api.CoreModule.Interfaces;
 
-namespace Chat.Api.CoreModule.Interfaces 
+namespace Chat.Api.CoreModule.CQRS
 {
     public interface ICommand : IRequest
     {

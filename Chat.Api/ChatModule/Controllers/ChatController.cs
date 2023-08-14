@@ -1,12 +1,12 @@
 using Chat.Api.ChatModule.Commands;
 using Chat.Api.ChatModule.Queries;
-using Chat.Api.CoreModule.Interfaces;
 using Chat.Api.CoreModule.Services;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Chat.Api.ChatModule.Hubs;
 using Chat.Api.CoreModule.Models;
+using Chat.Api.CoreModule.CQRS;
 
 namespace Chat.Api.ChatModule.Controllers
 {

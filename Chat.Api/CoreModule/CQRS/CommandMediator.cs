@@ -1,13 +1,12 @@
 using System.Composition;
 using Chat.Api.CoreModule.Services;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Interfaces;
+using Chat.Api.CoreModule.Mediators;
 
-namespace Chat.Api.CoreModule.Mediators;
+namespace Chat.Api.CoreModule.CQRS;
 
 [Export(typeof(ICommandMediator))]
 [Shared]
-public class CommandMediator : RequestMediator<ICommand, CommandResponse> , ICommandMediator
+public class CommandMediator : RequestMediator<ICommand, CommandResponse>, ICommandMediator
 {
     protected override IRequestHandler<ICommand, CommandResponse>? GetHandler(string handlerName)
     {

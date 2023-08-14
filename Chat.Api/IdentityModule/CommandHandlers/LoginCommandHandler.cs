@@ -1,7 +1,6 @@
 using System.Composition;
 using Chat.Api.ActivityModule.Commands;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
+using Chat.Api.CoreModule.CQRS;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Interfaces;

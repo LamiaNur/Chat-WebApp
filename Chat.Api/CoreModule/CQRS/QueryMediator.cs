@@ -1,13 +1,12 @@
 using System.Composition;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 
-namespace Chat.Api.CoreModule.Mediators;
+namespace Chat.Api.CoreModule.CQRS;
 
 [Export(typeof(IQueryMediator))]
 [Shared]
-public class QueryMediator : RequestMediator<IQuery, QueryResponse> , IQueryMediator
+public class QueryMediator : RequestMediator<IQuery, QueryResponse>, IQueryMediator
 {
     protected override IRequestHandler<IQuery, QueryResponse>? GetHandler(string handlerName)
     {

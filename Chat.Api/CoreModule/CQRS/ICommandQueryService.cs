@@ -1,5 +1,4 @@
-using Chat.Api.CoreModule.Models;
-namespace Chat.Api.CoreModule.Interfaces;
+namespace Chat.Api.CoreModule.CQRS;
 public interface ICommandQueryService
 {
     Task<CommandResponse> HandleAsync(ICommand command);
