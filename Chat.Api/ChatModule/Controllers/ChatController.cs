@@ -30,25 +30,25 @@ namespace Chat.Api.ChatModule.Controllers
             context.HubContext = (IHubContext)_hubContext;
             context.HttpContext = HttpContext;
             command.SetCurrentScope(context);
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await _commandQueryService.HandleCommandAsync(command));
         }
 
         [HttpPost, Route("update-status")]
         public async Task<IActionResult> UpdateChatsStatusAsync(UpdateChatsStatusCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await _commandQueryService.HandleCommandAsync(command));
         }
 
         [HttpPost, Route("list")]
         public async Task<IActionResult> GetChatListAsync(ChatListQuery query)
         {
-            return Ok(await _commandQueryService.HandleAsync(query));
+            return Ok(await _commandQueryService.HandleQueryAsync(query));
         }
 
         [HttpPost, Route("get")]
         public async Task<IActionResult> GetChatsAsync(ChatQuery query)
         {
-            return Ok(await _commandQueryService.HandleAsync(query));
+            return Ok(await _commandQueryService.HandleQueryAsync(query));
         }
         
     }

@@ -1,13 +1,11 @@
-using Chat.Api.CoreModule.Interfaces;
-
 namespace Chat.Api.CoreModule.Mediators;
 
-public interface IRequestHandler<T, R> where T : IRequest where R : IResponse
+public interface IRequestHandler
 {
-    Task<R> HandleAsync(T request);
+
 }
 
-public interface IRequestHandler : IRequestHandler<IRequest, IResponse>
+public interface IRequestHandler<in TRequest, TResponse> : IRequestHandler
 {
-    
+    Task<TResponse> HandleAsync(TRequest request);
 }

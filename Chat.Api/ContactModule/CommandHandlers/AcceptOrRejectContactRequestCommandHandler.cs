@@ -2,12 +2,12 @@ using System.Composition;
 using Chat.Api.ContactModule.Commands;
 using Chat.Api.ContactModule.Interfaces;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 
 namespace Chat.Api.ContactModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("AcceptOrRejectContactRequestCommandHandler", typeof(ICommandHandler))]
+    [Export("AcceptOrRejectContactRequestCommandHandler", typeof(IRequestHandler))]
     [Shared]
     public class AcceptOrRejectContactRequestCommandHandler : ACommandHandler<AcceptOrRejectContactRequestCommand>
     {

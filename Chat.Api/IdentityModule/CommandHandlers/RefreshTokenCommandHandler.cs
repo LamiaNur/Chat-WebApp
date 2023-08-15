@@ -1,14 +1,14 @@
 using System.Composition;
 using Chat.Api.CoreModule.CQRS;
 using Chat.Api.CoreModule.Helpers;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Interfaces;
 
 namespace Chat.Api.IdentityModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("RefreshTokenCommandHandler", typeof(ICommandHandler))]
+    [Export("RefreshTokenCommandHandler", typeof(IRequestHandler))]
     [Shared]
     public class RefreshTokenCommandHandler : ACommandHandler<RefreshTokenCommand>
     {

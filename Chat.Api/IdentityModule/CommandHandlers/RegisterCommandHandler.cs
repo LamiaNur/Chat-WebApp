@@ -1,13 +1,13 @@
 using System.Composition;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Interfaces;
 
 namespace Chat.Api.IdentityModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("RegisterCommandHandler", typeof(ICommandHandler))]
+    [Export("RegisterCommandHandler", typeof(IRequestHandler))]
     [Shared]
     public class RegisterCommandHandler : ACommandHandler<RegisterCommand>
     {

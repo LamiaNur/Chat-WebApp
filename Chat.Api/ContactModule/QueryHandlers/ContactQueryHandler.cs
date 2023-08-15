@@ -2,12 +2,12 @@ using System.Composition;
 using Chat.Api.ContactModule.Interfaces;
 using Chat.Api.ContactModule.Queries;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 
 namespace Chat.Api.ContactModule.QueryHandlers
 {
-    [Export(typeof(IQueryHandler))]
-    [Export("ContactQueryHandler", typeof(IQueryHandler))]
+    [Export("ContactQueryHandler", typeof(IRequestHandler))]
     [Shared]
     public class ContactQueryHandler : AQueryHandler<ContactQuery>
     {

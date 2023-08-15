@@ -21,28 +21,28 @@ namespace Chat.Api.IdentityModule.Controllers
         [Route("register")]
         public async Task<IActionResult> RegisterUserAsync(RegisterCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await _commandQueryService.HandleCommandAsync(command));
         }
 
         [HttpPost]
         [Route("log-in")]
         public async Task<IActionResult> LoginUserAsync(LoginCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await _commandQueryService.HandleCommandAsync(command));
         }
 
         [HttpPost]
         [Route("log-out")]
         public async Task<IActionResult> LogOutUserAsync(LogOutCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await _commandQueryService.HandleCommandAsync(command));
         }
 
         [HttpPost]
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshTokenAsync(RefreshTokenCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await _commandQueryService.HandleCommandAsync(command));
         }
 
         [HttpPost]
@@ -50,7 +50,7 @@ namespace Chat.Api.IdentityModule.Controllers
         [Authorize]
         public async Task<IActionResult> UserProfileAsync(UserProfileQuery query)
         {
-            return Ok(await _commandQueryService.HandleAsync(query));
+            return Ok(await _commandQueryService.HandleQueryAsync(query));
         }
         
         [HttpPost]
@@ -58,7 +58,7 @@ namespace Chat.Api.IdentityModule.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateUserAsync(UpdateUserProfileCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await _commandQueryService.HandleCommandAsync(command));
         }
     }
 }

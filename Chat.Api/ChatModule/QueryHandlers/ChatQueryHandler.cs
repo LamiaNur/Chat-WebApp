@@ -4,11 +4,11 @@ using Chat.Api.ChatModule.Queries;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.CoreModule.Helpers;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 
 namespace Chat.Api.ChatModule.QueryHandlers
 {
-    [Export(typeof(IQueryHandler))]
-    [Export("ChatQueryHandler", typeof(IQueryHandler))]
+    [Export("ChatQueryHandler", typeof(IRequestHandler))]
     [Shared]
     public class ChatQueryHandler : AQueryHandler<ChatQuery>
     {

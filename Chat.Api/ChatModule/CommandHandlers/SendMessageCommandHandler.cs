@@ -3,12 +3,12 @@ using Chat.Api.ChatModule.Commands;
 using Chat.Api.ChatModule.Interfaces;
 using Chat.Api.ChatModule.Models;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 
 namespace Chat.Api.ChatModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("SendMessageCommandHandler", typeof(ICommandHandler))]
+    [Export("SendMessageCommandHandler", typeof(IRequestHandler))]
     [Shared]
     public class SendMessageCommandHandler : ACommandHandler<SendMessageCommand>
     {
@@ -38,7 +38,7 @@ namespace Chat.Api.ChatModule.CommandHandlers
             {
                 LatestChatModel = latestChatModel
             };
-            await _commandQueryService.HandleAsync(updateLatestChatCommand);
+            await CommandQueryService.HandleCommandAsync(updateLatestChatCommand);
             response.SetData("Message", command.ChatModel.ToChatDto());
             return response;
         }

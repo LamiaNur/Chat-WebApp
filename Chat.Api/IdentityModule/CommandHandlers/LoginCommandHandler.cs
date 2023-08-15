@@ -1,6 +1,7 @@
 using System.Composition;
 using Chat.Api.ActivityModule.Commands;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Interfaces;
@@ -8,8 +9,7 @@ using Chat.Api.IdentityModule.Models;
 
 namespace Chat.Api.IdentityModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("LoginCommandHandler", typeof(ICommandHandler))]
+    [Export("LoginCommandHandler", typeof(IRequestHandler))]
     [Shared]
     public class LoginCommandHandler : ACommandHandler<LoginCommand>
     {

@@ -3,12 +3,12 @@ using Chat.Api.ActivityModule.Commands;
 using Chat.Api.ActivityModule.Interfaces;
 using Chat.Api.ActivityModule.Models;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 
 namespace Chat.Api.ActivityModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("UpdateLastSeenCommandHandler", typeof(ICommandHandler))]
+    [Export("UpdateLastSeenCommandHandler", typeof(IRequestHandler))]
     [Shared]
     public class UpdateLastSeenCommandHandler : ACommandHandler<UpdateLastSeenCommand>
     {

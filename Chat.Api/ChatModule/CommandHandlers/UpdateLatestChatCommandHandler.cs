@@ -2,12 +2,12 @@ using System.Composition;
 using Chat.Api.ChatModule.Commands;
 using Chat.Api.ChatModule.Interfaces;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 
 namespace Chat.Api.ChatModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("UpdateLatestChatCommandHandler", typeof(ICommandHandler))]
+    [Export("UpdateLatestChatCommandHandler", typeof(IRequestHandler))]
     [Shared]
     public class UpdateLatestChatCommandHandler : ACommandHandler<UpdateLatestChatCommand>
     {

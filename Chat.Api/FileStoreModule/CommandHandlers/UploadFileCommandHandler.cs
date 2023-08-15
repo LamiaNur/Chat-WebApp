@@ -1,5 +1,6 @@
 using System.Composition;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.FileStoreModule.Commands;
 using Chat.Api.FileStoreModule.Interfaces;
@@ -8,8 +9,7 @@ using Chat.Api.IdentityModule.Extensions;
 
 namespace Chat.Api.FileStoreModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("UploadFileCommandHandler", typeof(ICommandHandler))]
+    [Export("UploadFileCommandHandler", typeof(IRequestHandler))]
     [Shared]
     public class UploadFileCommandHandler : ACommandHandler<UploadFileCommand>
     {

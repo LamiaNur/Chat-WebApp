@@ -6,7 +6,7 @@ namespace Chat.Api.CoreModule.Services
     public sealed class DIService
     {
         private static DIService? _instance;
-        private static readonly object _lockObject = new();
+        private static readonly object LockObject = new();
         private CompositionHost? _container;
         private readonly ContainerConfiguration _containerConfiguration;
         private readonly List<string> _assemblyLists;
@@ -18,14 +18,14 @@ namespace Chat.Api.CoreModule.Services
             _containerConfiguration = new ContainerConfiguration();
             _assemblyLists = new List<string>();
         }
-
+        
         public static DIService Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    lock (_lockObject)
+                    lock (LockObject)
                     {
                         if (_instance == null)
                         {
@@ -38,8 +38,9 @@ namespace Chat.Api.CoreModule.Services
             }
         }
 
-        public void Initialize(string projectPrefix = "Chat")
+        public void Initialize(IServiceProvider serviceProvider, string projectPrefix = "Chat")
         {
+            ServiceProvider = serviceProvider;
             AddAllAssemblies(projectPrefix);
             CreateContainer();
         }
@@ -111,7 +112,7 @@ namespace Chat.Api.CoreModule.Services
         {
             if (_container == null)
             {
-                lock(_lockObject)
+                lock(LockObject)
                 {
                     if (_container == null)
                     {
@@ -124,7 +125,7 @@ namespace Chat.Api.CoreModule.Services
 
         public T GetService<T>()
         {
-            lock (_lockObject)
+            lock (LockObject)
             {
                 try
                 {
@@ -166,7 +167,7 @@ namespace Chat.Api.CoreModule.Services
 
         public T? GetService<T>(string name)
         {
-            lock (_lockObject)
+            lock (LockObject)
             {
                 try
                 {
@@ -199,8 +200,9 @@ namespace Chat.Api.CoreModule.Services
 
         public List<T> GetServices<T>()
         {
-            lock (_lockObject)
+            lock (LockObject)
             {
+                var allServices = new List<T>();
                 try
                 {
                     if (_container == null)
@@ -210,28 +212,28 @@ namespace Chat.Api.CoreModule.Services
                     }
                     var services = _container.GetExports<T>().ToList<T>();
                     Console.WriteLine($"GetServices Success of type {typeof(T).Name} with container. Services Count : {services.Count}\n");
-                    return services;
+                    allServices.AddRange( services );
                 }
                 catch (Exception)
                 {
                     Console.WriteLine($"GetServices Failed of type {typeof(T).Name} with container\n");
-                    try
-                    { 
-                        if (ServiceProvider == null) 
-                        {
-                            Console.WriteLine("ServiceProvider not set\n");
-                            throw;
-                        }
-                        var services = ServiceProvider.GetServices<T>().ToList<T>();
-                        Console.WriteLine($"GetServices Success of type {typeof(T).Name} with ServiceProvider. Services Count : {services.Count}\n");
-                        return services;
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine($"GetServices Failed of type {typeof(T).Name} with ServiceProvider");
-                        return new List<T>();
-                    }
                 }
+                try
+                {
+                    if (ServiceProvider == null)
+                    {
+                        Console.WriteLine("ServiceProvider not set\n");
+                        throw new Exception();
+                    }
+                    var services = ServiceProvider.GetServices<T>().ToList<T>();
+                    Console.WriteLine($"GetServices Success of type {typeof(T).Name} with ServiceProvider. Services Count : {services.Count}\n");
+                    allServices.AddRange(services);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine($"GetServices Failed of type {typeof(T).Name} with ServiceProvider");
+                }
+                return allServices;
             }
         }
 
@@ -248,11 +250,6 @@ namespace Chat.Api.CoreModule.Services
             }
             Console.WriteLine("Get Configuration Success\n");
             return config;
-        }
-        
-        public void SetServiceProvider(IServiceProvider serviceProvider)
-        {
-            ServiceProvider = serviceProvider;
         }
     }
 }

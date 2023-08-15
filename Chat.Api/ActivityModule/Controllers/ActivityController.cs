@@ -20,7 +20,7 @@ namespace Chat.Api.ActivityModule.Controllers
         [HttpPost, Route("last-seen")]
         public async Task<IActionResult> GetLastSeenModelAsync(LastSeenQuery query)
         {
-            return Ok(await _commandQueryService.HandleAsync(query));
+            return Ok(await _commandQueryService.HandleQueryAsync(query));
         }
     }
 }

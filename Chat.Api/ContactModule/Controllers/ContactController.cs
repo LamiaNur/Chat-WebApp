@@ -21,17 +21,17 @@ namespace Chat.Api.ContactModule.Controllers
         [HttpPost, Route("add")]
         public async Task<IActionResult> AddContactAsync(AddContactCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await _commandQueryService.HandleCommandAsync(command));
         }
         [HttpPost, Route("accept-reject")]
         public async Task<IActionResult> AcceptOrRejectContactRequestAsync(AcceptOrRejectContactRequestCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await _commandQueryService.HandleCommandAsync(command));
         }
         [HttpPost, Route("get")]
         public async Task<IActionResult> AddContactAsync(ContactQuery query)
         {
-            return Ok(await _commandQueryService.HandleAsync(query));
+            return Ok(await _commandQueryService.HandleQueryAsync(query));
         }
     }
 }

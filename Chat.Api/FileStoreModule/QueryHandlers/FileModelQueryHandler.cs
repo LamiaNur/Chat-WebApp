@@ -1,13 +1,13 @@
 using System.Composition;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.FileStoreModule.Interfaces;
 using Chat.Api.FileStoreModule.Queries;
 
 namespace Chat.Api.FileStoreModule.QueryHandlers
 {
-    [Export(typeof(IQueryHandler))]
-    [Export("FileModelQueryHandler", typeof(IQueryHandler))]
+    [Export("FileModelQueryHandler", typeof(IRequestHandler))]
     [Shared]
     public class FileModelQueryHandler : AQueryHandler<FileModelQuery>
     {

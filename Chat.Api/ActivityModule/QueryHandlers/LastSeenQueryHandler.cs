@@ -3,12 +3,12 @@ using Chat.Api.ActivityModule.Interfaces;
 using Chat.Api.ActivityModule.Queries;
 using Chat.Api.CoreModule.CQRS;
 using Chat.Api.CoreModule.Helpers;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 
 namespace Chat.Api.ActivityModule.QueryHandlers
 {
-    [Export(typeof(IQueryHandler))]
-    [Export("LastSeenQueryHandler", typeof(IQueryHandler))]
+    [Export("LastSeenQueryHandler", typeof(IRequestHandler))]
     [Shared]
     public class LastSeenQueryHandler : AQueryHandler<LastSeenQuery>
     {

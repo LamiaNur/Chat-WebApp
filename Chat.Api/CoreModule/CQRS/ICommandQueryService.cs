@@ -1,6 +1,6 @@
 namespace Chat.Api.CoreModule.CQRS;
 public interface ICommandQueryService
 {
-    Task<CommandResponse> HandleAsync(ICommand command);
-    Task<QueryResponse> HandleAsync(IQuery query);
+    Task<CommandResponse> HandleCommandAsync<TCommand>(TCommand command) where TCommand : ICommand;
+    Task<QueryResponse> HandleQueryAsync<TQuery>(TQuery query) where TQuery : IQuery;
 }

@@ -1,5 +1,6 @@
 using System.Composition;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
@@ -7,8 +8,7 @@ using Chat.Api.IdentityModule.Queries;
 
 namespace Chat.Api.IdentityModule.QueryHandlers
 {
-    [Export(typeof(IQueryHandler))]
-    [Export("UserProfileQueryHandler", typeof(IQueryHandler))]
+    [Export("UserProfileQueryHandler", typeof(IRequestHandler))]
     [Shared]
     public class UserProfileQueryHandler : AQueryHandler<UserProfileQuery>
     {

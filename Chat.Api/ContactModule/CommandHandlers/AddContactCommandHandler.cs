@@ -4,14 +4,14 @@ using Chat.Api.ContactModule.Interfaces;
 using Chat.Api.ContactModule.Models;
 using Chat.Api.CoreModule.Constants;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Models;
 using Chat.Api.IdentityModule.Queries;
 
 namespace Chat.Api.ContactModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("AddContactCommandHandler", typeof(ICommandHandler))]
+    [Export("AddContactCommandHandler", typeof(IRequestHandler))]
     [Shared]
     public class AddContactCommandHandler : ACommandHandler<AddContactCommand>
     {
@@ -29,7 +29,7 @@ namespace Chat.Api.ContactModule.CommandHandlers
                 UserIds = new List<string> {command.UserId},
                 Emails = new List<string> {command.ContactEmail}
             };
-            var queryResponse = await _commandQueryService.HandleAsync(userProfileQuery);
+            var queryResponse = await CommandQueryService.HandleQueryAsync(userProfileQuery);
             if (queryResponse == null || queryResponse.Status != ResponseStatus.Success || queryResponse.ItemsCount < 2)
             {
                 throw new Exception("User profile query error");

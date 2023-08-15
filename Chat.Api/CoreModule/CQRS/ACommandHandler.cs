@@ -1,11 +1,13 @@
+using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
+using MongoDB.Driver;
 
 namespace Chat.Api.CoreModule.CQRS
 {
-    public abstract class ACommandHandler<T> : ICommandHandler where T : ICommand
+    public abstract class ACommandHandler<T> : IRequestHandler<T, CommandResponse> where T : ICommand
     {
-        public readonly ICommandQueryService _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
-        public async Task<CommandResponse> HandleAsync(ICommand command)
+        protected readonly ICommandQueryService CommandQueryService = DIService.Instance.GetService<ICommandQueryService>();
+        public async Task<CommandResponse> HandleAsync(T command)
         {
             Console.WriteLine($"OnHandleAsync of : {GetType().Name}\n");
             command.ValidateCommand();
