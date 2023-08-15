@@ -1,8 +1,10 @@
+using Chat.Api.CoreModule.Enums;
+
 namespace Chat.Api.CoreModule.Interfaces
 {
-    public interface IResponse
+    public interface IResponse : ICommonData
     {
         string Message {get; set;}
-        string Status {get; set;}
+        ResponseStatus Status {get; set;}
     }
 }

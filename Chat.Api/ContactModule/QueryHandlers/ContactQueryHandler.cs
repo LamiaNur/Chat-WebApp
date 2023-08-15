@@ -16,7 +16,7 @@ namespace Chat.Api.ContactModule.QueryHandlers
         {
             _contactRepository = DIService.Instance.GetService<IContactRepository>();
         }
-        public override async Task<QueryResponse> OnHandleAsync(ContactQuery query)
+        protected override async Task<QueryResponse> OnHandleAsync(ContactQuery query)
         {
             var response = query.CreateResponse();
             if (query.IsRequestContacts)

@@ -16,7 +16,7 @@ namespace Chat.Api.IdentityModule.CommandHandlers
         {
             _tokenService = DIService.Instance.GetService<ITokenService>();
         }
-        public override async Task<CommandResponse> OnHandleAsync(LogOutCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(LogOutCommand command)
         {
             var response = command.CreateResponse();
             if (!await _tokenService.RevokeAllTokenByAppIdAsync(command.AppId))

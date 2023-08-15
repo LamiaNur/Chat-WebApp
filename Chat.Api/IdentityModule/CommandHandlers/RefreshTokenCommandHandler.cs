@@ -18,7 +18,7 @@ namespace Chat.Api.IdentityModule.CommandHandlers
             _tokenService = DIService.Instance.GetService<ITokenService>();
         }
 
-        public override async Task<CommandResponse> OnHandleAsync(RefreshTokenCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(RefreshTokenCommand command)
         {
             var response = command.CreateResponse();
             if (!TokenHelper.IsTokenValid(command.Token.AccessToken, _tokenService.GetTokenValidationParameters(true, true, false, true)))

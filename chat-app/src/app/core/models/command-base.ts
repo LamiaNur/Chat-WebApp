@@ -1,4 +1,4 @@
 export class CommandBase {
-    fieldValues : any;
+    metaData : any;
     apiUrl: string | undefined;
 }

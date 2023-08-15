@@ -18,7 +18,7 @@ namespace Chat.Api.ActivityModule.QueryHandlers
            _lastSeenRepository = DIService.Instance.GetService<ILastSeenRepository>();
         }
         
-        public override async Task<QueryResponse> OnHandleAsync(LastSeenQuery query)
+        protected override async Task<QueryResponse> OnHandleAsync(LastSeenQuery query)
         {
             var response = query.CreateResponse();
             var lastSeenModels = await _lastSeenRepository.GetLastSeenModelsByUserIdsAsync(query.UserIds);

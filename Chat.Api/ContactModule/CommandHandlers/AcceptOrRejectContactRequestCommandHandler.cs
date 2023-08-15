@@ -17,7 +17,7 @@ namespace Chat.Api.ContactModule.CommandHandlers
             _contactRepository = DIService.Instance.GetService<IContactRepository>();
         }
 
-        public override async Task<CommandResponse> OnHandleAsync(AcceptOrRejectContactRequestCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(AcceptOrRejectContactRequestCommand command)
         {
             var response = command.CreateResponse();
             var contact = await _contactRepository.GetContactByIdAsync(command.ContactId);

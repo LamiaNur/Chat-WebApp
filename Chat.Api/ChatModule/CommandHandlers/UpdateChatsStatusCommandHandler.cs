@@ -21,7 +21,7 @@ namespace Chat.Api.ChatModule.CommandHandlers
             _chatRepository = DIService.Instance.GetService<IChatRepository>();
         }
 
-        public override async Task<CommandResponse> OnHandleAsync(UpdateChatsStatusCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(UpdateChatsStatusCommand command)
         {
             var response = command.CreateResponse();
             var latestChatModel = await _latestChatRepository.GetLatestChatAsync(command.UserId, command.OpenedChatUserId);

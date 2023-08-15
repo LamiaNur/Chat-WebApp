@@ -18,7 +18,7 @@ namespace Chat.Api.FileStoreModule.QueryHandlers
             _fileRepository = DIService.Instance.GetService<IFileRepository>();
         }
         
-        public override async Task<QueryResponse> OnHandleAsync(FileModelQuery query)
+        protected override async Task<QueryResponse> OnHandleAsync(FileModelQuery query)
         {
             var response = query.CreateResponse();
             var fileModel = await _fileRepository.GetFileModelByIdAsync(query.FileId);

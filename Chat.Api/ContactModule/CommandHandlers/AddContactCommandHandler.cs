@@ -2,8 +2,8 @@ using System.Composition;
 using Chat.Api.ContactModule.Commands;
 using Chat.Api.ContactModule.Interfaces;
 using Chat.Api.ContactModule.Models;
-using Chat.Api.CoreModule.Constants;
 using Chat.Api.CoreModule.CQRS;
+using Chat.Api.CoreModule.Enums;
 using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Models;
@@ -21,7 +21,7 @@ namespace Chat.Api.ContactModule.CommandHandlers
             _contactRepository = DIService.Instance.GetService<IContactRepository>();
         }
 
-        public override async Task<CommandResponse> OnHandleAsync(AddContactCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(AddContactCommand command)
         {
             var response = command.CreateResponse();
             var userProfileQuery = new UserProfileQuery()
@@ -30,7 +30,7 @@ namespace Chat.Api.ContactModule.CommandHandlers
                 Emails = new List<string> {command.ContactEmail}
             };
             var queryResponse = await CommandQueryService.HandleQueryAsync(userProfileQuery);
-            if (queryResponse == null || queryResponse.Status != ResponseStatus.Success || queryResponse.ItemsCount < 2)
+            if (queryResponse == null || queryResponse.Status != ResponseStatus.Success || queryResponse.Items.Count < 2)
             {
                 throw new Exception("User profile query error");
             }

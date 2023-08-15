@@ -22,7 +22,7 @@ namespace Chat.Api.IdentityModule.CommandHandlers
             _tokenService = DIService.Instance.GetService<ITokenService>();
         }
 
-        public override async Task<CommandResponse> OnHandleAsync(LoginCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(LoginCommand command)
         {
             var response = command.CreateResponse();
             var user = await _userRepository.GetUserByEmailAsync(command.Email);

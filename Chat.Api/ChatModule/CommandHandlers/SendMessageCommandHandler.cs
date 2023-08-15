@@ -20,7 +20,7 @@ namespace Chat.Api.ChatModule.CommandHandlers
             _chatHubService = DIService.Instance.GetService<IChatHubService>();
             _chatRepository = DIService.Instance.GetService<IChatRepository>();
         }
-        public override async Task<CommandResponse> OnHandleAsync(SendMessageCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(SendMessageCommand command)
         {
             var response = command.CreateResponse();
             command.ChatModel.Id = Guid.NewGuid().ToString();
@@ -30,7 +30,7 @@ namespace Chat.Api.ChatModule.CommandHandlers
             {
                 throw new Exception("Chat model save error");
             }
-            var requestContext = command.GetCurrentScope();
+            var requestContext = command.GetRequestContext();
             await _chatHubService.SendAsync<ChatModel>(command.ChatModel.SendTo, command.ChatModel, requestContext);
 
             var latestChatModel = command.ChatModel.ToLatestChatModel();

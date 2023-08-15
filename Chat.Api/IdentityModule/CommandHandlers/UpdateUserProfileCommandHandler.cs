@@ -17,7 +17,7 @@ namespace Chat.Api.IdentityModule.CommandHandlers
         {
             _userRepository = DIService.Instance.GetService<IUserRepository>();
         }
-        public override async Task<CommandResponse> OnHandleAsync(UpdateUserProfileCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(UpdateUserProfileCommand command)
         {
             var response = command.CreateResponse();
             var requestUpdateModel = command.UserModel;

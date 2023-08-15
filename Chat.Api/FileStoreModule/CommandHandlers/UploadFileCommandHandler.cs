@@ -20,7 +20,7 @@ namespace Chat.Api.FileStoreModule.CommandHandlers
             _fileRepository = DIService.Instance.GetService<IFileRepository>();
         }
         
-        public override async Task<CommandResponse> OnHandleAsync(UploadFileCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(UploadFileCommand command)
         {
             var response = command.CreateResponse();
             var file = command.FormFile;
@@ -38,7 +38,7 @@ namespace Chat.Api.FileStoreModule.CommandHandlers
                 file.CopyTo(stream);
             }
 
-            var currentUser = command.GetCurrentScope()?.GetCurrentUserProfile();
+            var currentUser = command.GetRequestContext()?.GetCurrentUserProfile();
             var fileModel = new FileModel()
             {
                 Id = fileId,

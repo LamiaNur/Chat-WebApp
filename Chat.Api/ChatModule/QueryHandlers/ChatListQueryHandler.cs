@@ -16,7 +16,7 @@ namespace Chat.Api.ChatModule.QueryHandlers
         {
             _latestChatRepository = DIService.Instance.GetService<ILatestChatRepository>();
         }
-        public override async Task<QueryResponse> OnHandleAsync(ChatListQuery query)
+        protected override async Task<QueryResponse> OnHandleAsync(ChatListQuery query)
         {
             var response = query.CreateResponse();
             var latestChatModels = await _latestChatRepository.GetLatestChatModelsAsync(query.UserId, query.Offset, query.Limit);

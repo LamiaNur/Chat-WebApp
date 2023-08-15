@@ -29,7 +29,7 @@ namespace Chat.Api.ChatModule.Controllers
             var context = new RequestContext();
             context.HubContext = (IHubContext)_hubContext;
             context.HttpContext = HttpContext;
-            command.SetCurrentScope(context);
+            command.SetRequestContext(context);
             return Ok(await _commandQueryService.HandleCommandAsync(command));
         }
 

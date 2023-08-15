@@ -37,7 +37,7 @@
 //             {
 //                 FormFile = formFile
 //             };
-//             fileUploadCommand.SetCurrentScope(context);
+//             fileUploadCommand.SetRequestContext(context);
 //             return Ok(await _commandQueryService.HandleCommandAsync(fileUploadCommand));
 //         }
 //

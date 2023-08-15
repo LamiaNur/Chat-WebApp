@@ -2,11 +2,10 @@ using Chat.Api.CoreModule.Models;
 
 namespace Chat.Api.CoreModule.Interfaces
 {
-    public interface IRequest
+    public interface IRequest : ICommonData
     {
-        void SetValue(string key, object value);
-        T? GetValue<T>(string key);
-        void SetCurrentScope(RequestContext context);
-        RequestContext? GetCurrentScope();
+        RequestContext? RequestContext { get; set; }
+        void SetRequestContext(RequestContext context);
+        RequestContext? GetRequestContext();
     }
 }

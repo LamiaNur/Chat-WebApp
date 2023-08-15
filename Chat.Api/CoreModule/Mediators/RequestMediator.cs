@@ -10,7 +10,7 @@ public class RequestMediator : IRequestMediator
     public async Task<TResponse> HandleAsync<TRequest, TResponse>(TRequest request)
     {
         var handlerName = request?.GetType().Name + GetHandlerNameSuffix();
-        var handler = GetHandler<TRequest, TResponse>(handlerName) ?? throw new Exception("Handler not found");
+        var handler = GetHandler<TRequest, TResponse>(handlerName) ?? throw new Exception($"{handlerName} not found");
         return await handler.HandleAsync(request);
     }
 

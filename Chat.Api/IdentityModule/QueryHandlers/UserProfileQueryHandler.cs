@@ -18,7 +18,7 @@ namespace Chat.Api.IdentityModule.QueryHandlers
             _userRepository = DIService.Instance.GetService<IUserRepository>();
         }
 
-        public override async Task<QueryResponse> OnHandleAsync(UserProfileQuery query)
+        protected override async Task<QueryResponse> OnHandleAsync(UserProfileQuery query)
         {
             var response = query.CreateResponse();
             var userModels = new List<UserModel>();

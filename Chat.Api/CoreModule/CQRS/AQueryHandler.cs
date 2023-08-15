@@ -3,17 +3,17 @@ using Chat.Api.CoreModule.Services;
 
 namespace Chat.Api.CoreModule.CQRS
 {
-    public abstract class AQueryHandler<T> : IRequestHandler<T, QueryResponse> where T : IQuery
+    public abstract class AQueryHandler<TQuery> : IRequestHandler<TQuery, QueryResponse> where TQuery : IQuery
     {
         protected readonly ICommandQueryService CommandQueryService = DIService.Instance.GetService<ICommandQueryService>();
-        public async Task<QueryResponse> HandleAsync(T query)
+        
+        protected abstract Task<QueryResponse> OnHandleAsync(TQuery query);
+        
+        public async Task<QueryResponse> HandleAsync(TQuery query)
         {
             Console.WriteLine($"OnHandleAsync of : {GetType().Name}\n");
             query.ValidateQuery();
-            var response = await OnHandleAsync((T)query);
-            Console.WriteLine($"Successfully returned OnHandleAsync of : {GetType().Name}\n");
-            return response;
+            return await OnHandleAsync(query);
         }
-        public abstract Task<QueryResponse> OnHandleAsync(T query);
     }
 }

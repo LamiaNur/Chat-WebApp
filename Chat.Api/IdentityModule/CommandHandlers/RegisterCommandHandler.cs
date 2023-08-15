@@ -18,7 +18,7 @@ namespace Chat.Api.IdentityModule.CommandHandlers
             _userRepository = DIService.Instance.GetService<IUserRepository>();
         }
                 
-        public override async Task<CommandResponse> OnHandleAsync(RegisterCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(RegisterCommand command)
         {
             var response = command.CreateResponse();
             if (await _userRepository.IsUserExistAsync(command.UserModel)) 

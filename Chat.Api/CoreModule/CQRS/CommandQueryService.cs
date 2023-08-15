@@ -1,5 +1,5 @@
 using System.Composition;
-using Chat.Api.CoreModule.Constants;
+using Chat.Api.CoreModule.Enums;
 using Chat.Api.CoreModule.Mediators;
 using Chat.Api.CoreModule.Services;
 
@@ -18,12 +18,14 @@ public class CommandQueryService : ICommandQueryService
         {
             response = await _requestMediator.HandleAsync<TCommand, CommandResponse>(command);
             response.Status = ResponseStatus.Success;
+            response.Name = command.GetType().Name;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             response = new()
             {
+                Name = command.GetType().Name,
                 Status = ResponseStatus.Error,
                 Message = e.Message
             };
@@ -38,12 +40,14 @@ public class CommandQueryService : ICommandQueryService
         {
             response = await _requestMediator.HandleAsync<TQuery, QueryResponse>(query);
             response.Status = ResponseStatus.Success;
+            response.Name = query.GetType().Name;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             response = new()
             {
+                Name = query.GetType().Name,
                 Status = ResponseStatus.Error,
                 Message = e.Message
             };
