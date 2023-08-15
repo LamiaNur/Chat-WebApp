@@ -1,4 +1,4 @@
-using Chat.Api.CoreModule.CQRS;
+using Chat.Framework.CQRS;
 
 namespace Chat.Api.IdentityModule.Queries
 {

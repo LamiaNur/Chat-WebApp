@@ -1,10 +1,10 @@
 using System.Composition;
-using Chat.Api.CoreModule.CQRS;
-using Chat.Api.CoreModule.Helpers;
-using Chat.Api.CoreModule.Mediators;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Commands;
+using Chat.Api.IdentityModule.Helpers;
 using Chat.Api.IdentityModule.Interfaces;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
+using Chat.Framework.Services;
 
 namespace Chat.Api.IdentityModule.CommandHandlers
 {

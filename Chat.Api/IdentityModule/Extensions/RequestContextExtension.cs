@@ -1,16 +1,16 @@
-using Chat.Api.CoreModule.Models;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
-using Chat.Api.CoreModule.Services;
+using Chat.Framework.Services;
 using Microsoft.Net.Http.Headers;
+using Chat.Framework.Models;
 
 namespace Chat.Api.IdentityModule.Extensions;
-public static class RequestContextExtesion
+public static class RequestContextExtension
 {
-    private static ITokenService _tokenService = DIService.Instance.GetService<ITokenService>();
+    private static readonly ITokenService TokenService = DIService.Instance.GetService<ITokenService>();
     public static UserProfile GetCurrentUserProfile(this RequestContext context)
     {
         var accessToken = context.HttpContext?.Request.Headers[HeaderNames.Authorization].ToString();
-        return _tokenService.GetUserProfileFromAccessToken(accessToken);
+        return TokenService.GetUserProfileFromAccessToken(accessToken);
     }
 }

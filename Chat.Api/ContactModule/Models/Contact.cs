@@ -1,5 +1,5 @@
-using Chat.Api.CoreModule.Database.Interfaces;
 using Chat.Api.IdentityModule.Models;
+using Chat.Framework.Database.Interfaces;
 
 namespace Chat.Api.ContactModule.Models
 {

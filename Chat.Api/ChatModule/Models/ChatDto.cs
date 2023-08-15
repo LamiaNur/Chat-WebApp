@@ -1,5 +1,3 @@
-using Chat.Api.CoreModule.Database.Interfaces;
-
 namespace Chat.Api.ChatModule.Models
 {
     public class ChatDto

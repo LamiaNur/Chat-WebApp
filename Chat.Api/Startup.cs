@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Chat.Api.ActivityModule.Middlewares;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.ChatModule.Hubs;
-using Chat.Api.ChatModule.Interfaces;
-using Microsoft.AspNetCore.SignalR;
+using Chat.Framework.Services;
 
 namespace Chat.Api
 {

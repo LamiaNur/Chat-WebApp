@@ -1,7 +1,7 @@
-using Chat.Api.CoreModule.CQRS;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Queries;
+using Chat.Framework.CQRS;
+using Chat.Framework.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

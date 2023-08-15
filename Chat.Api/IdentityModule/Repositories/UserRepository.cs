@@ -1,9 +1,9 @@
 using System.Composition;
-using Chat.Api.CoreModule.Database.Interfaces;
-using Chat.Api.CoreModule.Database.Models;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
+using Chat.Framework.Database.Interfaces;
+using Chat.Framework.Database.Models;
+using Chat.Framework.Services;
 using MongoDB.Driver;
 
 namespace Chat.Api.IdentityModule.Repositories

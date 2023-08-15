@@ -1,9 +1,9 @@
 using System.Composition;
-using Chat.Api.CoreModule.CQRS;
-using Chat.Api.CoreModule.Mediators;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.FileStoreModule.Interfaces;
 using Chat.Api.FileStoreModule.Queries;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
+using Chat.Framework.Services;
 
 namespace Chat.Api.FileStoreModule.QueryHandlers
 {

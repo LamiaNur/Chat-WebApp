@@ -1,9 +1,9 @@
 using System.Composition;
 using Chat.Api.ContactModule.Commands;
 using Chat.Api.ContactModule.Interfaces;
-using Chat.Api.CoreModule.CQRS;
-using Chat.Api.CoreModule.Mediators;
-using Chat.Api.CoreModule.Services;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
+using Chat.Framework.Services;
 
 namespace Chat.Api.ContactModule.CommandHandlers
 {

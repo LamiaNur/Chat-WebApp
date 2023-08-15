@@ -1,10 +1,9 @@
 using System.Composition;
 using Chat.Api.ChatModule.Interfaces;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Interfaces;
+using Chat.Framework.Models;
+using Chat.Framework.Services;
 using Microsoft.AspNetCore.SignalR;
-using Chat.Api.CoreModule.Extensions;
-using Chat.Api.CoreModule.Models;
 
 namespace Chat.Api.ChatModule.Hubs
 {

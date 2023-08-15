@@ -1,5 +1,3 @@
-using Chat.Api.CoreModule.Database.Interfaces;
-
 namespace Chat.Api.ActivityModule.Models
 {
     public class LastSeenDto

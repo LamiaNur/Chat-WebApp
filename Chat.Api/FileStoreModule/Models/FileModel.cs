@@ -1,4 +1,4 @@
-using Chat.Api.CoreModule.Database.Interfaces;
+using Chat.Framework.Database.Interfaces;
 
 namespace Chat.Api.FileStoreModule.Models
 {

@@ -2,9 +2,9 @@ using System.Composition;
 using Chat.Api.ActivityModule.Commands;
 using Chat.Api.ActivityModule.Interfaces;
 using Chat.Api.ActivityModule.Models;
-using Chat.Api.CoreModule.CQRS;
-using Chat.Api.CoreModule.Mediators;
-using Chat.Api.CoreModule.Services;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
+using Chat.Framework.Services;
 
 namespace Chat.Api.ActivityModule.CommandHandlers
 {

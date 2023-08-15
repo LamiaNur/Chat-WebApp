@@ -1,11 +1,11 @@
 using System.Composition;
-using Chat.Api.CoreModule.CQRS;
-using Chat.Api.CoreModule.Mediators;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.FileStoreModule.Commands;
 using Chat.Api.FileStoreModule.Interfaces;
 using Chat.Api.FileStoreModule.Models;
 using Chat.Api.IdentityModule.Extensions;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
+using Chat.Framework.Services;
 
 namespace Chat.Api.FileStoreModule.CommandHandlers
 {

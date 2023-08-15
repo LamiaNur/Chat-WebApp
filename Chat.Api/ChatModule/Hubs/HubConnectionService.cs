@@ -1,7 +1,7 @@
 using Chat.Api.ChatModule.Interfaces;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Interfaces;
 using System.Composition;
+using Chat.Framework.Services;
 
 namespace Chat.Api.ChatModule.Hubs
 {

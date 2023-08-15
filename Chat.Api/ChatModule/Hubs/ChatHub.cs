@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Chat.Api.ChatModule.Interfaces;
-using Chat.Api.CoreModule.Services;
+using Chat.Framework.Services;
 
 namespace Chat.Api.ChatModule.Hubs
 {

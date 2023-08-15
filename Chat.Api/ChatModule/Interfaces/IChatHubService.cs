@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.SignalR;
-using Chat.Api.ChatModule.Hubs;
-using Chat.Api.CoreModule.Models;
+using Chat.Framework.Models;
 
 namespace Chat.Api.ChatModule.Interfaces
 {

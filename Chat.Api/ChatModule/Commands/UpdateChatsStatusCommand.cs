@@ -1,5 +1,5 @@
 using Chat.Api.ChatModule.Models;
-using Chat.Api.CoreModule.CQRS;
+using Chat.Framework.CQRS;
 
 namespace Chat.Api.ChatModule.Commands
 {

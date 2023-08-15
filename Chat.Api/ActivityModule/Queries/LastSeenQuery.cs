@@ -1,10 +1,10 @@
-using Chat.Api.CoreModule.CQRS;
+using Chat.Framework.CQRS;
 
 namespace Chat.Api.ActivityModule.Queries
 {
     public class LastSeenQuery : AQuery
     {
-        public List<string> UserIds {get; set;}
+        public List<string>? UserIds {get; set;}
 
         public override void ValidateQuery()
         {

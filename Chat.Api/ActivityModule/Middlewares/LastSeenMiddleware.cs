@@ -1,8 +1,8 @@
 using Chat.Api.ActivityModule.Commands;
-using Chat.Api.CoreModule.CQRS;
-using Chat.Api.CoreModule.Helpers;
-using Chat.Api.CoreModule.Services;
+using Chat.Api.IdentityModule.Helpers;
 using Chat.Api.IdentityModule.Interfaces;
+using Chat.Framework.CQRS;
+using Chat.Framework.Services;
 using Microsoft.Net.Http.Headers;
 
 namespace Chat.Api.ActivityModule.Middlewares

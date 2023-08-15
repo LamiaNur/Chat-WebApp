@@ -1,11 +1,11 @@
 using System.Composition;
 using System.Security.Claims;
 using System.Text;
-using Chat.Api.CoreModule.Helpers;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Constants;
+using Chat.Api.IdentityModule.Helpers;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
+using Chat.Framework.Services;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Chat.Api.IdentityModule.Services

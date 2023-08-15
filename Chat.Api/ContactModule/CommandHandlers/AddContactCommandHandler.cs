@@ -2,12 +2,12 @@ using System.Composition;
 using Chat.Api.ContactModule.Commands;
 using Chat.Api.ContactModule.Interfaces;
 using Chat.Api.ContactModule.Models;
-using Chat.Api.CoreModule.CQRS;
-using Chat.Api.CoreModule.Enums;
-using Chat.Api.CoreModule.Mediators;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Models;
 using Chat.Api.IdentityModule.Queries;
+using Chat.Framework.CQRS;
+using Chat.Framework.Enums;
+using Chat.Framework.Mediators;
+using Chat.Framework.Services;
 
 namespace Chat.Api.ContactModule.CommandHandlers
 {
