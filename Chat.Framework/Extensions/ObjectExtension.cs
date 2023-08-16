@@ -4,7 +4,7 @@ namespace Chat.Framework.Extensions
 {
     public static class ObjectExtension
     {
-        public static string ToJson(this object? obj)
+        public static string Serialize(this object? obj)
         {
             if (obj is null) return string.Empty;
             try

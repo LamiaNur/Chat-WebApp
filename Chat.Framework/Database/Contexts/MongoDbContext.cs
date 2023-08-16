@@ -1,8 +1,8 @@
 using System.Composition;
 using Chat.Framework.Database.Interfaces;
 using Chat.Framework.Database.Models;
+using Chat.Framework.Extensions;
 using MongoDB.Driver;
-using Newtonsoft.Json;
 
 namespace Chat.Framework.Database.Contexts
 {
@@ -11,18 +11,18 @@ namespace Chat.Framework.Database.Contexts
     public class MongoDbContext : IMongoDbContext
     {
         private readonly Dictionary<string, MongoClient> _dbClients;
-        private readonly int MaxLimit;
+        private readonly int _maxLimit;
         public MongoDbContext()
         {
             _dbClients = new Dictionary<string, MongoClient>();
-            MaxLimit = 1000;
+            _maxLimit = 1000;
         }
 
         private MongoClient? GetClient(string connectionString)
         {
-            if (_dbClients.ContainsKey(connectionString))
+            if (_dbClients.TryGetValue(connectionString, out var client))
             {
-                return _dbClients[connectionString];
+                return client;
             }
             try
             {
@@ -64,12 +64,12 @@ namespace Chat.Framework.Database.Contexts
                 }
                 var filter = Builders<T>.Filter.Eq("Id", item.Id);
                 await collection.ReplaceOneAsync(filter, item, new ReplaceOptions { IsUpsert = true });
-                Console.WriteLine($"Successfully Save Item : {JsonConvert.SerializeObject(item)}\n");
+                Console.WriteLine($"Successfully Save Item : {item.Serialize()}\n");
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Problem Save Item : {JsonConvert.SerializeObject(item)}\n{ex.Message}\n");
+                Console.WriteLine($"Problem Save Item : {item.Serialize()}\n{ex.Message}\n");
                 return false;
             }
         }
@@ -111,7 +111,7 @@ namespace Chat.Framework.Database.Contexts
                 var filter = Builders<T>.Filter.Eq("Id", id);
                 var items = await collection.FindAsync<T>(filter);
                 var item = await items.FirstOrDefaultAsync<T>();
-                Console.WriteLine($"Successfully Get Item : {JsonConvert.SerializeObject(item)}\n");
+                Console.WriteLine($"Successfully Get Item : {item.Serialize()}\n");
                 return item;
             }
             catch (Exception ex)
@@ -154,7 +154,7 @@ namespace Chat.Framework.Database.Contexts
                 }
                 var items = await collection.FindAsync<T>(filterDefinition);
                 var item = await items.FirstAsync<T>();
-                Console.WriteLine($"Successfully Get Item by filter : {JsonConvert.SerializeObject(item)}\n");
+                Console.WriteLine($"Successfully Get Item by filter : {item.Serialize()}\n");
                 return item;
             }
             catch (Exception ex)
@@ -176,7 +176,7 @@ namespace Chat.Framework.Database.Contexts
                 var res = await collection.DeleteManyAsync(filterDefinition);
                 if (res != null && res.DeletedCount > 0)
                 {
-                    Console.WriteLine($"Successfully Delete Items, count : {JsonConvert.SerializeObject(res.DeletedCount)}\n");
+                    Console.WriteLine($"Successfully Delete Items, count : {res.DeletedCount}\n");
                     return true;
                 }
                 throw new Exception();
@@ -213,7 +213,7 @@ namespace Chat.Framework.Database.Contexts
         {
             try
             {
-                if (limit > MaxLimit)
+                if (limit > _maxLimit)
                 {
                     throw new Exception($"Limit exceeded!");
                 }
@@ -238,6 +238,27 @@ namespace Chat.Framework.Database.Contexts
                 Console.WriteLine($"Problem Get Items by filter\n{ex.Message}\n");
                 return new List<T>();
             }
+        }
+
+        public async Task<bool> SaveItemsAsync<T>(DatabaseInfo databaseInfo, List<T> items) where T : class, IRepositoryItem
+        {
+            var writeModels = new List<WriteModel<T>>();
+            foreach (var item in items)
+            {
+                var filter = Builders<T>.Filter.Eq("Id", item.Id);
+                var replaceOneModel = new ReplaceOneModel<T>(filter, item)
+                {
+                    IsUpsert = true
+                };
+                writeModels.Add(replaceOneModel);
+            }
+            var collection = GetCollection<T>(databaseInfo);
+            if (collection == null)
+            {
+                throw new Exception("Collection null");
+            }
+            var writeResult = await collection.BulkWriteAsync(writeModels);
+            return writeResult != null && writeResult.IsAcknowledged;
         }
     }
 }

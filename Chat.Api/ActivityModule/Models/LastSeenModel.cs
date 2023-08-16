@@ -1,5 +1,5 @@
+using Chat.Api.SharedModule.Helpers;
 using Chat.Framework.Database.Interfaces;
-using Chat.Framework.Helpers;
 
 namespace Chat.Api.ActivityModule.Models
 {

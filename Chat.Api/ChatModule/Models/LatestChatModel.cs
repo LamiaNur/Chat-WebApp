@@ -1,4 +1,4 @@
-using Chat.Framework.Helpers;
+using Chat.Api.SharedModule.Helpers;
 
 namespace Chat.Api.ChatModule.Models
 {

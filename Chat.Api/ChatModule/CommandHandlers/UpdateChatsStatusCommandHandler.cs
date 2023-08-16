@@ -39,8 +39,9 @@ namespace Chat.Api.ChatModule.CommandHandlers
             foreach (var chatModel in chatModels)
             {
                 chatModel.Status = "Seen";
-                await _chatRepository.SaveChatModelAsync(chatModel); // TODO: need to save together at db
             }
+
+            await _chatRepository.SaveChatModelsAsync(chatModels);
             return response;
         }
     }

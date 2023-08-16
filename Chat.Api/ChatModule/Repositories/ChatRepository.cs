@@ -46,5 +46,10 @@ namespace Chat.Api.ChatModule.Repositories
             var andFilter = Builders<ChatModel>.Filter.And(senderFilter, receiverFilter);
             return await _dbContext.GetItemsByFilterDefinitionAsync<ChatModel>(_databaseInfo, andFilter);
         }
+
+        public async Task<bool> SaveChatModelsAsync(List<ChatModel> chatModels)
+        {
+            return await _dbContext.SaveItemsAsync(_databaseInfo, chatModels);
+        }
     }
 }

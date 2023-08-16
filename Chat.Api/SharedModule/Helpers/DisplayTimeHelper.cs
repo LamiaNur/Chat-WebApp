@@ -1,4 +1,4 @@
-namespace Chat.Framework.Helpers
+namespace Chat.Api.SharedModule.Helpers
 {
     public static class DisplayTimeHelper
     {
