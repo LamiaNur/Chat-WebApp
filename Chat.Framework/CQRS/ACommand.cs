@@ -12,5 +12,11 @@ namespace Chat.Framework.CQRS
                 Name = GetType().Name
             };
         }
+
+        public CommandResponse CreateResponse(CommandResponse response)
+        {
+            response.Name = GetType().Name;
+            return response;
+        }
     }
 }

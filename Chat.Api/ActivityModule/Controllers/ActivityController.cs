@@ -1,5 +1,5 @@
 using Chat.Api.ActivityModule.Queries;
-using Chat.Framework.CQRS;
+using Chat.Framework.Proxy;
 using Chat.Framework.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +11,16 @@ namespace Chat.Api.ActivityModule.Controllers
     [Authorize]
     public class ActivityController : ControllerBase
     {
-        private readonly ICommandQueryService _commandQueryService;
+        private readonly ICommandQueryProxy _commandQueryService;
         public ActivityController()
         {
-            _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
+            _commandQueryService = DIService.Instance.GetService<ICommandQueryProxy>();
         }
 
         [HttpPost, Route("last-seen")]
         public async Task<IActionResult> GetLastSeenModelAsync(LastSeenQuery query)
         {
-            return Ok(await _commandQueryService.HandleQueryAsync(query));
+            return Ok(await _commandQueryService.GetQueryResponseAsync(query));
         }
     }
 }

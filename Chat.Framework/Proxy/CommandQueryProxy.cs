@@ -1,56 +1,51 @@
 using System.Composition;
+using Chat.Framework.CQRS;
 using Chat.Framework.Enums;
 using Chat.Framework.Mediators;
 using Chat.Framework.Services;
 
-namespace Chat.Framework.CQRS;
+namespace Chat.Framework.Proxy;
 
-[Export(typeof(ICommandQueryService))]
+[Export(typeof(ICommandQueryProxy))]
 [Shared]
-public class CommandQueryService : ICommandQueryService
+public class CommandQueryProxy : ICommandQueryProxy
 {
     private readonly IRequestMediator _requestMediator = DIService.Instance.GetService<IRequestMediator>();
 
-    public async Task<CommandResponse> HandleCommandAsync<TCommand>(TCommand command) where TCommand : ICommand
+    public async Task<CommandResponse> GetCommandResponseAsync<TCommand>(TCommand command) where TCommand : ICommand
     {
         CommandResponse response;
         try
         {
             response = await _requestMediator.HandleAsync<TCommand, CommandResponse>(command);
+            response = command.CreateResponse(response);
             response.Status = ResponseStatus.Success;
-            response.Name = command.GetType().Name;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            response = new()
-            {
-                Name = command.GetType().Name,
-                Status = ResponseStatus.Error,
-                Message = e.Message
-            };
+            response = command.CreateResponse();
+            response.Status = ResponseStatus.Error;
+            response.Message = e.Message;
         }
         return response;
     }
 
-    public async Task<QueryResponse> HandleQueryAsync<TQuery>(TQuery query) where TQuery : IQuery
+    public async Task<QueryResponse> GetQueryResponseAsync<TQuery>(TQuery query) where TQuery : IQuery
     {
         QueryResponse response;
         try
         {
             response = await _requestMediator.HandleAsync<TQuery, QueryResponse>(query);
+            response = query.CreateResponse(response);
             response.Status = ResponseStatus.Success;
-            response.Name = query.GetType().Name;
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            response = new()
-            {
-                Name = query.GetType().Name,
-                Status = ResponseStatus.Error,
-                Message = e.Message
-            };
+            response = query.CreateResponse();
+            response.Status = ResponseStatus.Error;
+            response.Message = e.Message;
         }
         return response;
     }

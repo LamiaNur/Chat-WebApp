@@ -16,5 +16,13 @@ namespace Chat.Framework.CQRS
                 Limit = Limit
             };
         }
+
+        public QueryResponse CreateResponse(QueryResponse response)
+        {
+            response.Name = GetType().Name;
+            response.Offset = Offset;
+            response.Limit = Limit;
+            return response;
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace Chat.Framework.CQRS
     {
         void ValidateQuery();
         QueryResponse CreateResponse();
+        QueryResponse CreateResponse(QueryResponse response);
     }
 }
