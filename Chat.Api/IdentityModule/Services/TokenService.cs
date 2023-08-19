@@ -69,16 +69,17 @@ namespace Chat.Api.IdentityModule.Services
 
         public List<Claim> GenerateClaims(UserProfile userProfile, string appId)
         {
-            var claims = new List<Claim>();
-
-            claims.Add(new Claim(UserClaims.UserId, userProfile.Id));
-            claims.Add(new Claim(UserClaims.ProfilePictureId, userProfile.ProfilePictureId));
-            claims.Add(new Claim(UserClaims.Email, userProfile.Email));
-            claims.Add(new Claim(UserClaims.FirstName, userProfile.FirstName));
-            claims.Add(new Claim(UserClaims.LastName, userProfile.LastName));
-            claims.Add(new Claim(UserClaims.UserName, userProfile.UserName));
-            claims.Add(new Claim(UserClaims.AppId, appId));
-            claims.Add(new Claim(UserClaims.JwtId , Guid.NewGuid().ToString()));
+            var claims = new List<Claim>
+            {
+                new Claim(UserClaims.UserId, userProfile.Id),
+                new Claim(UserClaims.ProfilePictureId, userProfile.ProfilePictureId),
+                new Claim(UserClaims.Email, userProfile.Email),
+                new Claim(UserClaims.FirstName, userProfile.FirstName),
+                new Claim(UserClaims.LastName, userProfile.LastName),
+                new Claim(UserClaims.UserName, userProfile.UserName),
+                new Claim(UserClaims.AppId, appId),
+                new Claim(UserClaims.JwtId, Guid.NewGuid().ToString())
+            };
 
             return claims;
         }
