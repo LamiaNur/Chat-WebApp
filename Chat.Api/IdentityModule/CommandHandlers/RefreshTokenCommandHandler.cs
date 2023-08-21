@@ -1,21 +1,19 @@
-using System.Composition;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Helpers;
 using Chat.Api.IdentityModule.Interfaces;
+using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
-using Chat.Framework.Services;
 
 namespace Chat.Api.IdentityModule.CommandHandlers
 {
-    [Export("RefreshTokenCommandHandler", typeof(IRequestHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class RefreshTokenCommandHandler : ACommandHandler<RefreshTokenCommand>
     {
         private readonly ITokenService _tokenService;
-        public RefreshTokenCommandHandler()
+        public RefreshTokenCommandHandler(ITokenService tokenService)
         {
-            _tokenService = DIService.Instance.GetService<ITokenService>();
+            _tokenService = tokenService;
         }
 
         protected override async Task<CommandResponse> OnHandleAsync(RefreshTokenCommand command)

@@ -1,20 +1,18 @@
-using System.Composition;
 using Chat.Api.ChatModule.Interfaces;
 using Chat.Api.ChatModule.Queries;
+using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
-using Chat.Framework.Services;
 
 namespace Chat.Api.ChatModule.QueryHandlers
 {
-    [Export("ChatListQueryHandler", typeof(IRequestHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class ChatListQueryHandler : AQueryHandler<ChatListQuery>
     {
         private readonly ILatestChatRepository _latestChatRepository;
-        public ChatListQueryHandler()
+        public ChatListQueryHandler(ILatestChatRepository latestChatRepository)
         {
-            _latestChatRepository = DIService.Instance.GetService<ILatestChatRepository>();
+            _latestChatRepository = latestChatRepository;
         }
         protected override async Task<QueryResponse> OnHandleAsync(ChatListQuery query)
         {
@@ -24,7 +22,6 @@ namespace Chat.Api.ChatModule.QueryHandlers
             {
                 response.AddItem(latestChatModel.ToLatestChatDto(query.UserId));
             }
-            // response.AddItems(latestChatModels.ToList<object>());
             return response;
         }
     }

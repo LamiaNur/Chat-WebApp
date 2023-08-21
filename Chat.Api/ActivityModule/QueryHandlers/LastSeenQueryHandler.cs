@@ -1,20 +1,18 @@
-using System.Composition;
 using Chat.Api.ActivityModule.Interfaces;
 using Chat.Api.ActivityModule.Queries;
+using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
-using Chat.Framework.Services;
 
 namespace Chat.Api.ActivityModule.QueryHandlers
 {
-    [Export("LastSeenQueryHandler", typeof(IRequestHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class LastSeenQueryHandler : AQueryHandler<LastSeenQuery>
     {
         private readonly ILastSeenRepository _lastSeenRepository;        
-        public LastSeenQueryHandler()
+        public LastSeenQueryHandler(ILastSeenRepository lastSeenRepository)
         {
-           _lastSeenRepository = DIService.Instance.GetService<ILastSeenRepository>();
+           _lastSeenRepository = lastSeenRepository;
         }
         
         protected override async Task<QueryResponse> OnHandleAsync(LastSeenQuery query)

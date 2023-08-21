@@ -1,27 +1,28 @@
 using Chat.Api.ActivityModule.Commands;
 using Chat.Api.IdentityModule.Helpers;
 using Chat.Api.IdentityModule.Interfaces;
+using Chat.Framework.Attributes;
+using Chat.Framework.Extensions;
 using Chat.Framework.Proxy;
-using Chat.Framework.Services;
-using Microsoft.Net.Http.Headers;
 
 namespace Chat.Api.ActivityModule.Middlewares
 {
+    [ServiceRegister(typeof(LastSeenMiddleware), ServiceLifetime.Transient)]
     public class LastSeenMiddleware : IMiddleware
     {
         private readonly ITokenService _tokenService;
         private readonly ICommandQueryProxy _commandQueryService;
 
-        public LastSeenMiddleware()
+        public LastSeenMiddleware(ICommandQueryProxy commandQueryProxy, ITokenService tokenService)
         {
-            _tokenService = DIService.Instance.GetService<ITokenService>();
-            _commandQueryService = DIService.Instance.GetService<ICommandQueryProxy>();
+            _tokenService = tokenService;
+            _commandQueryService = commandQueryProxy;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             Console.WriteLine("Executing LastSeenMiddleware\n");
-            var accessToken = context.Request.Headers[HeaderNames.Authorization].ToString();
+            var accessToken = context.GetAccessToken();
             if (string.IsNullOrEmpty(accessToken))
             {
                 Console.WriteLine("AccessToken not found at LastSeenMiddleware\n");
@@ -44,7 +45,7 @@ namespace Chat.Api.ActivityModule.Middlewares
             } 
 
             await next(context);
-            Console.WriteLine("Returing from LastSeenMiddleware\n");
+            Console.WriteLine("Returning from LastSeenMiddleware\n");
         }
     }
 }

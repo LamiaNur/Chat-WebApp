@@ -1,24 +1,22 @@
-using System.Composition;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
+using Chat.Framework.Attributes;
 using Chat.Framework.Database.Interfaces;
 using Chat.Framework.Database.Models;
-using Chat.Framework.Services;
 using MongoDB.Driver;
 
 namespace Chat.Api.IdentityModule.Repositories
 {
-    [Export(typeof(IAccessRepository))]
-    [Shared]
+    [ServiceRegister(typeof(IAccessRepository), ServiceLifetime.Singleton)]
     public class AccessRepository : IAccessRepository
     {
         private readonly DatabaseInfo _databaseInfo;
         private readonly IMongoDbContext _dbContext;
         
-        public AccessRepository()
+        public AccessRepository(IMongoDbContext mongoDbContext, IConfiguration configuration)
         {
-            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
-            _dbContext = DIService.Instance.GetService<IMongoDbContext>();
+            _databaseInfo = configuration.GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _dbContext = mongoDbContext;
         }
 
         public async Task<bool> SaveAccessModelAsync(AccessModel accessModel)

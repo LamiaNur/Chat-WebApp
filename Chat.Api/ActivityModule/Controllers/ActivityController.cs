@@ -1,6 +1,5 @@
 using Chat.Api.ActivityModule.Queries;
 using Chat.Framework.Proxy;
-using Chat.Framework.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +11,9 @@ namespace Chat.Api.ActivityModule.Controllers
     public class ActivityController : ControllerBase
     {
         private readonly ICommandQueryProxy _commandQueryService;
-        public ActivityController()
+        public ActivityController(ICommandQueryProxy commandQueryProxy)
         {
-            _commandQueryService = DIService.Instance.GetService<ICommandQueryProxy>();
+            _commandQueryService = commandQueryProxy;
         }
 
         [HttpPost, Route("last-seen")]

@@ -1,18 +1,21 @@
-using System.Composition;
+using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Enums;
 using Chat.Framework.Mediators;
 using Chat.Framework.Models;
-using Chat.Framework.Services;
-using MongoDB.Driver;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Chat.Framework.Proxy;
 
-[Export(typeof(ICommandQueryProxy))]
-[Shared]
+[ServiceRegister(typeof(ICommandQueryProxy), ServiceLifetime.Singleton)]
 public class CommandQueryProxy : ICommandQueryProxy
 {
-    private readonly IRequestMediator _requestMediator = DIService.Instance.GetService<IRequestMediator>();
+    private readonly IRequestMediator _requestMediator;
+
+    public CommandQueryProxy(IRequestMediator requestMediator)
+    {
+        _requestMediator = requestMediator;
+    }
 
     public async Task<CommandResponse> GetCommandResponseAsync<TCommand>(TCommand command,
         RequestContext? requestContext = null) where TCommand : ICommand

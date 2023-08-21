@@ -1,23 +1,21 @@
-using System.Composition;
 using Chat.Api.FileStoreModule.Interfaces;
 using Chat.Api.FileStoreModule.Models;
+using Chat.Framework.Attributes;
 using Chat.Framework.Database.Interfaces;
 using Chat.Framework.Database.Models;
-using Chat.Framework.Services;
 
 namespace Chat.Api.FileStoreModule.Repositories
 {
-    [Export(typeof(IFileRepository))]
-    [Shared]
+    [ServiceRegister(typeof(IFileRepository), ServiceLifetime.Singleton)]
     public class FileRepository : IFileRepository
     {
         private readonly DatabaseInfo _databaseInfo;
         private readonly IMongoDbContext _dbContext;
         
-        public FileRepository()
+        public FileRepository(IMongoDbContext mongoDbContext, IConfiguration configuration)
         {
-            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
-            _dbContext = DIService.Instance.GetService<IMongoDbContext>();
+            _databaseInfo = configuration.GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _dbContext = mongoDbContext;
         }
         
         public async Task<bool> SaveFileModelAsync(FileModel fileModel) 

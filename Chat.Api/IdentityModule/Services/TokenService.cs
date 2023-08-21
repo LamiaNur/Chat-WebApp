@@ -1,26 +1,24 @@
-using System.Composition;
 using System.Security.Claims;
 using System.Text;
 using Chat.Api.IdentityModule.Constants;
 using Chat.Api.IdentityModule.Helpers;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
-using Chat.Framework.Services;
+using Chat.Framework.Attributes;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Chat.Api.IdentityModule.Services
 {
-    [Export(typeof(ITokenService))]
-    [Shared]
+    [ServiceRegister(typeof(ITokenService), ServiceLifetime.Singleton)]
     public class TokenService : ITokenService
     {
         private readonly TokenConfig _tokenConfig;
         private readonly IAccessRepository _accessRepository;
 
-        public TokenService()
+        public TokenService(IAccessRepository accessRepository, IConfiguration configuration)
         {
-            _tokenConfig = DIService.Instance.GetConfiguration().GetSection("TokenConfig").Get<TokenConfig>();
-            _accessRepository = DIService.Instance.GetService<IAccessRepository>();
+            _tokenConfig = configuration.GetSection("TokenConfig").Get<TokenConfig>();
+            _accessRepository = accessRepository;
         }
         
         public async Task<Token?> CreateTokenAsync(UserProfile userProfile, string appId)

@@ -1,24 +1,22 @@
-using System.Composition;
 using Chat.Api.ChatModule.Interfaces;
 using Chat.Api.ChatModule.Models;
+using Chat.Framework.Attributes;
 using Chat.Framework.Database.Interfaces;
 using Chat.Framework.Database.Models;
-using Chat.Framework.Services;
 using MongoDB.Driver;
 
 namespace Chat.Api.ChatModule.Repositories
 {
-    [Export(typeof(ILatestChatRepository))]
-    [Shared]
+    [ServiceRegister(typeof(ILatestChatRepository), ServiceLifetime.Singleton)]
     public class LatestChatRepository : ILatestChatRepository
     {
         private readonly IMongoDbContext _dbContext;
         private readonly DatabaseInfo _databaseInfo;
 
-        public LatestChatRepository()
+        public LatestChatRepository(IMongoDbContext mongoDbContext, IConfiguration configuration)
         {
-            _dbContext = DIService.Instance.GetService<IMongoDbContext>();
-            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _dbContext = mongoDbContext;
+            _databaseInfo = configuration.GetSection("DatabaseInfo").Get<DatabaseInfo>();
         }
 
         public async Task<bool> SaveLatestChatModelAsync(LatestChatModel latestChatModel)

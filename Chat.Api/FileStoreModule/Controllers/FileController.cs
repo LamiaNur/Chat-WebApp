@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Chat.Api.ChatModule.Hubs;
 using Chat.Api.FileStoreModule.Models;
-using Chat.Framework.Services;
 using Chat.Framework.Models;
 using Chat.Framework.Proxy;
 
@@ -19,9 +18,9 @@ namespace Chat.Api.FileStoreModule.Controllers
         private readonly ICommandQueryProxy _commandQueryService;
         private readonly IHubContext _hubContext;
 
-        public FileController(IHubContext<ChatHub> hubContext)
+        public FileController(IHubContext<ChatHub> hubContext, ICommandQueryProxy commandQueryProxy)
         {
-            _commandQueryService = DIService.Instance.GetService<ICommandQueryProxy>();
+            _commandQueryService = commandQueryProxy;
             _hubContext = (IHubContext)hubContext;
         }
 

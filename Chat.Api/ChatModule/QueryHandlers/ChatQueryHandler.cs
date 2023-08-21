@@ -1,21 +1,19 @@
-using System.Composition;
 using Chat.Api.ChatModule.Interfaces;
 using Chat.Api.ChatModule.Queries;
+using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
-using Chat.Framework.Services;
 
 namespace Chat.Api.ChatModule.QueryHandlers
 {
-    [Export("ChatQueryHandler", typeof(IRequestHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class ChatQueryHandler : AQueryHandler<ChatQuery>
     {
         private readonly IChatRepository _chatRepository;
-        
-        public ChatQueryHandler()
+
+        public ChatQueryHandler(IChatRepository chatRepository)
         {
-            _chatRepository = DIService.Instance.GetService<IChatRepository>();
+            _chatRepository = chatRepository;
         }
         protected override async Task<QueryResponse> OnHandleAsync(ChatQuery query)
         {

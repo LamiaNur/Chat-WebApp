@@ -1,4 +1,3 @@
-using Chat.Api.ChatModule.Models;
 using Chat.Framework.CQRS;
 
 namespace Chat.Api.ChatModule.Commands

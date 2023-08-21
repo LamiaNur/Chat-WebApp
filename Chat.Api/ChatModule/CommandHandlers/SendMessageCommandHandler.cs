@@ -1,24 +1,24 @@
-using System.Composition;
 using Chat.Api.ChatModule.Commands;
 using Chat.Api.ChatModule.Interfaces;
 using Chat.Api.ChatModule.Models;
+using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
-using Chat.Framework.Services;
+using Chat.Framework.Proxy;
 
 namespace Chat.Api.ChatModule.CommandHandlers
 {
-    [Export("SendMessageCommandHandler", typeof(IRequestHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class SendMessageCommandHandler : ACommandHandler<SendMessageCommand>
     {
         private readonly IChatRepository _chatRepository;
         private readonly IChatHubService _chatHubService;
-        
-        public SendMessageCommandHandler()
+        private readonly ICommandQueryProxy _commandQueryProxy;
+        public SendMessageCommandHandler(IChatRepository chatRepository, IChatHubService chatHubService, ICommandQueryProxy commandQueryProxy)
         {
-            _chatHubService = DIService.Instance.GetService<IChatHubService>();
-            _chatRepository = DIService.Instance.GetService<IChatRepository>();
+            _chatHubService = chatHubService;
+            _chatRepository = chatRepository;
+            _commandQueryProxy = commandQueryProxy;
         }
         protected override async Task<CommandResponse> OnHandleAsync(SendMessageCommand command)
         {
@@ -38,7 +38,7 @@ namespace Chat.Api.ChatModule.CommandHandlers
             {
                 LatestChatModel = latestChatModel
             };
-            await CommandQueryProxy.GetCommandResponseAsync(updateLatestChatCommand);
+            await _commandQueryProxy.GetCommandResponseAsync(updateLatestChatCommand);
             response.SetData("Message", command.ChatModel.ToChatDto());
             return response;
         }

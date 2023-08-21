@@ -1,23 +1,23 @@
-using System.Composition;
 using Chat.Api.FileStoreModule.Commands;
 using Chat.Api.FileStoreModule.Interfaces;
 using Chat.Api.FileStoreModule.Models;
-using Chat.Api.IdentityModule.Extensions;
+using Chat.Api.IdentityModule.Interfaces;
+using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
+using Chat.Framework.Extensions;
 using Chat.Framework.Mediators;
-using Chat.Framework.Services;
 
 namespace Chat.Api.FileStoreModule.CommandHandlers
 {
-    [Export("UploadFileCommandHandler", typeof(IRequestHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class UploadFileCommandHandler : ACommandHandler<UploadFileCommand>
     {
         private readonly IFileRepository _fileRepository;
-
-        public UploadFileCommandHandler()
+        private readonly ITokenService _tokenService;
+        public UploadFileCommandHandler(IFileRepository fileRepository, ITokenService tokenService)
         {
-            _fileRepository = DIService.Instance.GetService<IFileRepository>();
+            _fileRepository = fileRepository;
+            _tokenService = tokenService;
         }
         
         protected override async Task<CommandResponse> OnHandleAsync(UploadFileCommand command)
@@ -33,12 +33,13 @@ namespace Chat.Api.FileStoreModule.CommandHandlers
             var fileId = Guid.NewGuid().ToString();
             var extension = Path.GetExtension(fileName);
             var fullPath = Path.Combine(pathToSave, fileId + extension);
-            using (var stream = new FileStream(fullPath, FileMode.Create))
+            await using (var stream = new FileStream(fullPath, FileMode.Create))
             {
-                file.CopyTo(stream);
+                await file.CopyToAsync(stream);
             }
 
-            var currentUser = command.GetRequestContext()?.GetCurrentUserProfile();
+            var requestContext = command.GetRequestContext()?.HttpContext;
+            var currentUser = _tokenService.GetUserProfileFromAccessToken(requestContext?.GetAccessToken());
             var fileModel = new FileModel()
             {
                 Id = fileId,

@@ -1,22 +1,17 @@
-using System.Composition;
 using Chat.Api.ChatModule.Interfaces;
-using Chat.Api.IdentityModule.Interfaces;
+using Chat.Framework.Attributes;
 using Chat.Framework.Models;
-using Chat.Framework.Services;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.Api.ChatModule.Hubs
 {
-    [Export(typeof(IChatHubService))]
-    [Shared]
+    [ServiceRegister(typeof(IChatHubService), ServiceLifetime.Singleton)]
     public class ChatHubService : IChatHubService
     {
-        private readonly ITokenService _tokenService;
         private readonly IHubConnectionService _hubConnectionService;
-        public ChatHubService()
+        public ChatHubService(IHubConnectionService hubConnectionService)
         {
-            _hubConnectionService = DIService.Instance.GetService<IHubConnectionService>();
-            _tokenService = DIService.Instance.GetService<ITokenService>();
+            _hubConnectionService = hubConnectionService;
         }
 
         public async Task SendAsync<T>(string userId, T message, RequestContext requestContext)

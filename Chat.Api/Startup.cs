@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Chat.Api.ActivityModule.Middlewares;
 using Chat.Api.ChatModule.Hubs;
-using Chat.Framework.Services;
+using Chat.Framework.Extensions;
 
 namespace Chat.Api
 {
@@ -37,7 +37,22 @@ namespace Chat.Api
                     ClockSkew = TimeSpan.Zero,
                     ValidIssuer = Configuration["TokenConfig:Issuer"],
                     ValidAudience = Configuration["TokenConfig:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF32.GetBytes(Configuration["TokenConfig:SecretKey"]))
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.UTF32.GetBytes(Configuration["TokenConfig:SecretKey"]))
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Query["path"];
+                        if (string.IsNullOrEmpty(path) == false && string.IsNullOrEmpty(accessToken) == false)
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
             services.AddSignalR();
@@ -79,12 +94,13 @@ namespace Chat.Api
                     .AllowCredentials();
             }));
             
-            services.AddTransient<LastSeenMiddleware>();
+            services.AddAllAssemblies("Chat");
+            services.AddAttributeRegisteredServices();
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            DIService.Instance.Initialize(app.ApplicationServices);
+            // IocContainer.Instance.Initialize(app.ApplicationServices);
             if (WebHostEnvironment.IsDevelopment())
             {
                 app.UseSwagger();

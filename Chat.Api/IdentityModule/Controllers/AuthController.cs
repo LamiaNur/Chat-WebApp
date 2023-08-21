@@ -1,7 +1,6 @@
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Queries;
 using Chat.Framework.Proxy;
-using Chat.Framework.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +11,9 @@ namespace Chat.Api.IdentityModule.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ICommandQueryProxy _commandQueryService;
-        public AuthController()
+        public AuthController(ICommandQueryProxy commandQueryProxy)
         {
-            _commandQueryService = DIService.Instance.GetService<ICommandQueryProxy>();
+            _commandQueryService = commandQueryProxy;
         }
 
         [HttpPost]

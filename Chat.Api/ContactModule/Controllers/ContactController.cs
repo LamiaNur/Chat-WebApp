@@ -1,7 +1,6 @@
 using Chat.Api.ContactModule.Commands;
 using Chat.Api.ContactModule.Queries;
 using Chat.Framework.Proxy;
-using Chat.Framework.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +12,9 @@ namespace Chat.Api.ContactModule.Controllers
     public class ContactController : ControllerBase
     {
         private readonly ICommandQueryProxy _commandQueryService;
-        public ContactController()
+        public ContactController(ICommandQueryProxy commandQueryProxy)
         {
-            _commandQueryService = DIService.Instance.GetService<ICommandQueryProxy>();
+            _commandQueryService = commandQueryProxy;
         }
 
         [HttpPost, Route("add")]

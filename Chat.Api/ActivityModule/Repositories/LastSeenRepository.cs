@@ -1,24 +1,22 @@
-using System.Composition;
 using Chat.Api.ActivityModule.Interfaces;
 using Chat.Api.ActivityModule.Models;
+using Chat.Framework.Attributes;
 using Chat.Framework.Database.Interfaces;
 using Chat.Framework.Database.Models;
-using Chat.Framework.Services;
 using MongoDB.Driver;
 
 namespace Chat.Api.ActivityModule.Repositories
 {
-    [Export(typeof(ILastSeenRepository))]
-    [Shared]
+    [ServiceRegister(typeof(ILastSeenRepository), ServiceLifetime.Singleton)]
     public class LastSeenRepository : ILastSeenRepository
     {
         private readonly DatabaseInfo _databaseInfo; 
         private readonly IMongoDbContext _dbContext;
         
-        public LastSeenRepository()
+        public LastSeenRepository(IMongoDbContext mongoDbContext, IConfiguration configuration)
         {
-            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
-            _dbContext = DIService.Instance.GetService<IMongoDbContext>();
+            _databaseInfo = configuration.GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _dbContext = mongoDbContext;
         }   
 
         public async Task<bool> SaveLastSeenModelAsync(LastSeenModel lastSeenModel)

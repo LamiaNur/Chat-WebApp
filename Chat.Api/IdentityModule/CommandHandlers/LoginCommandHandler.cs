@@ -1,25 +1,21 @@
-using System.Composition;
-using Chat.Api.ActivityModule.Commands;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Interfaces;
-using Chat.Api.IdentityModule.Models;
+using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
-using Chat.Framework.Services;
 
 namespace Chat.Api.IdentityModule.CommandHandlers
 {
-    [Export("LoginCommandHandler", typeof(IRequestHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class LoginCommandHandler : ACommandHandler<LoginCommand>
     {
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
 
-        public LoginCommandHandler()
+        public LoginCommandHandler(IUserRepository userRepository, ITokenService tokenService)
         {
-            _userRepository = DIService.Instance.GetService<IUserRepository>();
-            _tokenService = DIService.Instance.GetService<ITokenService>();
+            _userRepository = userRepository;
+            _tokenService = tokenService;
         }
 
         protected override async Task<CommandResponse> OnHandleAsync(LoginCommand command)

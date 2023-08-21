@@ -1,20 +1,18 @@
-using System.Composition;
 using Chat.Api.ContactModule.Interfaces;
 using Chat.Api.ContactModule.Queries;
+using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
-using Chat.Framework.Services;
 
 namespace Chat.Api.ContactModule.QueryHandlers
 {
-    [Export("ContactQueryHandler", typeof(IRequestHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class ContactQueryHandler : AQueryHandler<ContactQuery>
     {
         private readonly IContactRepository _contactRepository;
-        public ContactQueryHandler()
+        public ContactQueryHandler(IContactRepository contactRepository)
         {
-            _contactRepository = DIService.Instance.GetService<IContactRepository>();
+            _contactRepository = contactRepository;
         }
         protected override async Task<QueryResponse> OnHandleAsync(ContactQuery query)
         {

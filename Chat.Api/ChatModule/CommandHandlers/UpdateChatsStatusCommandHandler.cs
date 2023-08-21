@@ -1,24 +1,22 @@
-using System.Composition;
 using Chat.Api.ChatModule.Commands;
 using Chat.Api.ChatModule.Interfaces;
+using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
-using Chat.Framework.Services;
 
 namespace Chat.Api.ChatModule.CommandHandlers
 {
-    [Export("UpdateChatsStatusCommandHandler", typeof(IRequestHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class UpdateChatsStatusCommandHandler : ACommandHandler<UpdateChatsStatusCommand>
     {
         
         private readonly ILatestChatRepository _latestChatRepository;
         private readonly IChatRepository _chatRepository;
         
-        public UpdateChatsStatusCommandHandler()
+        public UpdateChatsStatusCommandHandler(IChatRepository chatRepository, ILatestChatRepository latestChatRepository)
         {
-            _latestChatRepository = DIService.Instance.GetService<ILatestChatRepository>();
-            _chatRepository = DIService.Instance.GetService<IChatRepository>();
+            _latestChatRepository = latestChatRepository;
+            _chatRepository = chatRepository;
         }
 
         protected override async Task<CommandResponse> OnHandleAsync(UpdateChatsStatusCommand command)

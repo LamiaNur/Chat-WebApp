@@ -1,12 +1,17 @@
-using System.Composition;
-using Chat.Framework.Services;
+using Chat.Framework.Attributes;
+using Chat.Framework.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Chat.Framework.Mediators;
 
-[Export(typeof(IRequestMediator))]
-[Shared]
+[ServiceRegister(typeof(IRequestMediator), ServiceLifetime.Singleton)]
 public class RequestMediator : IRequestMediator
 {
+    private readonly IServiceProvider _serviceProvider;
+    public RequestMediator(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
     public async Task<TResponse> HandleAsync<TRequest, TResponse>(TRequest request)
     {
         var handlerName = request?.GetType().Name + GetHandlerNameSuffix();
@@ -21,7 +26,7 @@ public class RequestMediator : IRequestMediator
 
     protected virtual IRequestHandler<TRequest, TResponse>? GetHandler<TRequest, TResponse>(string handlerName)
     {
-        var handler = DIService.Instance.GetService<IRequestHandler>(handlerName);
+        var handler = _serviceProvider.GetService<IRequestHandler>(handlerName);
         return (IRequestHandler<TRequest, TResponse>?)handler;
     }
 }
