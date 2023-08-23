@@ -3,6 +3,7 @@ using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.SharedModule.Helpers;
 using Chat.Framework.Attributes;
 using Chat.Framework.Extensions;
+using Chat.Framework.Models;
 using Chat.Framework.Proxy;
 
 namespace Chat.Api.ActivityModule.Middlewares
@@ -11,12 +12,12 @@ namespace Chat.Api.ActivityModule.Middlewares
     public class LastSeenMiddleware : IMiddleware
     {
         private readonly ITokenService _tokenService;
-        private readonly ICommandQueryProxy _commandQueryService;
+        private readonly ICommandQueryProxy _commandQueryProxy;
 
         public LastSeenMiddleware(ICommandQueryProxy commandQueryProxy, ITokenService tokenService)
         {
             _tokenService = tokenService;
-            _commandQueryService = commandQueryProxy;
+            _commandQueryProxy = commandQueryProxy;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -38,7 +39,9 @@ namespace Chat.Api.ActivityModule.Middlewares
                     {
                         UserId = userProfile.Id  
                     };
-                    await _commandQueryService.GetCommandResponseAsync(updateLastSeenCommand);
+                    await _commandQueryProxy.GetCommandResponseAsync(updateLastSeenCommand, new RequestContext{
+                        HttpContext = context
+                    });
                     Console.WriteLine("Last seen activity saved at LastSeenMiddleware\n");
                 } 
                 

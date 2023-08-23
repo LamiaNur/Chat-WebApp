@@ -27,16 +27,8 @@ namespace Chat.Framework.Extensions
                 {
                     if (!type.IsClass || type.IsAbstract || type.IsInterface) continue;
 
-                    var customAttributes = type.GetCustomAttributes();
-                    ServiceRegisterAttribute? serviceRegisterAttribute = null;
-                    foreach (var attribute in customAttributes)
-                    {
-                        if (attribute is ServiceRegisterAttribute registerAttribute)
-                        {
-                            serviceRegisterAttribute = registerAttribute;
-                        }
-                    }
-
+                    var serviceRegisterAttribute = type.GetCustomAttribute<ServiceRegisterAttribute>();
+                    
                     if (serviceRegisterAttribute == null) continue;
 
                     switch (serviceRegisterAttribute.ServiceLifetime)
