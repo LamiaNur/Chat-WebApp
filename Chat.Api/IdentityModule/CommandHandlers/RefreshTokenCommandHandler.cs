@@ -1,6 +1,6 @@
 using Chat.Api.IdentityModule.Commands;
-using Chat.Api.IdentityModule.Helpers;
 using Chat.Api.IdentityModule.Interfaces;
+using Chat.Api.SharedModule.Helpers;
 using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;

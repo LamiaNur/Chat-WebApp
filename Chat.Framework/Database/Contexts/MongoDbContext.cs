@@ -3,6 +3,7 @@ using Chat.Framework.Database.Interfaces;
 using Chat.Framework.Database.Models;
 using Chat.Framework.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Chat.Framework.Database.Contexts
@@ -259,6 +260,21 @@ namespace Chat.Framework.Database.Contexts
             }
             var writeResult = await collection.BulkWriteAsync(writeModels);
             return writeResult != null && writeResult.IsAcknowledged;
+        }
+
+        public async Task<string?> CreateIndexAsync<T>(DatabaseInfo databaseInfo, List<FieldOrder> fieldOrders)
+        {
+            var fieldOrdersDictionary = fieldOrders.ToDictionary(
+                key => key.FieldKey, 
+                value => (int)value.SortDirection);
+
+            var collection = GetCollection<T>(databaseInfo) ?? throw new Exception("Collection null");
+            
+            var document = new BsonDocument(fieldOrdersDictionary);
+            var indexName = await collection.Indexes.CreateOneAsync(
+                new CreateIndexModel<T>(
+                new BsonDocumentIndexKeysDefinition<T>(document)));
+            return indexName;
         }
     }
 }

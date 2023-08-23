@@ -1,3 +1,4 @@
+using Chat.Framework.Enums;
 using Chat.Framework.Models;
 
 namespace Chat.Framework.CQRS
@@ -9,7 +10,8 @@ namespace Chat.Framework.CQRS
         {
             return new CommandResponse
             {
-                Name = GetType().Name
+                Name = GetType().Name,
+                Status = ResponseStatus.Success
             };
         }
 

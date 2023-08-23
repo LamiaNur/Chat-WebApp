@@ -47,6 +47,7 @@ namespace Chat.Framework.Extensions
                         case ServiceLifetime.Scoped:
                             services.AddScoped(serviceRegisterAttribute.ServiceType, type);
                             break;
+                        case ServiceLifetime.Transient:
                         default:
                             services.AddTransient(serviceRegisterAttribute.ServiceType, type);
                             break;

@@ -23,25 +23,25 @@ namespace Chat.Api.ChatModule.Controllers
         [HttpPost, Route("send")]
         public async Task<IActionResult> SendMessageAsync(SendMessageCommand command)
         {
-            return Ok(await CommandQueryProxy.GetCommandResponseAsync(command, GetRequestContext()));
+            return Ok(await GetCommandResponseAsync(command));
         }
 
         [HttpPost, Route("update-status")]
         public async Task<IActionResult> UpdateChatsStatusAsync(UpdateChatsStatusCommand command)
         {
-            return Ok(await CommandQueryProxy.GetCommandResponseAsync(command, GetRequestContext()));
+            return Ok(await GetCommandResponseAsync(command));
         }
 
         [HttpPost, Route("list")]
         public async Task<IActionResult> GetChatListAsync(ChatListQuery query)
         {
-            return Ok(await CommandQueryProxy.GetQueryResponseAsync(query, GetRequestContext()));
+            return Ok(await GetQueryResponseAsync(query));
         }
 
         [HttpPost, Route("get")]
         public async Task<IActionResult> GetChatsAsync(ChatQuery query)
         {
-            return Ok(await CommandQueryProxy.GetQueryResponseAsync(query, GetRequestContext()));
+            return Ok(await GetQueryResponseAsync(query));
         }
         
     }

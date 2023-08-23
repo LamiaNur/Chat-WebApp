@@ -1,9 +1,9 @@
 using System.Security.Claims;
 using System.Text;
 using Chat.Api.IdentityModule.Constants;
-using Chat.Api.IdentityModule.Helpers;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
+using Chat.Api.SharedModule.Helpers;
 using Chat.Framework.Attributes;
 using Microsoft.IdentityModel.Tokens;
 

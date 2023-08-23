@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Chat.Api.IdentityModule.Helpers
+namespace Chat.Api.SharedModule.Helpers
 {
     public static class TokenHelper
     {
