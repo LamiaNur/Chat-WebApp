@@ -31,6 +31,8 @@ namespace Chat.Framework.Extensions
                     
                     if (serviceRegisterAttribute == null) continue;
 
+                    if (!type.IsAssignableTo(serviceRegisterAttribute.ServiceType)) continue;
+                    
                     switch (serviceRegisterAttribute.ServiceLifetime)
                     {
                         case ServiceLifetime.Singleton:
