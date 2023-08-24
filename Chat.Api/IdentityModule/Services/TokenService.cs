@@ -3,8 +3,8 @@ using System.Text;
 using Chat.Api.IdentityModule.Constants;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
-using Chat.Api.SharedModule.Helpers;
 using Chat.Framework.Attributes;
+using Chat.Shared.Domain.Helpers;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Chat.Api.IdentityModule.Services

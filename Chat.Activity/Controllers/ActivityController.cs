@@ -1,19 +1,18 @@
-using Chat.Api.ActivityModule.Queries;
-using Chat.Api.ChatModule.Hubs;
-using Chat.Api.SharedModule.Controllers;
+using Chat.Activity.Queries;
 using Chat.Framework.Proxy;
+using Chat.Shared.Contracts.Commands;
+using Chat.Shared.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
-namespace Chat.Api.ActivityModule.Controllers
+namespace Chat.Activity.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
     public class ActivityController : ACommonController
     {
-        public ActivityController(IHubContext<ChatHub> hubContext, ICommandQueryProxy commandQueryProxy) : base(hubContext, commandQueryProxy)
+        public ActivityController(ICommandQueryProxy commandQueryProxy) : base(commandQueryProxy)
         {
         }
 
@@ -21,6 +20,12 @@ namespace Chat.Api.ActivityModule.Controllers
         public async Task<IActionResult> GetLastSeenModelAsync(LastSeenQuery query)
         {
             return Ok(await GetQueryResponseAsync(query));
+        }
+
+        [HttpPost, Route("track")]
+        public async Task<IActionResult> UpdateLastSeenAsync(UpdateLastSeenCommand command)
+        {
+            return Ok(await GetCommandResponseAsync(command));
         }
     }
 }

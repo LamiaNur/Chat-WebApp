@@ -1,11 +1,11 @@
-using Chat.Api.ActivityModule.Commands;
-using Chat.Api.ActivityModule.Interfaces;
-using Chat.Api.ActivityModule.Models;
+using Chat.Activity.Interfaces;
+using Chat.Activity.Models;
 using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
+using Chat.Shared.Contracts.Commands;
 
-namespace Chat.Api.ActivityModule.CommandHandlers
+namespace Chat.Activity.CommandHandlers
 {
     [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class UpdateLastSeenCommandHandler : ACommandHandler<UpdateLastSeenCommand>
@@ -20,7 +20,7 @@ namespace Chat.Api.ActivityModule.CommandHandlers
         {
             var response = command.CreateResponse();
             var lastSeenModel = await _lastSeenRepository.GetLastSeenModelByUserIdAsync(command.UserId);
-            if (lastSeenModel == null) 
+            if (lastSeenModel == null)
             {
                 lastSeenModel = new LastSeenModel
                 {

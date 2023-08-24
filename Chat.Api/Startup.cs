@@ -1,5 +1,5 @@
-﻿using Chat.Api.ActivityModule.Middlewares;
-using Chat.Api.ChatModule.Hubs;
+﻿using Chat.Api.ChatModule.Hubs;
+using Chat.Api.Middlewares;
 using Chat.Shared;
 
 namespace Chat.Api

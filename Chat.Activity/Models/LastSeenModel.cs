@@ -1,14 +1,14 @@
-using Chat.Api.SharedModule.Helpers;
 using Chat.Framework.Database.Interfaces;
+using Chat.Shared.Domain.Helpers;
 
-namespace Chat.Api.ActivityModule.Models
+namespace Chat.Activity.Models
 {
     public class LastSeenModel : IRepositoryItem
     {
         public string Id { get; set; } = string.Empty;
-        public string UserId {get; set;} = string.Empty;
-        public DateTime LastSeenAt {get; set;}
-        
+        public string UserId { get; set; } = string.Empty;
+        public DateTime LastSeenAt { get; set; }
+
         public LastSeenDto ToLastSeenDto()
         {
             return new LastSeenDto

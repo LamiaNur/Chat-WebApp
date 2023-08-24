@@ -1,11 +1,11 @@
 using Chat.Framework.CQRS;
 
-namespace Chat.Api.ActivityModule.Commands
+namespace Chat.Shared.Contracts.Commands
 {
     public class UpdateLastSeenCommand : ACommand
     {
-        public string UserId {get; set;} = string.Empty;
-        
+        public string UserId { get; set; } = string.Empty;
+
         public override void ValidateCommand()
         {
             if (string.IsNullOrEmpty(UserId))

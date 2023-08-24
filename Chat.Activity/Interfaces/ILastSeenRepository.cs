@@ -1,6 +1,6 @@
-using Chat.Api.ActivityModule.Models;
+using Chat.Activity.Models;
 
-namespace Chat.Api.ActivityModule.Interfaces
+namespace Chat.Activity.Interfaces
 {
     public interface ILastSeenRepository
     {

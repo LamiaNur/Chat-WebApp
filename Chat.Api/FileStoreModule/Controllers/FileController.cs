@@ -13,7 +13,7 @@ namespace Chat.Api.FileStoreModule.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class FileController : ACommonController
+    public class FileController : AChatController
     {
         public FileController(IHubContext<ChatHub> hubContext, ICommandQueryProxy commandQueryProxy) : base(hubContext, commandQueryProxy)
         {

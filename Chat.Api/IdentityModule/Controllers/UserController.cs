@@ -12,7 +12,7 @@ namespace Chat.Api.IdentityModule.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UserController : ACommonController
+    public class UserController : AChatController
     {
         public UserController(IHubContext<ChatHub> hubContext, ICommandQueryProxy commandQueryProxy) 
             : base(hubContext, commandQueryProxy)
