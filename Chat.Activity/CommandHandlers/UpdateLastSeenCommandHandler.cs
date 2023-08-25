@@ -16,24 +16,22 @@ namespace Chat.Activity.CommandHandlers
         {
             _lastSeenRepository = lastSeenRepository;
         }
+
         protected override async Task<CommandResponse> OnHandleAsync(UpdateLastSeenCommand command)
         {
             var response = command.CreateResponse();
-            var lastSeenModel = await _lastSeenRepository.GetLastSeenModelByUserIdAsync(command.UserId);
-            if (lastSeenModel == null)
+            var lastSeenModel = await _lastSeenRepository.GetLastSeenModelByUserIdAsync(command.UserId) ?? new LastSeenModel
             {
-                lastSeenModel = new LastSeenModel
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    UserId = command.UserId
-                };
-            }
+                Id = Guid.NewGuid().ToString(),
+                UserId = command.UserId
+            };
             lastSeenModel.LastSeenAt = DateTime.UtcNow;
             if (!await _lastSeenRepository.SaveLastSeenModelAsync(lastSeenModel))
             {
-                throw new Exception("Last Seen model Save error");
+                response.SetErrorResponse("Save Last Seen Model Error");
+                return response;
             }
-            response.Message = "Last seen time set successfully";
+            response.SetSuccessResponse("Last seen time set successfully");
             response.SetData("LastSeenAt", lastSeenModel.LastSeenAt);
             return response;
         }

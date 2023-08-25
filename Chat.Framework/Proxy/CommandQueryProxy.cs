@@ -26,7 +26,7 @@ public class CommandQueryProxy : ICommandQueryProxy
             if (requestContext != null) command.SetRequestContext(requestContext);
             if (command.GetData<bool>("FireAndForget"))
             {
-                _ = Task.Factory.StartNew(async () => await _requestMediator.HandleAsync<TCommand, CommandResponse>(command));
+                _ = Task.Factory.StartNew( () => _requestMediator.HandleAsync<TCommand, CommandResponse>(command));
                 response = command.CreateResponse();
                 response.Status = ResponseStatus.Pending;
             }
@@ -42,8 +42,7 @@ public class CommandQueryProxy : ICommandQueryProxy
         {
             Console.WriteLine(e);
             response = command.CreateResponse();
-            response.Status = ResponseStatus.Error;
-            response.Message = e.Message;
+            response.SetErrorResponse(e.Message);
         }
         return response;
     }

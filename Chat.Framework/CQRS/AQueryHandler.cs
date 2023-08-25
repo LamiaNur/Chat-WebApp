@@ -1,3 +1,4 @@
+using Chat.Framework.Enums;
 using Chat.Framework.Mediators;
 
 namespace Chat.Framework.CQRS
@@ -9,9 +10,20 @@ namespace Chat.Framework.CQRS
         public async Task<QueryResponse> HandleAsync(TQuery query)
         {
             Console.WriteLine($"OnHandleAsync of : {GetType().Name}\n");
-            query.ValidateQuery();
-            var response = await OnHandleAsync(query);
-            return query.CreateResponse(response);
+            try
+            {
+                query.ValidateQuery();
+                var response = await OnHandleAsync(query);
+                return query.CreateResponse(response);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                var response = query.CreateResponse();
+                response.Message = e.Message;
+                response.Status = ResponseStatus.Error;
+                return response;
+            }
         }
     }
 }
