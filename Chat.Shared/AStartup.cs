@@ -100,7 +100,7 @@ namespace Chat.Shared
 
             services.AddAllAssemblies("Chat");
             services.AddAttributeRegisteredServices();
-
+            services.AddHttpClient();
             RegisterServices(services);
         }
 

@@ -1,10 +1,8 @@
-using System.Net.Http.Headers;
-using System.Text;
 using Chat.Api.IdentityModule.Interfaces;
+using Chat.Api.IdentityModule.Models;
 using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
 using Chat.Framework.Extensions;
-using Chat.Framework.Models;
-using Chat.Framework.Proxy;
 using Chat.Shared.Contracts.Commands;
 using Chat.Shared.Domain.Helpers;
 
@@ -14,18 +12,19 @@ namespace Chat.Api.Middlewares
     public class LastSeenMiddleware : IMiddleware
     {
         private readonly ITokenService _tokenService;
-        private readonly ICommandQueryProxy _commandQueryProxy;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public LastSeenMiddleware(ICommandQueryProxy commandQueryProxy, ITokenService tokenService)
+        public LastSeenMiddleware(ITokenService tokenService, IHttpClientFactory clientFactory)
         {
             _tokenService = tokenService;
-            _commandQueryProxy = commandQueryProxy;
+            _httpClientFactory = clientFactory;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             Console.WriteLine("Executing LastSeenMiddleware\n");
             var accessToken = context.GetAccessToken();
+
             if (string.IsNullOrEmpty(accessToken))
             {
                 Console.WriteLine("AccessToken not found at LastSeenMiddleware\n");
@@ -37,29 +36,32 @@ namespace Chat.Api.Middlewares
                 if (TokenHelper.IsTokenValid(accessToken, _tokenService.GetTokenValidationParameters()))
                 {
                     var userProfile = _tokenService.GetUserProfileFromAccessToken(accessToken);
-                    var updateLastSeenCommand = new UpdateLastSeenCommand()
-                    {
-                        UserId = userProfile.Id
-                    };
-                    // todo : will refactor
-                    var body = updateLastSeenCommand.Serialize();
-                    var client = new HttpClient();
-                    client.DefaultRequestHeaders.Add("Authorization", accessToken);
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    var res = await client.PostAsync("https://localhost:50502/api/Activity/track", 
-                        new StringContent(body , Encoding.UTF8, "application/json"));
 
-                    await _commandQueryProxy.GetCommandResponseAsync(updateLastSeenCommand, new RequestContext
-                    {
-                        HttpContext = context
-                    });
-                    Console.WriteLine("Last seen activity saved at LastSeenMiddleware\n");
+                    // Todo: its currently synchronous. have to use message broker for async 
+                    await TrackLastSeenActivityAsync(userProfile, accessToken);
+
+                    Console.WriteLine("Last seen activity tracing from LastSeenMiddleware\n");
                 }
 
             }
 
             await next(context);
             Console.WriteLine("Returning from LastSeenMiddleware\n");
+        }
+
+        private async Task TrackLastSeenActivityAsync(UserProfile userProfile, string accessToken)
+        {
+            var updateLastSeenCommand = new UpdateLastSeenCommand()
+            {
+                UserId = userProfile.Id
+            };
+            updateLastSeenCommand.SetData("FireAndForget", true);
+
+            var url = "https://localhost:50502/api/Activity/track";
+            var response = await _httpClientFactory
+                .CreateClient()
+                .AddBearerToken(accessToken)
+                .PostAsync<CommandResponse>(url, updateLastSeenCommand);
         }
     }
 }

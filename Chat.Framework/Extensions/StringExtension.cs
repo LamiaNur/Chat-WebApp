@@ -9,7 +9,10 @@ namespace Chat.Framework.Extensions
             if (string.IsNullOrEmpty(str)) return default;
             try
             {
-                var model = JsonSerializer.Deserialize<T>(str);
+                var model = JsonSerializer.Deserialize<T>(str, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
                 return model;
             }
             catch (Exception ex)

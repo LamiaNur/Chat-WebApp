@@ -1,4 +1,5 @@
-﻿using Chat.Framework.Interfaces;
+﻿using Chat.Framework.Extensions;
+using Chat.Framework.Interfaces;
 
 namespace Chat.Framework.Models
 {
@@ -18,7 +19,16 @@ namespace Chat.Framework.Models
         {
             if (MetaData.TryGetValue(key, out var data))
             {
-                return (T)data;
+                try
+                {
+                    return (T)data;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    var serializedData = data.Serialize();
+                    return serializedData.Deserialize<T>();
+                }
             }
             return default;
         }

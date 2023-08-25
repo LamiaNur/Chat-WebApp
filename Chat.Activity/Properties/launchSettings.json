@@ -12,7 +12,7 @@
     "Chat.Activity": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:50502",
       "environmentVariables": {
