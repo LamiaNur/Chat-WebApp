@@ -1,24 +1,22 @@
-using System.Composition;
 using Chat.Api.ChatModule.Interfaces;
 using Chat.Api.ChatModule.Models;
-using Chat.Api.CoreModule.Database.Interfaces;
-using Chat.Api.CoreModule.Database.Models;
-using Chat.Api.CoreModule.Services;
+using Chat.Framework.Attributes;
+using Chat.Framework.Database.Interfaces;
+using Chat.Framework.Database.Models;
 using MongoDB.Driver;
 
 namespace Chat.Api.ChatModule.Repositories
 {
-    [Export(typeof(IChatRepository))]
-    [Shared]
+    [ServiceRegister(typeof(IChatRepository), ServiceLifetime.Singleton)]
     public class ChatRepository : IChatRepository
     {
         private readonly IMongoDbContext _dbContext;
         private readonly DatabaseInfo _databaseInfo;
 
-        public ChatRepository()
+        public ChatRepository(IMongoDbContext mongoDbContext, IConfiguration configuration)
         {
-            _dbContext = DIService.Instance.GetService<IMongoDbContext>();
-            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _dbContext = mongoDbContext;
+            _databaseInfo = configuration.GetSection("DatabaseInfo").Get<DatabaseInfo>();
         }
 
         public async Task<bool> SaveChatModelAsync(ChatModel chatModel)
@@ -45,6 +43,11 @@ namespace Chat.Api.ChatModule.Repositories
             var statusFilter = Builders<ChatModel>.Filter.Ne("Status", "Seen");
             var andFilter = Builders<ChatModel>.Filter.And(senderFilter, receiverFilter);
             return await _dbContext.GetItemsByFilterDefinitionAsync<ChatModel>(_databaseInfo, andFilter);
+        }
+
+        public async Task<bool> SaveChatModelsAsync(List<ChatModel> chatModels)
+        {
+            return await _dbContext.SaveItemsAsync(_databaseInfo, chatModels);
         }
     }
 }

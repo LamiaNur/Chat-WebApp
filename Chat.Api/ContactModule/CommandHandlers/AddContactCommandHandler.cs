@@ -1,28 +1,28 @@
-using System.Composition;
 using Chat.Api.ContactModule.Commands;
 using Chat.Api.ContactModule.Interfaces;
 using Chat.Api.ContactModule.Models;
-using Chat.Api.CoreModule.Constants;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Models;
 using Chat.Api.IdentityModule.Queries;
+using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
+using Chat.Framework.Enums;
+using Chat.Framework.Mediators;
+using Chat.Framework.Proxy;
 
 namespace Chat.Api.ContactModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("AddContactCommandHandler", typeof(ICommandHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class AddContactCommandHandler : ACommandHandler<AddContactCommand>
     {
         private readonly IContactRepository _contactRepository;
-        public AddContactCommandHandler()
+        private readonly ICommandQueryProxy _commandQueryProxy;
+        public AddContactCommandHandler(IContactRepository contactRepository, ICommandQueryProxy commandQueryProxy)
         {
-            _contactRepository = DIService.Instance.GetService<IContactRepository>();
+            _contactRepository = contactRepository;
+            _commandQueryProxy = commandQueryProxy;
         }
 
-        public override async Task<CommandResponse> OnHandleAsync(AddContactCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(AddContactCommand command)
         {
             var response = command.CreateResponse();
             var userProfileQuery = new UserProfileQuery()
@@ -30,8 +30,8 @@ namespace Chat.Api.ContactModule.CommandHandlers
                 UserIds = new List<string> {command.UserId},
                 Emails = new List<string> {command.ContactEmail}
             };
-            var queryResponse = await _commandQueryService.HandleAsync(userProfileQuery);
-            if (queryResponse == null || queryResponse.Status != ResponseStatus.Success || queryResponse.ItemsCount < 2)
+            var queryResponse = await _commandQueryProxy.GetQueryResponseAsync(userProfileQuery);
+            if (queryResponse == null || queryResponse.Status != ResponseStatus.Success || queryResponse.Items.Count < 2)
             {
                 throw new Exception("User profile query error");
             }

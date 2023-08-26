@@ -1,49 +1,46 @@
 using Chat.Api.ChatModule.Interfaces;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Interfaces;
-using System.Composition;
+using Chat.Framework.Attributes;
 
 namespace Chat.Api.ChatModule.Hubs
 {
-    [Export(typeof(IHubConnectionService))]
-    [Shared]
+    [ServiceRegister(typeof(IHubConnectionService), ServiceLifetime.Singleton)]
     public class HubConnectionService : IHubConnectionService
     {
-        private readonly Dictionary<string, string> connectionIdUserIdMapper;
-        private readonly Dictionary<string, string> userIdConnectionIdMapper;
+        private readonly Dictionary<string, string> _connectionIdUserIdMapper;
+        private readonly Dictionary<string, string> _userIdConnectionIdMapper;
         private readonly ITokenService _tokenService;
 
-        public HubConnectionService()
+        public HubConnectionService(ITokenService tokenService)
         {
-             _tokenService = DIService.Instance.GetService<ITokenService>();
-            connectionIdUserIdMapper = new Dictionary<string, string>();
-            userIdConnectionIdMapper = new Dictionary<string, string>();
+             _tokenService = tokenService;
+            _connectionIdUserIdMapper = new Dictionary<string, string>();
+            _userIdConnectionIdMapper = new Dictionary<string, string>();
         }
 
         public void AddConnection(string connectionId, string accessToken)
         {
             var userProfile = _tokenService.GetUserProfileFromAccessToken(accessToken);
             var userId = userProfile.Id;
-            if (userIdConnectionIdMapper.ContainsKey(userId))
+            if (_userIdConnectionIdMapper.TryGetValue(userId, out var prevConnectionId))
             {
-                var prevConnectionId = userIdConnectionIdMapper[userId];
-                if (connectionIdUserIdMapper.ContainsKey(prevConnectionId))
+                if (_connectionIdUserIdMapper.ContainsKey(prevConnectionId))
                 {
-                    connectionIdUserIdMapper.Remove(prevConnectionId);
+                    _connectionIdUserIdMapper.Remove(prevConnectionId);
                 }
             }
-            userIdConnectionIdMapper[userId] = connectionId;
-            connectionIdUserIdMapper[connectionId] = userId;
+            _userIdConnectionIdMapper[userId] = connectionId;
+            _connectionIdUserIdMapper[connectionId] = userId;
         }
 
         public string GetConnectionId(string userId)
         {
-            return userIdConnectionIdMapper.ContainsKey(userId)? userIdConnectionIdMapper[userId]: string.Empty;
+            return _userIdConnectionIdMapper.TryGetValue(userId, out var value)? value: string.Empty;
         }
 
         public string GetUserId(string connectionId)
         {
-            return connectionIdUserIdMapper.ContainsKey(connectionId)? connectionIdUserIdMapper[connectionId]: string.Empty;
+            return _connectionIdUserIdMapper.TryGetValue(connectionId, out var value)? value: string.Empty;
         }
 
         public void RemoveConnection(string connectionId)
@@ -51,17 +48,17 @@ namespace Chat.Api.ChatModule.Hubs
             var userId = GetUserId(connectionId);
             if (!string.IsNullOrEmpty(userId))
             {
-                connectionIdUserIdMapper.Remove(userId);
+                _connectionIdUserIdMapper.Remove(userId);
             }
-            if (connectionIdUserIdMapper.ContainsKey(connectionId))
+            if (_connectionIdUserIdMapper.ContainsKey(connectionId))
             {
-                connectionIdUserIdMapper.Remove(connectionId);
+                _connectionIdUserIdMapper.Remove(connectionId);
             }
         }
 
         public bool IsUserConnectedWithHub(string userId)
         {
-            return userIdConnectionIdMapper.ContainsKey(userId);
+            return _userIdConnectionIdMapper.ContainsKey(userId);
         }
     }
 }

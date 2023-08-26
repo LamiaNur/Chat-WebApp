@@ -1,25 +1,22 @@
-using System.Composition;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.FileStoreModule.Interfaces;
 using Chat.Api.FileStoreModule.Models;
 using Chat.Api.FileStoreModule.Queries;
+using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
 
 namespace Chat.Api.FileStoreModule.QueryHandlers
 {
-    [Export(typeof(IQueryHandler))]
-    [Export("FileDownloadQueryHandler", typeof(IQueryHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class FileDownloadQueryHandler : AQueryHandler<FileDownloadQuery>
     {
         private readonly IFileRepository _fileRepository;
-        public FileDownloadQueryHandler()
+        public FileDownloadQueryHandler(IFileRepository fileRepository)
         {
-            _fileRepository = DIService.Instance.GetService<IFileRepository>();
+            _fileRepository = fileRepository;
         }
 
-        public override async Task<QueryResponse> OnHandleAsync(FileDownloadQuery query)
+        protected override async Task<QueryResponse> OnHandleAsync(FileDownloadQuery query)
         {
             var response = query.CreateResponse();
             var fileModel = await _fileRepository.GetFileModelByIdAsync(query.FileId);
@@ -33,7 +30,7 @@ namespace Chat.Api.FileStoreModule.QueryHandlers
                 FileModel = fileModel,
                 ContentType = GetContentType(fileModel.Extension)
             };
-            using (var fileStream = new FileStream(path, FileMode.Open))
+            await using (var fileStream = new FileStream(path, FileMode.Open))
             {
                 fileDownloadResult.FileBytes = new byte[fileStream.Length];
                 await fileStream.ReadAsync(fileDownloadResult.FileBytes, 0 , fileDownloadResult.FileBytes.Length);

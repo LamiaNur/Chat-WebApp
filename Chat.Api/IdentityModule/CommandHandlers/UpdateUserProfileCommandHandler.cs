@@ -1,24 +1,21 @@
-using System.Composition;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Interfaces;
+using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
 
 namespace Chat.Api.IdentityModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("UpdateUserProfileCommandHandler", typeof(ICommandHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class UpdateUserProfileCommandHandler : ACommandHandler<UpdateUserProfileCommand>
     {
         private readonly IUserRepository _userRepository;
         
-        public UpdateUserProfileCommandHandler()
+        public UpdateUserProfileCommandHandler(IUserRepository userRepository)
         {
-            _userRepository = DIService.Instance.GetService<IUserRepository>();
+            _userRepository = userRepository;
         }
-        public override async Task<CommandResponse> OnHandleAsync(UpdateUserProfileCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(UpdateUserProfileCommand command)
         {
             var response = command.CreateResponse();
             var requestUpdateModel = command.UserModel;

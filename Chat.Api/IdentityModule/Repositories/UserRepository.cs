@@ -1,24 +1,22 @@
-using System.Composition;
-using Chat.Api.CoreModule.Database.Interfaces;
-using Chat.Api.CoreModule.Database.Models;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
+using Chat.Framework.Attributes;
+using Chat.Framework.Database.Interfaces;
+using Chat.Framework.Database.Models;
 using MongoDB.Driver;
 
 namespace Chat.Api.IdentityModule.Repositories
 {
-    [Export(typeof(IUserRepository))]
-    [Shared]
+    [ServiceRegister(typeof(IUserRepository), ServiceLifetime.Singleton)]
     public class UserRepository : IUserRepository
     {
         private readonly DatabaseInfo _databaseInfo;
         private readonly IMongoDbContext _dbContext;
         
-        public UserRepository()
+        public UserRepository(IMongoDbContext mongoDbContext, IConfiguration configuration)
         {
-            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
-            _dbContext = DIService.Instance.GetService<IMongoDbContext>();
+            _databaseInfo = configuration.GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _dbContext = mongoDbContext;
         }
 
         public async Task<bool> IsUserExistAsync(UserModel userModel)

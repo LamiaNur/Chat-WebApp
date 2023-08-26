@@ -1,24 +1,21 @@
-using System.Composition;
 using Chat.Api.ContactModule.Commands;
 using Chat.Api.ContactModule.Interfaces;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Services;
+using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
 
 namespace Chat.Api.ContactModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("AcceptOrRejectContactRequestCommandHandler", typeof(ICommandHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class AcceptOrRejectContactRequestCommandHandler : ACommandHandler<AcceptOrRejectContactRequestCommand>
     {
         private readonly IContactRepository _contactRepository;
-        public AcceptOrRejectContactRequestCommandHandler()
+        public AcceptOrRejectContactRequestCommandHandler(IContactRepository contactRepository)
         {
-            _contactRepository = DIService.Instance.GetService<IContactRepository>();
+            _contactRepository = contactRepository;
         }
 
-        public override async Task<CommandResponse> OnHandleAsync(AcceptOrRejectContactRequestCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(AcceptOrRejectContactRequestCommand command)
         {
             var response = command.CreateResponse();
             var contact = await _contactRepository.GetContactByIdAsync(command.ContactId);

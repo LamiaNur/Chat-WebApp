@@ -1,27 +1,26 @@
-using System.Composition;
 using Chat.Api.ChatModule.Commands;
 using Chat.Api.ChatModule.Interfaces;
 using Chat.Api.ChatModule.Models;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Services;
+using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
+using Chat.Framework.Proxy;
 
 namespace Chat.Api.ChatModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("SendMessageCommandHandler", typeof(ICommandHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class SendMessageCommandHandler : ACommandHandler<SendMessageCommand>
     {
         private readonly IChatRepository _chatRepository;
         private readonly IChatHubService _chatHubService;
-        
-        public SendMessageCommandHandler()
+        private readonly ICommandQueryProxy _commandQueryProxy;
+        public SendMessageCommandHandler(IChatRepository chatRepository, IChatHubService chatHubService, ICommandQueryProxy commandQueryProxy)
         {
-            _chatHubService = DIService.Instance.GetService<IChatHubService>();
-            _chatRepository = DIService.Instance.GetService<IChatRepository>();
+            _chatHubService = chatHubService;
+            _chatRepository = chatRepository;
+            _commandQueryProxy = commandQueryProxy;
         }
-        public override async Task<CommandResponse> OnHandleAsync(SendMessageCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(SendMessageCommand command)
         {
             var response = command.CreateResponse();
             command.ChatModel.Id = Guid.NewGuid().ToString();
@@ -31,7 +30,7 @@ namespace Chat.Api.ChatModule.CommandHandlers
             {
                 throw new Exception("Chat model save error");
             }
-            var requestContext = command.GetCurrentScope();
+            var requestContext = command.GetRequestContext();
             await _chatHubService.SendAsync<ChatModel>(command.ChatModel.SendTo, command.ChatModel, requestContext);
 
             var latestChatModel = command.ChatModel.ToLatestChatModel();
@@ -39,7 +38,7 @@ namespace Chat.Api.ChatModule.CommandHandlers
             {
                 LatestChatModel = latestChatModel
             };
-            await _commandQueryService.HandleAsync(updateLatestChatCommand);
+            await _commandQueryProxy.GetCommandResponseAsync(updateLatestChatCommand);
             response.SetData("Message", command.ChatModel.ToChatDto());
             return response;
         }

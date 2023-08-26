@@ -1,64 +1,41 @@
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Services;
+using Chat.Api.ChatModule.Hubs;
 using Chat.Api.IdentityModule.Commands;
-using Chat.Api.IdentityModule.Queries;
-using Microsoft.AspNetCore.Authorization;
+using Chat.Api.SharedModule.Controllers;
+using Chat.Framework.Proxy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.Api.IdentityModule.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController : AChatController
     {
-        private readonly ICommandQueryService _commandQueryService;
-        public AuthController()
+        public AuthController(IHubContext<ChatHub> hubContext, ICommandQueryProxy commandQueryProxy) 
+            : base(hubContext, commandQueryProxy)
         {
-            _commandQueryService = DIService.Instance.GetService<ICommandQueryService>();
-        }
 
-        [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> RegisterUserAsync(RegisterCommand command)
-        {
-            return Ok(await _commandQueryService.HandleAsync(command));
         }
 
         [HttpPost]
         [Route("log-in")]
         public async Task<IActionResult> LoginUserAsync(LoginCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await GetCommandResponseAsync(command));
         }
 
         [HttpPost]
         [Route("log-out")]
         public async Task<IActionResult> LogOutUserAsync(LogOutCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await GetCommandResponseAsync(command));
         }
 
         [HttpPost]
         [Route("refresh-token")]
         public async Task<IActionResult> RefreshTokenAsync(RefreshTokenCommand command)
         {
-            return Ok(await _commandQueryService.HandleAsync(command));
-        }
-
-        [HttpPost]
-        [Route("user-profile")]
-        [Authorize]
-        public async Task<IActionResult> UserProfileAsync(UserProfileQuery query)
-        {
-            return Ok(await _commandQueryService.HandleAsync(query));
-        }
-        
-        [HttpPost]
-        [Route("update")]
-        [Authorize]
-        public async Task<IActionResult> UpdateUserAsync(UpdateUserProfileCommand command)
-        {
-            return Ok(await _commandQueryService.HandleAsync(command));
+            return Ok(await GetCommandResponseAsync(command));
         }
     }
 }

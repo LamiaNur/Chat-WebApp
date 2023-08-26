@@ -1,11 +1,11 @@
 using Chat.Api.ChatModule.Models;
-using Chat.Api.CoreModule.Models;
+using Chat.Framework.CQRS;
 
 namespace Chat.Api.ChatModule.Commands
 {
     public class SendMessageCommand : ACommand
     {
-        public ChatModel ChatModel {get; set;}
+        public ChatModel? ChatModel {get; set;}
         
         public override void ValidateCommand()
         {

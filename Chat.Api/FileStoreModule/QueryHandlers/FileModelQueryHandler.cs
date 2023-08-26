@@ -1,25 +1,22 @@
-using System.Composition;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.FileStoreModule.Interfaces;
 using Chat.Api.FileStoreModule.Queries;
+using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
 
 namespace Chat.Api.FileStoreModule.QueryHandlers
 {
-    [Export(typeof(IQueryHandler))]
-    [Export("FileModelQueryHandler", typeof(IQueryHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class FileModelQueryHandler : AQueryHandler<FileModelQuery>
     {
         private readonly IFileRepository _fileRepository;
         
-        public FileModelQueryHandler()
+        public FileModelQueryHandler(IFileRepository fileRepository)
         {
-            _fileRepository = DIService.Instance.GetService<IFileRepository>();
+            _fileRepository = fileRepository;
         }
         
-        public override async Task<QueryResponse> OnHandleAsync(FileModelQuery query)
+        protected override async Task<QueryResponse> OnHandleAsync(FileModelQuery query)
         {
             var response = query.CreateResponse();
             var fileModel = await _fileRepository.GetFileModelByIdAsync(query.FileId);

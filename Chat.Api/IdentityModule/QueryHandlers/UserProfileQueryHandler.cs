@@ -1,25 +1,22 @@
-using System.Composition;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
 using Chat.Api.IdentityModule.Queries;
+using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
 
 namespace Chat.Api.IdentityModule.QueryHandlers
 {
-    [Export(typeof(IQueryHandler))]
-    [Export("UserProfileQueryHandler", typeof(IQueryHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class UserProfileQueryHandler : AQueryHandler<UserProfileQuery>
     {
         private readonly IUserRepository _userRepository;
-        public UserProfileQueryHandler()
+        public UserProfileQueryHandler(IUserRepository userRepository)
         {
-            _userRepository = DIService.Instance.GetService<IUserRepository>();
+            _userRepository = userRepository;
         }
 
-        public override async Task<QueryResponse> OnHandleAsync(UserProfileQuery query)
+        protected override async Task<QueryResponse> OnHandleAsync(UserProfileQuery query)
         {
             var response = query.CreateResponse();
             var userModels = new List<UserModel>();

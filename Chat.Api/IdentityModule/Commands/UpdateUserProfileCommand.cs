@@ -1,5 +1,5 @@
-using Chat.Api.CoreModule.Models;
 using Chat.Api.IdentityModule.Models;
+using Chat.Framework.CQRS;
 
 namespace Chat.Api.IdentityModule.Commands
 {

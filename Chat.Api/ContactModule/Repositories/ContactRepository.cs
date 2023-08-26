@@ -1,24 +1,22 @@
-using System.Composition;
 using Chat.Api.ContactModule.Interfaces;
 using Chat.Api.ContactModule.Models;
-using Chat.Api.CoreModule.Database.Interfaces;
-using Chat.Api.CoreModule.Database.Models;
-using Chat.Api.CoreModule.Services;
+using Chat.Framework.Attributes;
+using Chat.Framework.Database.Interfaces;
+using Chat.Framework.Database.Models;
 using MongoDB.Driver;
 
 namespace Chat.Api.ContactModule.Repositories
 {
-    [Export(typeof(IContactRepository))]
-    [Shared]
+    [ServiceRegister(typeof(IContactRepository), ServiceLifetime.Singleton)]
     public class ContactRepository : IContactRepository
     {
         private readonly DatabaseInfo _databaseInfo;
         private readonly IMongoDbContext _dbContext;
         
-        public ContactRepository()
+        public ContactRepository(IMongoDbContext mongoDbContext, IConfiguration configuration)
         {
-            _databaseInfo = DIService.Instance.GetConfiguration().GetSection("DatabaseInfo").Get<DatabaseInfo>();
-            _dbContext = DIService.Instance.GetService<IMongoDbContext>();
+            _databaseInfo = configuration.GetSection("DatabaseInfo").Get<DatabaseInfo>();
+            _dbContext = mongoDbContext;
         }
 
         public async Task<bool> SaveContactAsync(Contact contact)

@@ -1,26 +1,24 @@
-using System.Composition;
 using System.Security.Claims;
 using System.Text;
-using Chat.Api.CoreModule.Helpers;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Constants;
 using Chat.Api.IdentityModule.Interfaces;
 using Chat.Api.IdentityModule.Models;
+using Chat.Framework.Attributes;
+using Chat.Shared.Domain.Helpers;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Chat.Api.IdentityModule.Services
 {
-    [Export(typeof(ITokenService))]
-    [Shared]
+    [ServiceRegister(typeof(ITokenService), ServiceLifetime.Singleton)]
     public class TokenService : ITokenService
     {
         private readonly TokenConfig _tokenConfig;
         private readonly IAccessRepository _accessRepository;
 
-        public TokenService()
+        public TokenService(IAccessRepository accessRepository, IConfiguration configuration)
         {
-            _tokenConfig = DIService.Instance.GetConfiguration().GetSection("TokenConfig").Get<TokenConfig>();
-            _accessRepository = DIService.Instance.GetService<IAccessRepository>();
+            _tokenConfig = configuration.GetSection("TokenConfig").Get<TokenConfig>();
+            _accessRepository = accessRepository;
         }
         
         public async Task<Token?> CreateTokenAsync(UserProfile userProfile, string appId)
@@ -69,16 +67,17 @@ namespace Chat.Api.IdentityModule.Services
 
         public List<Claim> GenerateClaims(UserProfile userProfile, string appId)
         {
-            var claims = new List<Claim>();
-
-            claims.Add(new Claim(UserClaims.UserId, userProfile.Id));
-            claims.Add(new Claim(UserClaims.ProfilePictureId, userProfile.ProfilePictureId));
-            claims.Add(new Claim(UserClaims.Email, userProfile.Email));
-            claims.Add(new Claim(UserClaims.FirstName, userProfile.FirstName));
-            claims.Add(new Claim(UserClaims.LastName, userProfile.LastName));
-            claims.Add(new Claim(UserClaims.UserName, userProfile.UserName));
-            claims.Add(new Claim(UserClaims.AppId, appId));
-            claims.Add(new Claim(UserClaims.JwtId , Guid.NewGuid().ToString()));
+            var claims = new List<Claim>
+            {
+                new Claim(UserClaims.UserId, userProfile.Id),
+                new Claim(UserClaims.ProfilePictureId, userProfile.ProfilePictureId),
+                new Claim(UserClaims.Email, userProfile.Email),
+                new Claim(UserClaims.FirstName, userProfile.FirstName),
+                new Claim(UserClaims.LastName, userProfile.LastName),
+                new Claim(UserClaims.UserName, userProfile.UserName),
+                new Claim(UserClaims.AppId, appId),
+                new Claim(UserClaims.JwtId, Guid.NewGuid().ToString())
+            };
 
             return claims;
         }

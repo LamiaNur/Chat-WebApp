@@ -1,25 +1,22 @@
-using System.Composition;
-using Chat.Api.CoreModule.Helpers;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Interfaces;
+using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
+using Chat.Shared.Domain.Helpers;
 
 namespace Chat.Api.IdentityModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("RefreshTokenCommandHandler", typeof(ICommandHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class RefreshTokenCommandHandler : ACommandHandler<RefreshTokenCommand>
     {
         private readonly ITokenService _tokenService;
-        public RefreshTokenCommandHandler()
+        public RefreshTokenCommandHandler(ITokenService tokenService)
         {
-            _tokenService = DIService.Instance.GetService<ITokenService>();
+            _tokenService = tokenService;
         }
 
-        public override async Task<CommandResponse> OnHandleAsync(RefreshTokenCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(RefreshTokenCommand command)
         {
             var response = command.CreateResponse();
             if (!TokenHelper.IsTokenValid(command.Token.AccessToken, _tokenService.GetTokenValidationParameters(true, true, false, true)))

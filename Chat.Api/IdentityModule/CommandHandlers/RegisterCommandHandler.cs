@@ -1,25 +1,22 @@
-using System.Composition;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Services;
 using Chat.Api.IdentityModule.Commands;
 using Chat.Api.IdentityModule.Interfaces;
+using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
 
 namespace Chat.Api.IdentityModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("RegisterCommandHandler", typeof(ICommandHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class RegisterCommandHandler : ACommandHandler<RegisterCommand>
     {
         private readonly IUserRepository _userRepository;
         
-        public RegisterCommandHandler()
+        public RegisterCommandHandler(IUserRepository userRepository)
         {
-            _userRepository = DIService.Instance.GetService<IUserRepository>();
+            _userRepository = userRepository;
         }
                 
-        public override async Task<CommandResponse> OnHandleAsync(RegisterCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(RegisterCommand command)
         {
             var response = command.CreateResponse();
             if (await _userRepository.IsUserExistAsync(command.UserModel)) 

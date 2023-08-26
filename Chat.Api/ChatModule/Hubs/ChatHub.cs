@@ -1,16 +1,14 @@
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Authorization;
 using Chat.Api.ChatModule.Interfaces;
-using Chat.Api.CoreModule.Services;
 
 namespace Chat.Api.ChatModule.Hubs
 {
     public class ChatHub : Hub
     {
-        public readonly IHubConnectionService _hubConnectionService;
-        public ChatHub()
+        private readonly IHubConnectionService _hubConnectionService;
+        public ChatHub(IHubConnectionService hubConnectionService)
         {
-            _hubConnectionService = DIService.Instance.GetService<IHubConnectionService>();
+            _hubConnectionService = hubConnectionService;
         }
         public override Task OnConnectedAsync()
         {

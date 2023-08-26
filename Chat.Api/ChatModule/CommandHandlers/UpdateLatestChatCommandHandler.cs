@@ -1,26 +1,23 @@
-using System.Composition;
 using Chat.Api.ChatModule.Commands;
 using Chat.Api.ChatModule.Interfaces;
-using Chat.Api.CoreModule.Interfaces;
-using Chat.Api.CoreModule.Models;
-using Chat.Api.CoreModule.Services;
+using Chat.Framework.Attributes;
+using Chat.Framework.CQRS;
+using Chat.Framework.Mediators;
 
 namespace Chat.Api.ChatModule.CommandHandlers
 {
-    [Export(typeof(ICommandHandler))]
-    [Export("UpdateLatestChatCommandHandler", typeof(ICommandHandler))]
-    [Shared]
+    [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class UpdateLatestChatCommandHandler : ACommandHandler<UpdateLatestChatCommand>
     {
         
         private readonly ILatestChatRepository _latestChatRepository;
         
-        public UpdateLatestChatCommandHandler()
+        public UpdateLatestChatCommandHandler(ILatestChatRepository latestChatRepository)
         {
-            _latestChatRepository = DIService.Instance.GetService<ILatestChatRepository>();
+            _latestChatRepository = latestChatRepository;
         }
 
-        public override async Task<CommandResponse> OnHandleAsync(UpdateLatestChatCommand command)
+        protected override async Task<CommandResponse> OnHandleAsync(UpdateLatestChatCommand command)
         {
             var response = command.CreateResponse();
             var latestChatModel = await _latestChatRepository.GetLatestChatAsync(command.LatestChatModel.UserId, command.LatestChatModel.SendTo);

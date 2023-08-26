@@ -1,6 +1,6 @@
 export class ResponseStatus {
-    public static readonly success : string = "success";
-    public static readonly failed : string = "failed";
-    public static readonly error : string = "error";
-    public static readonly pending : string = "pending";
+    public static readonly success : number = 1;
+    public static readonly failed : number = 0;
+    public static readonly error : number = 2;
+    public static readonly pending : number = 3;
 }
