@@ -1,4 +1,4 @@
-namespace Chat.Activity;
+namespace Chat.Activity.Api;
 
 public class Program
 {

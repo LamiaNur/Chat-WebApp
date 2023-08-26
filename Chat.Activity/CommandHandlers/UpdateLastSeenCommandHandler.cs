@@ -1,11 +1,11 @@
-using Chat.Activity.Interfaces;
-using Chat.Activity.Models;
+using Chat.Activity.Api.Interfaces;
+using Chat.Activity.Api.Models;
 using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
 using Chat.Shared.Contracts.Commands;
 
-namespace Chat.Activity.CommandHandlers
+namespace Chat.Activity.Api.CommandHandlers
 {
     [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class UpdateLastSeenCommandHandler : ACommandHandler<UpdateLastSeenCommand>

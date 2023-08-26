@@ -1,11 +1,11 @@
-using Chat.Activity.Queries;
+using Chat.Activity.Api.Queries;
 using Chat.Framework.Proxy;
 using Chat.Shared.Contracts.Commands;
 using Chat.Shared.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Chat.Activity.Controllers
+namespace Chat.Activity.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

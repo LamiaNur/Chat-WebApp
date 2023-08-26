@@ -1,11 +1,11 @@
-using Chat.Activity.Extensions;
-using Chat.Activity.Interfaces;
-using Chat.Activity.Queries;
+using Chat.Activity.Api.Extensions;
+using Chat.Activity.Api.Interfaces;
+using Chat.Activity.Api.Queries;
 using Chat.Framework.Attributes;
 using Chat.Framework.CQRS;
 using Chat.Framework.Mediators;
 
-namespace Chat.Activity.QueryHandlers
+namespace Chat.Activity.Api.QueryHandlers
 {
     [ServiceRegister(typeof(IRequestHandler), ServiceLifetime.Singleton)]
     public class LastSeenQueryHandler : AQueryHandler<LastSeenQuery>

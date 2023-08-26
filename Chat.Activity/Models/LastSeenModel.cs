@@ -1,6 +1,6 @@
 using Chat.Framework.Database.Interfaces;
 
-namespace Chat.Activity.Models
+namespace Chat.Activity.Api.Models
 {
     public class LastSeenModel : IRepositoryItem
     {

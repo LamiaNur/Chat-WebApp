@@ -1,11 +1,11 @@
-using Chat.Activity.Interfaces;
-using Chat.Activity.Models;
+using Chat.Activity.Api.Interfaces;
+using Chat.Activity.Api.Models;
 using Chat.Framework.Attributes;
 using Chat.Framework.Database.Interfaces;
 using Chat.Framework.Database.Models;
 using MongoDB.Driver;
 
-namespace Chat.Activity.Repositories
+namespace Chat.Activity.Api.Repositories
 {
     [ServiceRegister(typeof(ILastSeenRepository), ServiceLifetime.Singleton)]
     public class LastSeenRepository : ILastSeenRepository

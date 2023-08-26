@@ -1,4 +1,4 @@
-namespace Chat.Activity.Models
+namespace Chat.Activity.Api.Models
 {
     public class LastSeenDto
     {

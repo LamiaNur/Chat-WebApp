@@ -1,6 +1,6 @@
 ﻿using Chat.Shared;
 
-namespace Chat.Activity
+namespace Chat.Activity.Api
 {
     public class Startup : AStartup
     {

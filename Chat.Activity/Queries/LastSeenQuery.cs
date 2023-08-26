@@ -1,11 +1,11 @@
 using Chat.Framework.CQRS;
 
-namespace Chat.Activity.Queries
+namespace Chat.Activity.Api.Queries
 {
     public class LastSeenQuery : AQuery
     {
         public List<string> UserIds { get; set; }
-        
+
         public LastSeenQuery()
         {
             UserIds = new List<string>();

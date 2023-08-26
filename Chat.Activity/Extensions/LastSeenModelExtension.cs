@@ -1,7 +1,7 @@
-﻿using Chat.Activity.Models;
+﻿using Chat.Activity.Api.Models;
 using Chat.Shared.Domain.Helpers;
 
-namespace Chat.Activity.Extensions;
+namespace Chat.Activity.Api.Extensions;
 
 public static class LastSeenModelExtension
 {
