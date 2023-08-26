@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Api", "Chat.Api\Chat.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Framework", "Chat.Framework\Chat.Framework.csproj", "{0ED02D30-9139-4048-AB26-5D8406F9F517}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Activity", "Chat.Activity\Chat.Activity.csproj", "{E391CA4F-6F15-4893-B3DB-104304A67896}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Activity", "Chat.Activity\Chat.Activity.csproj", "{E391CA4F-6F15-4893-B3DB-104304A67896}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat.Shared", "Chat.Shared\Chat.Shared.csproj", "{777F9E39-E0FA-4CFB-A7E2-C2D580119889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat.Shared", "Chat.Shared\Chat.Shared.csproj", "{777F9E39-E0FA-4CFB-A7E2-C2D580119889}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

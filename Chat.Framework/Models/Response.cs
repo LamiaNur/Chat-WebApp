@@ -8,12 +8,12 @@ namespace Chat.Framework.Models
         public string Message { get; set; } = string.Empty;
         public ResponseStatus Status { get; set; }
 
-        public void SetErrorResponse(string message)
+        public void SetErrorMessage(string message)
         {
             Message = message;
             Status = ResponseStatus.Error;
         }
-        public void SetSuccessResponse(string message)
+        public void SetSuccessMessage(string message)
         {
             Message = message;
             Status = ResponseStatus.Success;

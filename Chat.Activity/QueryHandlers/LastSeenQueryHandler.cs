@@ -1,3 +1,4 @@
+using Chat.Activity.Extensions;
 using Chat.Activity.Interfaces;
 using Chat.Activity.Queries;
 using Chat.Framework.Attributes;
@@ -19,10 +20,6 @@ namespace Chat.Activity.QueryHandlers
         {
             var response = query.CreateResponse();
             var lastSeenModels = await _lastSeenRepository.GetLastSeenModelsByUserIdsAsync(query.UserIds);
-            if (lastSeenModels == null)
-            {
-                throw new Exception("Last Seen Models Query Problems");
-            }
             foreach (var lastSeenModel in lastSeenModels)
             {
                 response.AddItem(lastSeenModel.ToLastSeenDto());

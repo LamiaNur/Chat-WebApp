@@ -28,10 +28,10 @@ namespace Chat.Activity.CommandHandlers
             lastSeenModel.LastSeenAt = DateTime.UtcNow;
             if (!await _lastSeenRepository.SaveLastSeenModelAsync(lastSeenModel))
             {
-                response.SetErrorResponse("Save Last Seen Model Error");
+                response.SetErrorMessage("Save Last Seen Model Error");
                 return response;
             }
-            response.SetSuccessResponse("Last seen time set successfully");
+            response.SetSuccessMessage("Last seen time set successfully");
             response.SetData("LastSeenAt", lastSeenModel.LastSeenAt);
             return response;
         }

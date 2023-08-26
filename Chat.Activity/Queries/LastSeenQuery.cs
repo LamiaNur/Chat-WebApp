@@ -4,7 +4,12 @@ namespace Chat.Activity.Queries
 {
     public class LastSeenQuery : AQuery
     {
-        public List<string>? UserIds { get; set; }
+        public List<string> UserIds { get; set; }
+        
+        public LastSeenQuery()
+        {
+            UserIds = new List<string>();
+        }
 
         public override void ValidateQuery()
         {

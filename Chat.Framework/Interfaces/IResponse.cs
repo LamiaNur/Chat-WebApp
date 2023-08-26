@@ -6,7 +6,7 @@ namespace Chat.Framework.Interfaces
     {
         string Message { get; set; }
         ResponseStatus Status { get; set; }
-        void SetErrorResponse(string message);
-        void SetSuccessResponse(string message);
+        void SetErrorMessage(string message);
+        void SetSuccessMessage(string message);
     }
 }

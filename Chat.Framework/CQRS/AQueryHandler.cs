@@ -20,8 +20,7 @@ namespace Chat.Framework.CQRS
             {
                 Console.WriteLine(e.Message);
                 var response = query.CreateResponse();
-                response.Message = e.Message;
-                response.Status = ResponseStatus.Error;
+                response.SetErrorMessage(e.Message);
                 return response;
             }
         }

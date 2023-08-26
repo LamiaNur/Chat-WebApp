@@ -42,7 +42,7 @@ public class CommandQueryProxy : ICommandQueryProxy
         {
             Console.WriteLine(e);
             response = command.CreateResponse();
-            response.SetErrorResponse(e.Message);
+            response.SetErrorMessage(e.Message);
         }
         return response;
     }
